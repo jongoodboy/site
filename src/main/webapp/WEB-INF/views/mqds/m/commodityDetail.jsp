@@ -200,7 +200,7 @@
     //立即购买
     function buyNuew() {
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
-            window.location.href = '${ctx}/m/orderPage?newBuy=yes&commodityId=${commodity.id}';
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}';
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/loginPage?url=" + window.location.href;
         }

@@ -301,12 +301,12 @@ public class IndexController {
      * 支付页面
      *
      * @param orderNumber 订单号
-     * @param orderName   订单描述或商品名称
+     * @param orderBody   订单描述或商品名称
      * @param payMoney    支付金额
      * @return
      */
     @RequestMapping("/payPage")
-    public String payPage(Model m, String orderName, String payMoney, String orderNumber, HttpServletRequest request) {
+    public String payPage(Model m, String orderBody, String payMoney, String orderNumber, HttpServletRequest request) {
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
         m.addAttribute("openid", openid);
         m.addAttribute("orderNo", orderNumber);
@@ -318,7 +318,7 @@ public class IndexController {
         m.addAttribute("openid", openid);
      //微信支付的金额单位为分。所以这里要*100
         int price = (int) (Float.parseFloat(payMoney) * 100);
-        String prepayId = WxPayUtil.unifiedorder("测试了", orderNumber, openid, price);
+        String prepayId = WxPayUtil.unifiedorder(orderBody, orderNumber, openid, price);
         SortedMap<Object, Object> signParams = new TreeMap<Object, Object>();
         signParams.put("appId", ConfigUtil.APPID);
         signParams.put("nonceStr", nonceStr);

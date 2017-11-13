@@ -42,7 +42,7 @@
             </ul>
         </li>
         <!-- 立即购买-->
-        <c:if test="${param.newBuy != null}">
+        <c:if test="${param.nowBuy != null}">
             <li class="buy-pay-stlye">
                 <ul class="nav-menu">
                     <li>
@@ -105,19 +105,19 @@
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
-            if (('${param.newBuy}' != "")) {//如果立即购买
+            if (('${param.nowBuy}' != "")) {//如果立即购买
                 subData.buyNumber = $("#buyNumber").val();
             }
             $.post("${ctx}/m/saveOrder", subData, function (data) {
                 /* loadingShow()*/
                 if (data.code == "0") {
-                    window.location.href = "${ctx}/m/payPage?orderNumber=" + data.orderNumber + "&payMoney=" + $("#payMoney").html();
+                    window.location.href = "${ctx}/m/payPage?orderNumber=" + data.orderNumber + "&payMoney=" + $("#payMoney").html()+"&orderBody=购买母亲云电商平台产品";
                 } else {
                     loadingShow(data.msg);
                 }
             });
         })
-        if ('${param.newBuy}' != "") {//如果立即购买
+        if ('${param.nowBuy}' != "") {//如果立即购买
             $(".buy-sum-number").hide();
             $.post("${ctx}/m/commodityById?commodityId=${param.commodityId}", function (ret) {
                 if (ret.code == "0") {

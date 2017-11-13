@@ -258,7 +258,7 @@
                 loadingShow("再次购买功能开发中!")
                 break;
             case 1:
-                window.location.href = "${ctx}/m/payPage?orderNumber=" + orderNumber + "&payMoney=" + payMoney;
+                window.location.href = "${ctx}/m/payPage?orderNumber=" + orderNumber + "&payMoney=" + payMoney+"&orderBody=购买母亲云电商平台产品";
                 break;
             case 2:
                loadingShow("催单成功!")
