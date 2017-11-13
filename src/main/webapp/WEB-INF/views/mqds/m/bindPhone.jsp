@@ -27,9 +27,11 @@
         display: inline-block;
         color: #333;
     }
-    .am-list{
+
+    .am-list {
         margin-top: 10%;
     }
+
     .am-list li {
         border-bottom: 1px solid #eee;
         line-height: 50px;
@@ -51,18 +53,21 @@
         color: #fff;
         line-height: 30px;
     }
-    .am-btn-default{
+
+    .am-btn-default {
         width: 70%;
         margin-left: 15%;
     }
-    .am-icon-weixin{
+
+    .am-icon-weixin {
         display: block;
         text-align: center;
         font-size: 30px;
         color: green;
         margin-top: 20px;
     }
-    .version{
+
+    .version {
         display: inline-block;
         width: 100%;
         text-align: center;
@@ -78,7 +83,7 @@
     </div>
     <h1 class="am-header-title">
         <a href="javascript:void(0)" class="">
-            登录
+            绑定手机号
         </a>
     </h1>
 </header>
@@ -92,30 +97,39 @@
             <span class="am-list-date">获取验证码</span>
         </li>
     </ul>
-    <button type="button" class="am-btn am-btn-default am-radius" onclick="login()">登录</button>
+    <button type="button" class="am-btn am-btn-default am-radius" onclick="bindPhone()">绑定</button>
     <span class="am-icon-weixin"></span>
     <span class="version">母亲云电商&copy;2017</span>
 </div>
 </body>
 <script>
     var url = '${param.url}';
-    if(url == ""){
-        url = Window.location.href;
+    if (url == "") {
+        url = window.location.href;
     }
-    //登录
-    function  login() {
-        $.post("${ctx}/m/login?phone="+$("#phone").val(),function (data) {
-            if(data.code == "0"){
+    //绑定
+    function bindPhone() {
+        var phone = $("#phone").val();
+        if (phone == "") {
+            loadingShow("手机号不能为空");
+            return;
+        }
+        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))) {
+            loadingShow("请输入正确的手机号");
+            return;
+        }
+        $.post("${ctx}/m/bind?phone=" + phone, function (data) {
+            if (data.code == "0") {
                 window.location.href = url;
             }
-         })
+        })
     }
     //获取验证码
     var index = 59;
-    var code =  $(".am-list-date");
+    var code = $(".am-list-date");
     var codeBut = true;
-    code.on("click",function () {
-        if(codeBut){
+    code.on("click", function () {
+        if (codeBut) {
             alert(1);
             codeBut = false;
             countDown();
@@ -123,15 +137,15 @@
     })
 
     function countDown() {
-        code.html(index+"s后再获取");
+        code.html(index + "s后再获取");
         index--;
-        if(index < 0){
+        if (index < 0) {
             code.html("获取验证码");
             index = 59;
             codeBut = true;
             return;
         }
-        setTimeout(countDown,"1000");
+        setTimeout(countDown, "1000");
     }
 </script>
 </html>

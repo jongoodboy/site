@@ -96,7 +96,7 @@
                 </a>
             </li>
             <li class="active">
-                <a href="javascript:buyNuew()" class="">
+                <a href="javascript:buyNow()" class="">
                     <span>立即购买</span>
                 </a>
             </li>
@@ -135,7 +135,7 @@
         if ('${sessionScope.mUser.id}' != "") {
             $("#open-bottom-model").modal('open');
         } else {//没有登录，去登录
-            window.location.href = "${ctx}/m/loginPage?url=" + window.location.href;
+            window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
         }
     })
     $(".close-model").on("click", function () {
@@ -198,11 +198,11 @@
         $("article img").css("width", "100%");//设置商品描图片
     })
     //立即购买
-    function buyNuew() {
+    function buyNow() {
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
             window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}';
         } else {//没有登录，去登录
-            window.location.href = "${ctx}/m/loginPage?url=" + window.location.href;
+            window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
         }
 
     }

@@ -65,7 +65,7 @@
             AND phone = #{phone}
         </if>
         <if test="openId != null and openId != ''">
-            AND openId = #{openId}
+            AND open_id = #{openId}
         </if>
     </select>
 </mapper>

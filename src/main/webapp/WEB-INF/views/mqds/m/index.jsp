@@ -143,7 +143,7 @@
         if (userId != "") {//已经登录
             window.location.href = url;
         } else {//没有登录，去登录
-            window.location.href = "${ctx}/m/loginPage?url=" +url;
+            window.location.href = "${ctx}/m/bindPhone?url=" +url;
         }
     }
 </script>

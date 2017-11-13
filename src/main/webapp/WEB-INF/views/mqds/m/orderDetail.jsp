@@ -76,17 +76,16 @@
             </ul>
         </li>
     </ul>
-    <!-- 提交订单-->
-    <div class="to-settle-accounts">
+   <%-- <div class="to-settle-accounts">
         <ul class="nav-menu">
-            <%--  <li>
+            &lt;%&ndash;  <li>
                   <span class="payMoney">实付款:￥<span id="payMoney"></span></span>
-              </li>--%>
+              </li>&ndash;%&gt;
             <li class="right-menu">
                 <button type="button" class="am-btn am-btn-danger">去支付</button>
             </li>
         </ul>
-    </div>
+    </div>--%>
 </div>
 <script>
     function  commodityDetail(id) {

@@ -61,7 +61,7 @@ public class IndexController {
     //手机端商城首页
     @RequestMapping
     public String appIndex(Commodity commodity, Model model, @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                           @RequestParam(required = false, defaultValue = "10") Integer pageSize,HttpServletRequest request) {
+                           @RequestParam(required = false, defaultValue = "10") Integer pageSize, HttpServletRequest request) {
         Page<Commodity> page = new Page<Commodity>(pageNo, pageSize);//分页查询
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
         if (openid == null) {
@@ -316,7 +316,7 @@ public class IndexController {
         m.addAttribute("timestamp", timeStamp);
         m.addAttribute("nonceStr", nonceStr);
         m.addAttribute("openid", openid);
-     //微信支付的金额单位为分。所以这里要*100
+        //微信支付的金额单位为分。所以这里要*100
         int price = (int) (Float.parseFloat(payMoney) * 100);
         String prepayId = WxPayUtil.unifiedorder(orderBody, orderNumber, openid, price);
         SortedMap<Object, Object> signParams = new TreeMap<Object, Object>();
@@ -334,41 +334,44 @@ public class IndexController {
 
     /**
      * 支付回调收到后,告诉微信不要再发起支付了
+     *
      * @param request
      * @param response
      * @return
      */
     @RequestMapping("/payCallBack")
     public void payCallBack(HttpServletRequest request,
-                              HttpServletResponse response) throws IOException {
+                            HttpServletResponse response) throws IOException {
         String retInfo = PayCommonUtil.setXML("SUCCESS", "OK");
         response.getWriter().write(retInfo);
     }
 
     /**
      * 支付成功后改订单回已支付
+     *
      * @param orderNumber
      * @return
      */
     @RequestMapping("updateOrderState")
     @ResponseBody
-    public Map<String,Object> updateOrderState(String orderNumber,String state){
-        Map<String,Object>  returnMap = new HashedMap();
+    public Map<String, Object> updateOrderState(String orderNumber, String state) {
+        Map<String, Object> returnMap = new HashedMap();
         try {
-            Map<String,Object> paramMap = new HashedMap();
-            paramMap.put("orderNumber",orderNumber);
-            paramMap.put("orderState",state);
-            paramMap.put("updateDate",new Date());
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("orderNumber", orderNumber);
+            paramMap.put("orderState", state);
+            paramMap.put("updateDate", new Date());
             orderService.updateOrderState(paramMap);//0已完成,1待付款,2.待发货,3已发货,4已取消)
-            returnMap.put("code","0");
-            returnMap.put("msg","修改订单成功");
+            returnMap.put("code", "0");
+            returnMap.put("msg", "修改订单成功");
         } catch (Exception e) {
-            returnMap.put("code","-1");
-            returnMap.put("msg","修改订单失败");
+            returnMap.put("code", "-1");
+            returnMap.put("msg", "修改订单失败");
             e.printStackTrace();
         }
         return returnMap;
     }
+
     /**
      * 手机端个人中心
      *
@@ -511,42 +514,41 @@ public class IndexController {
 
 
     //登录页面
-    @RequestMapping("/loginPage")
-    public String loginPage() {
-        return "mqds/m/login";
+    @RequestMapping("/bindPhone")
+    public String bindPhone() {
+        return "mqds/m/bindPhone";
     }
 
     /**
-     * 手机端登录
+     * 绑定手机号
      *
      * @param code 验证码
      * @return
      */
-    @RequestMapping("/login")
+    @RequestMapping("/bind")
     @ResponseBody
-    public Map<String, Object> login(Muser muser, String code, HttpServletRequest request) {
+    public Map<String, Object> bindPhone(String phone, String code, HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
         Map<String, Object> paramMap = new HashedMap();
         try {
-            if (muser.getOpenId() != null) {
-                paramMap.put("openId", muser.getOpenId());
-                //微信登录
-            } else if (1 == 1) {//验证码校验
-                paramMap.put("phone", muser.getPhone());
-                Muser m = checkUser(paramMap);
-                if (m == null) {//如果该用户没有注册过
-                    muser.setIsVip("1");
-                    mUserSerivce.save(muser);//新增用户
-                    m = checkUser(paramMap);//新增完再去校验一次
-                }
-                request.getSession().setAttribute("mUser", m);
+            Muser muser = new Muser();
+            String openId = (String) request.getSession().getAttribute("openid");//微信openId
+            muser.setOpenId(openId);
+            muser.setPhone(phone);//绑定的手机号
+            muser.setIsVip("1");//默认不是会员
+            mUserSerivce.save(muser);//保存用户信息
+            paramMap.put("openId", openId);
+            paramMap.put("phone", phone);
+            Muser m = mUserSerivce.findUser(paramMap);
+            if (m != null) {
+                request.getSession().setAttribute("mUser", muser);//存起来
             }
             returnMap.put("code", "0");
-            returnMap.put("msg", "登录成功");
+            returnMap.put("msg", "绑定成功");
         } catch (Exception e) {
             e.printStackTrace();
             returnMap.put("code", "-1");
-            returnMap.put("msg", "登录失败");
+            returnMap.put("msg", "绑定失败");
         }
         return returnMap;
     }
@@ -566,13 +568,5 @@ public class IndexController {
         return returnMap;
     }
 
-    //验证用户是否已经存在
-    public Muser checkUser(Map<String, Object> map) {
-        try {
-            return mUserSerivce.findUser(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Muser();
-        }
-    }
+
 }
