@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.ShoppingCatDao">
+    <sql id="shoppingCat">
+        id as "id",
+        user_id as "userId",
+        commodity_id as "commodityId",
+        commodity_number as "commodityNumber",
+        create_date as "createDate",
+        update_date as "updateDate",
+        del_flag as "delFlag"
+    </sql>
+    <!--加入购物车-->
+    <insert id="insert" parameterType="ShoppingCat">
+      INSERT INTO mq_shopping_cat
+      (
+      id,
+      user_id,
+      commodity_id,
+      commodity_number,
+      create_date,
+      del_flag
+      )
+      VALUES (
+      #{id},
+      #{userId},
+      #{commodityId},
+      #{commodityNumber},
+      #{createDate},
+      #{delFlag}
+      )
+    </insert>
+    <!--修改购物车-->
+    <update id="update">
+        UPDATE mq_shopping_cat
+        SET
+        update_date = #{updateDate}
+        <if test="commodityNumber != null and commodityNumber != ''">
+            ,commodity_number = #{commodityNumber}
+        </if>
+        <if test="delFlag != null and delFlag != ''">
+            ,del_flag = #{delFlag}
+        </if>
+        WHERE
+        id = #{id}
+    </update>
+    <!--查看个人的购物车 -->
+    <select id="findShoppingCatByUserId" parameterType="String" resultType="java.util.Map">
+        SELECT
+        com.commodity_name as commodityName,
+        com.commodity_imager as commodityImager,
+        com.id as id,
+        commodity_price as commodityPice,
+        cat.commodity_number as shoppingNumber,
+        com.commodity_number as commodityNumber
+        FROM
+        mq_shopping_cat cat
+        LEFT JOIN mq_commodity com ON
+        cat.commodity_id = com.id
+        WHERE
+        cat.del_flag = '0'
+        AND user_id = #{userId}
+    </select>
+
+    <!--清空购物车-->
+    <update id="delShoppingCatByCommodityId" parameterType="java.util.Map">
+        UPDATE mq_shopping_cat
+        SET
+        update_date = #{update},
+        del_flag = 1
+        WHERE commodity_id in (
+          <foreach collection="commodityList" item="itme" separator=",">
+              #{itme}
+          </foreach>
+        )
+        AND user_id = #{userId}
+    </update>
+
+</mapper>

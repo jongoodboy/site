@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.CashWithDrawalDao">
+    <sql id="cashWithrawal">
+      id as "id",
+      user_id as "userId",
+      bank_number as "bankNumber",
+      bank_address as "bankAddress",
+      bank_number_name as "bankNumberName",
+      get_cash as "getCash",
+      balance as "balance",
+      remarks as "remarks",
+      create_date as "createDate",
+      update_date as "createDate",
+      update_by as "updateBy",
+      update_name as "updateName",
+      del_flag as "delFlag"
+    </sql>
+    <!--申请提现 -->
+    <insert id="insert" parameterType="CashWithDrawal">
+      INSERT INTO mq_cash_withdrawal
+      SET (
+      id,
+      user_id,
+      bank_number,
+      bank_address,
+      bank_number_name,
+      get_cash,
+      balance,
+      remarks,
+      create_date,
+      del_flag
+      )
+      VALUES
+      (
+        #{id},
+        #{userId},
+        #{bankNumber},
+        #{bankAddress},
+        #{bankNumberName},
+        #{getCash},
+        #{balance},
+        #{remarks},
+        #{createDate},
+        #{delFlag}
+      )
+    </insert>
+    <!--个人和所有提现列表-->
+    <select id="findList" parameterType="CashWithDrawal" resultType="CashWithDrawal">
+        SELECT
+        <include refid="cashWithrawal"/>
+        FROM mq_cash_withdrawal
+        WHERE 1 = 1
+        AND del_flag = #{delFlag}
+        <if test="userId != null and userId != ''"><!--个人提现列表-->
+            AND user_id = #{userId}
+        </if>
+    </select>
+    <!-- 处理提现-->
+    <update id="update" parameterType="java.util.Map">
+    UPDATE mq_cash_withdrawal
+      remarks = #{remarks},
+      update_date = #{updateDate},
+      update_by = #{updateBy},
+      update_name = #{updateName},
+      del_flag = #{delFlag}
+      WHERE
+      id = #{id}
+  </update>
+</mapper>

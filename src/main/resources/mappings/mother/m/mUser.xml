@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.MuserDao">
+    <sql id="mUser">
+      id as "id",
+      phone as "phone",
+      password as "password",
+      open_id as "openId",
+      is_vip as "isVip",
+      parent as "parent",
+      money as "money",
+      create_date as "createDate",
+      update_date as "updateDate",
+      del_flag as "delFlag"
+    </sql>
+    <!--保存用户信息-->
+    <insert id="insert" parameterType="Muser">
+        INSERT INTO mq_user
+       (
+        id,
+        phone,
+        password,
+        open_id,
+        is_vip,
+        parent,
+        money,
+        create_date,
+        del_flag
+        )
+        VALUES (
+        #{id},
+        #{phone},
+        #{password},
+        #{openId},
+        #{isVip},
+        #{parent},
+        #{money},
+        #{createDate},
+        #{delFlag}
+        )
+    </insert>
+    <!--修改用户信息-->
+    <update id="update" parameterType="Muser">
+      UPDATE mq_user
+      SET
+        phone = #{phone},
+        password = #{password},
+        open_id = #{openId},
+        is_vip = #{isVip},
+        parent = #{parent},
+        money = #{money},
+        update_date = #{updateDate}
+        del_flag = #{delFlag}
+        WHERE
+        id = #{id}
+    </update>
+    <!--登录-->
+    <select id="findUser" parameterType="java.util.Map" resultType="Muser">
+        SELECT
+        <include refid="mUser"/>
+        FROM mq_user
+        WHERE
+        1 = 1
+        <if test="phone != null and phone != ''">
+            AND phone = #{phone}
+        </if>
+        <if test="openId != null and openId != ''">
+            AND openId = #{openId}
+        </if>
+    </select>
+</mapper>

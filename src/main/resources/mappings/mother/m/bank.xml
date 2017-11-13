@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.BankDao">
+    <sql id="bank">
+      id as "id",
+      user_id as "userId",
+      card_number as "cardNumber",
+      bank_address as "bankAddress",
+      id_card as "idCard",
+      stay_bank_phone as "stayBankPhone",
+      card_name as "cardName",
+      password as "password",
+      create_date as "createDate",
+      update_date as "updateDate",
+      del_flag as "delFlag"
+    </sql>
+    <!-- 添加银行卡-->
+    <insert id="insert" parameterType="Bank">
+      INSERT INTO  mq_bank
+      SET (
+      id,
+      user_id,
+      card_number,
+      bank_address,
+      id_card,
+      stay_bank_phone,
+      card_name,
+      password,
+      create_date,
+      del_flag
+      )
+      VALUES (
+        #{id},
+        #{userId},
+        #{cardNumber},
+        #{bankAddress},
+        #{idCard},
+        #{stayBankPhone},
+        #{cardName},
+        #{password},
+        #{createDate},
+        #{del_flag}
+      )
+
+
+    </insert>
+    <!-- 根据用户查询他所有绑定的银行卡-->
+    <select id="findList" parameterType="String">
+        SELECT
+        <include refid="bank"/>
+        FROM mq_bank
+        WHERE user_id = #{userId}
+    </select>
+    <!--删除绑定的银行卡-->
+    <update id="del" parameterType="String">
+      UPDATE mq_bank
+      SET
+      del_flag = 1,
+      update_date = #{updateDate}
+      WHERE id = #{id}
+
+    </update>
+</mapper>

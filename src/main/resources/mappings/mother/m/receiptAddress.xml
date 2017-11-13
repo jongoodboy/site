@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.ReceiptAddressDao">
+    <sql id="address">
+        id as "id",
+        user_id as "userId",
+        address as "address",
+        is_default as "isDefault",
+        consignee as "consignee",
+        consignee_phone as "consigneePhone",
+        province as "province",
+        city as "city",
+        county as "county",
+        create_date as "createDate",
+        update_date as "updateDate",
+        del_flag as "delFlag"
+    </sql>
+    <!--添加收货地址 -->
+    <insert id="insert" parameterType="ReceiptAddress">
+      INSERT  INTO mq_address
+        (
+          id,
+          user_id,
+          address,
+          is_default,
+          consignee,
+          consignee_phone,
+          province,
+          city,
+          county,
+          create_date,
+          del_flag
+       )
+       VALUES (
+        #{id},
+        #{userId},
+        #{address},
+        #{isDefault},
+        #{consignee},
+        #{consigneePhone},
+        #{province},
+        #{city},
+        #{county},
+        #{createDate},
+        #{delFlag}
+       )
+    </insert>
+    <!--根据用户查询所有的收货地址-->
+    <select id="findListfByUserId" parameterType="String" resultType="ReceiptAddress">
+        SELECT
+        <include refid="address"/>
+        FROM mq_address
+        WHERE user_id = #{userId}
+        AND del_flag = '0'
+        ORDER BY is_default,
+        create_date DESC
+    </select>
+    <!--修改收货地址-->
+    <update id="update" parameterType="ReceiptAddress">
+      UPDATE mq_address
+      SET
+          address = #{address},
+          is_default = #{isDefault},
+          consignee = #{consignee},
+          consignee_phone = #{consigneePhone},
+          province = #{province},
+          city = #{city},
+          county = #{county},
+          update_date = #{updateDate}
+          WHERE
+          id = #{id}
+    </update>
+    <!--修改默认收货地址-->
+    <update id="updateDefault" parameterType="java.util.Map">
+        UPDATE mq_address
+        SET
+        is_default = '0',
+         update_date = #{updateDate}
+        WHERE
+        id = #{id}
+        AND user_id = #{userId}
+    </update>
+    <!--收货地址默认地址全清空-->
+    <update id="removeAllByUserId" parameterType="java.util.Map">
+        UPDATE mq_address
+        SET
+        is_default = '1',
+        update_date = #{updateDate}
+        WHERE
+         user_id = #{userId}
+    </update>
+    <!--删除收货地址-->
+    <update id="delDelAddress" parameterType="String">
+        UPDATE mq_address
+        SET
+         del_flag = 1
+        WHERE
+        id = #{id}
+    </update>
+    <!--查询单条地址信息-->
+    <select id="findListfById" parameterType="String" resultType="ReceiptAddress">
+        SELECT
+        <include refid="address"/>
+        FROM mq_address
+        WHERE id = #{id}
+        AND del_flag = '0'
+    </select>
+</mapper>

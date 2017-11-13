@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.OrderDao">
+    <sql id="order">
+        id as "id",
+        order_number as "orderNumber",
+        commodity_id as "commodityId",
+        user_id as "userId",
+        order_state as "orderState",
+        address_id as "addressId",
+        commodity_number as "commodityNumber",
+        commodity_price as "commodityPrice",
+        create_date as "createDate",
+        update_date as "updateDate",
+        del_flag as "delFlag"
+    </sql>
+
+    <!--个人所有订单号-->
+    <select id="findOrderNumber" parameterType="java.util.Map" resultType="String">
+        SELECT
+        DISTINCT(order_number)
+        FROM mq_order
+        WHERE
+        del_flag = '0'
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="orderState != null and orderState != ''">
+            AND order_state = #{orderState}
+        </if>
+        ORDER BY order_number DESC
+        LIMIT #{pageNo},#{pageSize}
+    </select>
+    <!--个人所有订单商品根据订单号查询-->
+    <select id="findOrderListByOrderNumber" parameterType="java.util.List" resultType="Order">
+        SELECT
+        <include refid="order"/>
+        FROM mq_order
+        WHERE
+        del_flag = '0'
+        AND
+        order_number in
+        (
+        <foreach collection="list" separator="," item="itme">
+            #{itme}
+        </foreach>
+        )
+        ORDER BY order_number DESC
+    </select>
+
+    <!--生成订单-->
+    <insert id="addList" parameterType="java.util.List">
+        INSERT INTO mq_order
+        (
+        id,
+        order_number,
+        commodity_id,
+        user_id,
+        order_state,
+        address_id,
+        commodity_number,
+        commodity_price,
+        create_date,
+        del_flag
+        )
+        VALUES
+        <foreach collection="list" item="itme" separator=",">
+            (
+            #{itme.id},
+            #{itme.orderNumber},
+            #{itme.commodityId},
+            #{itme.userId},
+            #{itme.orderState},
+            #{itme.addressId},
+            #{itme.commodityNumber},
+            #{itme.commodityPrice},
+            #{itme.createDate},
+            #{itme.delFlag}
+            )
+        </foreach>
+
+    </insert>
+    <!--订单支付-->
+    <update id="orderBuy" parameterType="java.util.Map">
+      UPDATE  mq_order
+      SET
+      order_state = #{orderState}
+      WHERE
+      id = #{id}
+    </update>
+
+    <!--修改订单-->
+    <update id="update" parameterType="java.util.Map">
+        UPDATE mq_order
+        SET
+        update_date = #{updateDate}
+        <if test="commodityNumber != null and commodityNumber != ''">
+            ,commodity_number = #{commodityNumber}
+        </if>
+        <if test="orderState != null and orderState != ''">
+            ,order_state = #{orderState}
+        </if>
+        <if test="del">
+            ,del_flag = 1
+        </if>
+        WHERE
+        id = #{id}
+    </update>
+</mapper>
