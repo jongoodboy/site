@@ -15,7 +15,8 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        h5{
+
+        h5 {
             margin: 0;
         }
     </style>
@@ -23,17 +24,18 @@
 <body>
 <div class="content">
     <ul class="am-list am-list-static am-list-border">
-        <li>
-            <c:if test="${addresslist != null}">
-                <c:forEach var="itme" items="${addresslist}">
-                    <c:if test="${itme.isDefault=='0'}"><!-- 默认地址-->
-                        <input id="addressId" value="${itme.id}" hidden><!-- 收货地址的Id-->
-                        <h5>${itme.consignee}${itme.consigneePhone}</h5>
-                        <span>${itme.province}${itme.city}${itme.county}${itme.address}</span>
-                    </c:if>
-                </c:forEach>
-            </c:if>
+        <c:if test="${address != null}"> <!-- 默认地址-->
+            <li class="selectAddress">
+                <input id="addressId" value="${address.id}" hidden><!-- 收货地址的Id-->
+                <h5>${address.consignee}${address.consigneePhone}</h5>
+                <span>${address.province}${address.city}${address.county}${address.address}</span>
+            </li>
+        </c:if>
+        <c:if test="${address == null}"> <!--如果没有默认地址-->
+        <li class="selectAddress">
+            <span>请填写收货人信息</span>
         </li>
+        </c:if>
         <li class="buy-img-list">
             <ul class="nav-menu" id="show-shopping">
                 <li class="buy-sum-number">
@@ -101,17 +103,21 @@
             buyNumber: '${param.buyNumber}',//每个商品购买的数量多个用","分割
             commodityPrice: '${param.commodityPrice}',//每个商品单价多个用","分割
             addressId: $("#addressId").val(),//收货地址
-            userId:'${sessionScope.mUser.id}' //个人Id
+            userId: '${sessionScope.mUser.id}' //个人Id
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
+            if (subData.addressId == undefined || subData.addressId == null) {
+                loadingShow("请先选择收货人");
+                return;
+            }
             if (('${param.nowBuy}' != "")) {//如果立即购买
                 subData.buyNumber = $("#buyNumber").val();
             }
             $.post("${ctx}/m/saveOrder", subData, function (data) {
                 /* loadingShow()*/
                 if (data.code == "0") {
-                    window.location.href = "${ctx}/m/payPage?orderNumber=" + data.orderNumber + "&payMoney=" + $("#payMoney").html()+"&orderBody=购买母亲云电商平台产品";
+                    window.location.href = "${ctx}/m/payPage?orderNumber=" + data.orderNumber + "&payMoney=" + $("#payMoney").html() + "&orderBody=购买母亲云电商平台产品";
                 } else {
                     loadingShow(data.msg);
                 }
@@ -178,8 +184,11 @@
             }
             $(this).val(buyNumber);
         })
+        //选择地址
+        $(".selectAddress").on("click", function () {
+            window.location.href = "${ctx}/m/addressList?userId=${sessionScope.mUser.id}&isOrderPage=yes&addressId="+$(this).find("input").val();
+        })
     })
-
 </script>
 </body>
 </html>

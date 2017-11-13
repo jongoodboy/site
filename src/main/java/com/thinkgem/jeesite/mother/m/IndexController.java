@@ -177,8 +177,8 @@ public class IndexController {
     @RequestMapping("/orderPage")
     public String orderPage(Model model, String userId) {
         try {
-            List<ReceiptAddress> list = addressService.findListfByUserId(userId);//个人收货地址
-            model.addAttribute("addresslist", list);
+            ReceiptAddress address =  addressService.findAddressByUserId(userId);//个人默认收货地址
+            model.addAttribute("address", address);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -494,7 +494,7 @@ public class IndexController {
     public Map<String, Object> saveAddress(ReceiptAddress receiptAddress, String userId) {
         Map<String, Object> returnMap = new HashedMap();
         receiptAddress.setUserId(userId);
-        receiptAddress.setIsDefault("1");//不是默认地址
+        receiptAddress.setIsDefault("1");//默认不是地址
         try {
             addressService.save(receiptAddress);
             returnMap.put("msg", "添加地址成功");

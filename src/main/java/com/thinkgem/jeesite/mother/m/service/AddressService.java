@@ -35,4 +35,8 @@ public class AddressService extends CrudService<ReceiptAddressDao, ReceiptAddres
     public ReceiptAddress findListfById(String id) {
         return  receiptAddressDao.findListfById(id);
     }
+    //个人默认地址
+    public ReceiptAddress  findAddressByUserId(String userId){
+        return  receiptAddressDao.findAddressByUserId(userId);
+    }
 }

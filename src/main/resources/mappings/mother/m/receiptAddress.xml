@@ -97,12 +97,21 @@
         WHERE
         id = #{id}
     </update>
-    <!--查询单条地址信息-->
+    <!--个人地址列表-->
     <select id="findListfById" parameterType="String" resultType="ReceiptAddress">
         SELECT
         <include refid="address"/>
         FROM mq_address
         WHERE id = #{id}
         AND del_flag = '0'
+    </select>
+    <!--个人默认地址-->
+    <select id="findAddressByUserId" parameterType="String" resultType="ReceiptAddress">
+        SELECT
+        <include refid="address"/>
+        FROM mq_address
+        WHERE user_id = #{userId}
+        AND del_flag = '0'
+        AND is_default = '0'
     </select>
 </mapper>

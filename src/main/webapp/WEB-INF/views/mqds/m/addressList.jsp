@@ -27,11 +27,6 @@
         margin: 0;
         color: #333;
     }
-
-    .am-list {
-        font-size: 12px;
-    }
-
     .am-divider-default {
         border-top: 1px solid #fdf6f6;
         margin: 0;
@@ -85,20 +80,28 @@
 <body>
 <div class="content">
     <ul class="am-list am-list-static am-list-border">
+        <c:set value="${param.isOrderPage}" var="isOrderPage"></c:set>  <!--如果是生成订单页面点过来的-->
+        <c:set value="${param.addressId}" var="addressId"></c:set>  <!--如果是生成订单页面点过来的-->
         <c:forEach var="itme" items="${list}">
-            <li>
-                <h5>${itme.consignee} ${itme.consigneePhone}</h5>
+            <li  <c:if
+                    test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
+                <h5 <c:if test="${isOrderPage!= null and addressId == itme.id}">style="color: red" </c:if>>
+                        ${itme.consignee} ${itme.consigneePhone}
+                </h5>
                 <span>${itme.province}${itme.city}${itme.county}${itme.address}</span>
                 <hr data-am-widget="divider" style="" class="am-divider am-divider-default"/>
+                <c:if test="${param.isOrderPage == null}"><!--不是生成订单页面点击过来-->
                 <label class="am-radio">
                     <input type="radio" name="isDefault" value="${itme.id}" data-am-ucheck
                            <c:if test="${itme.isDefault == '0'}">checked</c:if>>
                     默认地址
                 </label>
+                </c:if>
                 <div class="operation">
                     <a class="update-address" id="${itme.id}">编辑</a>
                     <a class="del-address" id="${itme.id}">删除</a>
                 </div>
+
             </li>
         </c:forEach>
     </ul>
@@ -155,7 +158,7 @@
                 $("input[name='id']").val(ret.data.id);
                 $("input[name='consignee']").val(ret.data.consignee);
                 $("input[name='consigneePhone']").val(ret.data.consigneePhone);
-                $("input[name='location']").val(ret.data.province+","+ret.data.city+","+ret.data.county);
+                $("input[name='location']").val(ret.data.province + "," + ret.data.city + "," + ret.data.county);
                 $("input[name='receipAddress']").val(ret.data.address);
                 $("#open-bottom-model").modal('open');
             }
@@ -210,9 +213,9 @@
             loadingShow("联系方式不能为空");
             return;
         }
-        if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(consigneePhone))){
+        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(consigneePhone))) {
             loadingShow("请输入正确的手机号");
-            return ;
+            return;
         }
         if (location == "") {
             loadingShow("所在区域不能为空");
@@ -230,8 +233,8 @@
             address: receipAddress,
             province: locationList[0] == undefined ? "" : locationList[0],//省
             city: locationList[1] == undefined ? "" : locationList[1],//市
-            county:locationList[2] == undefined ? "" : locationList[2],//区/县
-            userId:'${param.userId}'//个人Id
+            county: locationList[2] == undefined ? "" : locationList[2],//区/县
+            userId: '${param.userId}'//个人Id
         }
         $.post("${ctx}/m/saveAddress", DATA, function (data) {
             if (data.code == "0") {
@@ -243,13 +246,23 @@
     //更改默认地址
     $(function () {
         $(":radio").click(function () {
-            $.post("${ctx}/m/checkedDefault?adddressId=" + $(this).val(), function (data) {
+            $.post("${ctx}/m/checkedDefault?adddressId=" + $(this).val() + "&userId=${param.userId}", function (data) {
                 if (data.code == "0") {
                     window.location.href = window.location.href;//刷新
                 }
             })
         });
     });
+    //选择地址
+    function selectAddess(id) {
+       $.post("${ctx}/m/checkedDefault?adddressId=" + id + "&userId=${param.userId}", function (data) {
+            if (data.code == "0") {
+                history.go(-1);
+                location.reload(-1);
+            }
+        })
+
+    }
 </script>
 </body>
 </html>

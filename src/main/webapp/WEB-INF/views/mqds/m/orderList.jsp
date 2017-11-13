@@ -169,7 +169,7 @@
     }
     function init(orderState) {
         $(".content").html('');
-        $.post("${ctx}/m/orderListDate?orderState=" + orderState, function (ret) {
+        $.post("${ctx}/m/orderListDate?orderState=" + orderState+"&userId=${sessionScope.mUser.id}", function (ret) {
             if (ret.code == "0") {
                 if (ret.data.length > 0) {
                     for (var i = 0; i < ret.data.length; i++) {

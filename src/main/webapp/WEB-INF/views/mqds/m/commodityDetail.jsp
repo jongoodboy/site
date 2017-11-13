@@ -66,7 +66,7 @@
                                 <li><%--<i class="my-icon like"></i>--%>￥</li>
                                 <li class="active">${itme.commodityPice}</li>
                             </ul>
-                            <a href="/front/m/orderPage?newBuy=yes&commodityId=${itme.id }" class="">
+                            <a href="/front/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}" class="">
                                 <spen class="buy">购买</spen>
                             </a>
                         </div>
@@ -200,7 +200,7 @@
     //立即购买
     function buyNow() {
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
-            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}';
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
         }

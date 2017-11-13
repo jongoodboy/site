@@ -21,4 +21,6 @@ public interface ReceiptAddressDao extends CrudDao<ReceiptAddress> {
     int delDelAddress(String adddressId);
 
     ReceiptAddress findListfById(String id);
+
+    ReceiptAddress findAddressByUserId(String userId);
 }
