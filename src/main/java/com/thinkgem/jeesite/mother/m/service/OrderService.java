@@ -95,4 +95,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
         }
         return returnMap;
     }
+   //修改订单状态
+    public int updateOrderState(Map<String,Object> map){
+        return orderDao.updateOrderState(map);
+    }
 }

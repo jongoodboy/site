@@ -16,6 +16,7 @@ import com.thinkgem.jeesite.mother.m.weixin.*;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,17 +61,16 @@ public class IndexController {
     //手机端商城首页
     @RequestMapping
     public String appIndex(Commodity commodity, Model model, @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                           @RequestParam(required = false, defaultValue = "10") Integer pageSize, HttpServletRequest request) {
+                           @RequestParam(required = false, defaultValue = "10") Integer pageSize,HttpServletRequest request) {
+        Page<Commodity> page = new Page<Commodity>(pageNo, pageSize);//分页查询
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
         if (openid == null) {
             return "redirect:" + ConfigUtil.GET_CODE;//微信取code
         }
-        Page<Commodity> page = new Page<Commodity>(pageNo, pageSize);//分页查询
         page = commodityService.findPage(page, commodity);
         model.addAttribute("page", page);
         model.addAttribute("commodityList", page.getList());
         return "/mqds/m/index";//首页
-
     }
 
     /**
@@ -343,6 +343,31 @@ public class IndexController {
                               HttpServletResponse response) throws IOException {
         String retInfo = PayCommonUtil.setXML("SUCCESS", "OK");
         response.getWriter().write(retInfo);
+    }
+
+    /**
+     * 支付成功后改订单回已支付
+     * @param orderNumber
+     * @return
+     */
+    @RequestMapping("updateOrderState")
+    @ResponseBody
+    public Map<String,Object> updateOrderState(String orderNumber,String state){
+        Map<String,Object>  returnMap = new HashedMap();
+        try {
+            Map<String,Object> paramMap = new HashedMap();
+            paramMap.put("orderNumber",orderNumber);
+            paramMap.put("orderState",state);
+            paramMap.put("updateDate",new Date());
+            orderService.updateOrderState(paramMap);//0已完成,1待付款,2.待发货,3已发货,4已取消)
+            returnMap.put("code","0");
+            returnMap.put("msg","修改订单成功");
+        } catch (Exception e) {
+            returnMap.put("code","-1");
+            returnMap.put("msg","修改订单失败");
+            e.printStackTrace();
+        }
+        return returnMap;
     }
     /**
      * 手机端个人中心

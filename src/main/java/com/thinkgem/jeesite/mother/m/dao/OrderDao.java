@@ -14,6 +14,10 @@ import java.util.Map;
 public interface OrderDao extends CrudDao<Order> {
     //批量生成订单
     int addList(List<Order> list);
-    List<String> findOrderNumber(Map<String,Object> map);
+
+    List<String> findOrderNumber(Map<String, Object> map);
+
     List<Order> findOrderListByOrderNumber(List<String> list);
+
+    int updateOrderState(Map<String,Object> map);
 }

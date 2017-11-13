@@ -82,14 +82,6 @@
 </div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
-    $(document).ready(function () {
-        //支付
-        /*  $("#pay-success").modal('open');*/
-        //确定返回主页
-        $(".am-modal-btn").on("click", function () {
-            window.location.href = ctx + "/m"
-        })
-    })
     function onBridgeReady() {
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
@@ -102,14 +94,15 @@
                 },
                 function (res) {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-                        alert("支付成功");
+                        paySuccess();
                     } else if (res.err_msg == "get_brand_wcpay_request:cancel") {//  支付过程中用户取消
                         alert("你已经取消支付了");
 
                     } else if (res.err_msg == " get_brand_wcpay_request:fail") {//  支付失败
                         alert("支付失败");
+                    }else{
+                        alert(res.err_msg);
                     }
-                    alert(res.err_msg);
                 }
         );
     }
@@ -122,6 +115,15 @@
         }
     } else {
         onBridgeReady();
+    }
+    //支付成功之后把订单改为已支付，待发货
+    function paySuccess() {
+        //0已完成,1待付款,2.待发货,3已发货,4已取消)
+        $.post("${ctx}/m/updateOrderState?orderNumber=${param.orderNumber}&state=2", function (ret) {
+            if (ret.code == "0") {
+                window.location.href = ctx + "/m";//返回首页
+            }
+        })
     }
 </script>
 </body>

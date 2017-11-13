@@ -89,21 +89,13 @@
       id = #{id}
     </update>
 
-    <!--修改订单-->
-    <update id="update" parameterType="java.util.Map">
+    <!--修改订单状态-->
+    <update id="updateOrderState" parameterType="java.util.Map">
         UPDATE mq_order
         SET
+        order_state = #{orderState},
         update_date = #{updateDate}
-        <if test="commodityNumber != null and commodityNumber != ''">
-            ,commodity_number = #{commodityNumber}
-        </if>
-        <if test="orderState != null and orderState != ''">
-            ,order_state = #{orderState}
-        </if>
-        <if test="del">
-            ,del_flag = 1
-        </if>
         WHERE
-        id = #{id}
+        order_number = #{orderNumber}
     </update>
 </mapper>
