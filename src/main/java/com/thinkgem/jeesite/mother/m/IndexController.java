@@ -58,6 +58,18 @@ public class IndexController {
     @Resource
     private AddressService addressService;
 
+    //每次请求都会先进这里
+    @ModelAttribute
+    public void getMuser(HttpServletRequest request) {
+        Map<String, Object> paramMap = new HashedMap();
+        String openId = (String) request.getSession().getAttribute("openid");//微信openId
+        paramMap.put("openId", openId);
+        Muser m = mUserSerivce.findUser(paramMap);
+        if (m != null && m.getPhone() != null) {
+            request.getSession().setAttribute("mUser", m);//存起来
+        }
+    }
+
     //手机端商城首页
     @RequestMapping
     public String appIndex(Commodity commodity, Model model, @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -201,7 +213,10 @@ public class IndexController {
 
     /**
      * 手机端所有订单页面数据请求
-     *
+     * @param orderState 订单状态
+     * @param pageNo 当前页数
+     * @param pageSize 每页显示条数
+     * @param userId 用户id
      * @return
      */
     @RequestMapping("/orderListDate")
@@ -529,7 +544,6 @@ public class IndexController {
     @ResponseBody
     public Map<String, Object> bindPhone(String phone, String code, HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
-        Map<String, Object> paramMap = new HashedMap();
         try {
             Muser muser = new Muser();
             String openId = (String) request.getSession().getAttribute("openid");//微信openId
@@ -537,12 +551,6 @@ public class IndexController {
             muser.setPhone(phone);//绑定的手机号
             muser.setIsVip("1");//默认不是会员
             mUserSerivce.save(muser);//保存用户信息
-            paramMap.put("openId", openId);
-            paramMap.put("phone", phone);
-            Muser m = mUserSerivce.findUser(paramMap);
-            if (m != null) {
-                request.getSession().setAttribute("mUser", muser);//存起来
-            }
             returnMap.put("code", "0");
             returnMap.put("msg", "绑定成功");
         } catch (Exception e) {

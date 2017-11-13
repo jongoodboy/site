@@ -27,15 +27,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "weixin")
 public class WxUserUlit {
-    //商品
-    @Resource
-    private CommodityService commodityService;
-    //手机用户
-    @Resource
-    private MuserService mUserSerivce;
-
     @RequestMapping("/getCode")
-    public String accessToken(String code, HttpServletRequest request, Model model) {
+    public void accessToken(String code, HttpServletRequest request, Model model) {
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
         String src = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
         if (openId == null) {
@@ -66,29 +59,5 @@ public class WxUserUlit {
                 e.printStackTrace();
             }
         }
-        try {
-            Page<Commodity> page = new Page<Commodity>(1, 10);//分页查询
-            Commodity commodity = new Commodity();
-            page = commodityService.findPage(page, commodity);
-            model.addAttribute("page", page);
-            model.addAttribute("commodityList", page.getList());
-            String openid = (String) request.getSession().getAttribute("openid");//用户OpenId
-            Map<String, Object> paramMap = new HashedMap();
-            paramMap.put("openId", openid);
-            Muser muser = mUserSerivce.findUser(paramMap);
-            if (muser != null) {//如果这微信用户已经在平台登录过
-                if (muser.getPhone() != null) {//如果已经绑定了手机号
-                    //返回首页
-                    request.getSession().setAttribute("mUser", muser);//存起来
-                }else{
-                    return "/mqds/m/bindPhone";//手机绑定页面
-                }
-            }else{
-                return "/mqds/m/bindPhone";//手机绑定页面
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "/mqds/m/index";//首页
     }
 }
