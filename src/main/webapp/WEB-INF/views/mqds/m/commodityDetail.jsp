@@ -66,7 +66,7 @@
                                 <li><%--<i class="my-icon like"></i>--%>￥</li>
                                 <li class="active">${itme.commodityPice}</li>
                             </ul>
-                            <a href="/front/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}" class="">
+                            <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}" class="">
                                 <spen class="buy">购买</spen>
                             </a>
                         </div>

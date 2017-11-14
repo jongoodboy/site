@@ -72,17 +72,56 @@ public class IndexController {
 
     //手机端商城首页
     @RequestMapping
-    public String appIndex(Commodity commodity, Model model, @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                           @RequestParam(required = false, defaultValue = "10") Integer pageSize, HttpServletRequest request) {
-        Page<Commodity> page = new Page<Commodity>(pageNo, pageSize);//分页查询
+    public String appIndex(HttpServletRequest request) {
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
         if (openid == null) {
             return "redirect:" + ConfigUtil.GET_CODE;//微信取code
         }
-        page = commodityService.findPage(page, commodity);
-        model.addAttribute("page", page);
-        model.addAttribute("commodityList", page.getList());
         return "/mqds/m/index";//首页
+    }
+
+    /**
+     * //首页加载数据
+     *
+     * @param pageNo        当前页娄
+     * @param pageSize      每页条数
+     * @param type          1推荐 2热门
+     * @param commodityName 商品名称(模糊查询)
+     * @return
+     */
+    @RequestMapping("/indexData")
+    @ResponseBody
+    public Map<String, Object> indexData(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize, Integer type, String commodityName) {
+        Map<String, Object> returnMap = new HashedMap();
+        try {
+            Map<String, Object> paramMapIndex = new HashedMap();
+            paramMapIndex.put("pageNo", (pageNo * pageSize));
+            paramMapIndex.put("pageSize", pageSize);
+            paramMapIndex.put("type", type == 1 ? "" : type);//如果是1就查所有
+            paramMapIndex.put("commodityName", commodityName);
+            List<Commodity> listCommodity = commodityService.findPageCommodity(paramMapIndex);//页面商品列表数据
+            returnMap.put("listCommodity", listCommodity);
+            if (pageNo == 0 && type == 1 && commodityName == "") {//如果是第一次加载
+                Map<String, Object> paramMap = new HashedMap();
+                paramMap.put("pageNo", 0);
+                paramMap.put("pageSize", 4);//顶部banner
+                paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+                List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
+                returnMap.put("banner", listBanner);//顶部banner
+                paramMap.put("pageSize", 5);//推荐精品
+                paramMap.put("commodityState", 1);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+                List<Commodity> listProducts = commodityService.findAdvertising(paramMap);
+                returnMap.put("products", listProducts);//精品推荐
+            }
+            returnMap.put("msg", "数据查询成功");
+            returnMap.put("code", "0");
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnMap.put("msg", "数据查询失败");
+            returnMap.put("code", "-1");
+        }
+        return returnMap;
     }
 
     /**
@@ -177,7 +216,7 @@ public class IndexController {
     @RequestMapping("/orderPage")
     public String orderPage(Model model, String userId) {
         try {
-            ReceiptAddress address =  addressService.findAddressByUserId(userId);//个人默认收货地址
+            ReceiptAddress address = addressService.findAddressByUserId(userId);//个人默认收货地址
             model.addAttribute("address", address);
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,10 +252,11 @@ public class IndexController {
 
     /**
      * 手机端所有订单页面数据请求
+     *
      * @param orderState 订单状态
-     * @param pageNo 当前页数
-     * @param pageSize 每页显示条数
-     * @param userId 用户id
+     * @param pageNo     当前页数
+     * @param pageSize   每页显示条数
+     * @param userId     用户id
      * @return
      */
     @RequestMapping("/orderListDate")
@@ -322,7 +362,9 @@ public class IndexController {
      */
     @RequestMapping("/payPage")
     public String payPage(Model m, String orderBody, String payMoney, String orderNumber, HttpServletRequest request) {
-        String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
+      /*  String openid = (String) request.getSession().getAttribute("openid");//微信用户openId*/
+        Muser muser = (Muser) request.getSession().getAttribute("mUser");//微信用户openId
+        String openid = muser.getOpenId();
         m.addAttribute("openid", openid);
         m.addAttribute("orderNo", orderNumber);
         String timeStamp = PayCommonUtil.create_timestamp();

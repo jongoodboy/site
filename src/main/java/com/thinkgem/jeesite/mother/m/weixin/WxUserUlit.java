@@ -27,13 +27,9 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "weixin")
 public class WxUserUlit {
-    //商品
-    @Resource
-    private CommodityService commodityService;
     //手机用户
     @Resource
     private MuserService mUserSerivce;
-
     @RequestMapping("/getCode")
     public String accessToken(String code, HttpServletRequest request, Model model) {
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
@@ -68,11 +64,6 @@ public class WxUserUlit {
             }
         }
         try {
-            Page<Commodity> page = new Page<Commodity>(1, 10);//分页查询
-            Commodity commodity = new Commodity();
-            page = commodityService.findPage(page, commodity);
-            model.addAttribute("page", page);
-            model.addAttribute("commodityList", page.getList());
             String openid = (String) request.getSession().getAttribute("openid");//用户OpenId
             Map<String, Object> paramMap = new HashedMap();
             paramMap.put("openId", openid);

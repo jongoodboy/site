@@ -17,9 +17,11 @@
         create_date as "createDate",
         del_flag as "delFlag"
     </sql>
-    <!--商品列表 -->
+    <!--后台商品列表 -->
     <select id="findList" resultType="Commodity" parameterType="Commodity">
-        SELECT <include refid="commodity"/> FROM
+        SELECT
+        <include refid="commodity"/>
+        FROM
         mq_commodity
         WHERE
         1 = 1
@@ -32,10 +34,32 @@
         <if test="commodityRelease != '' and commodityRelease != null">
             and commodity_release = #{commodityRelease}
         </if>
+        AND del_flag = '0'
     </select>
+    <!--手机端商品列表 -->
+    <select id="findPageCommodity" resultType="Commodity" parameterType="java.util.Map">
+        SELECT
+        <include refid="commodity"/>
+        FROM
+        mq_commodity
+        WHERE
+        1 = 1
+        <if test="type != '' and type != null">
+            and commodity_state = #{type}
+        </if>
+        <if test="commodityName != '' and commodityName != null">
+           AND commodity_name LIKE '%${commodityName}%'
+        </if>
+        AND del_flag = '0'
+        ORDER BY create_date DESC
+        LIMIT  #{pageNo},#{pageSize}
+    </select>
+
     <!--查看单条记录-->
     <select id="get" resultType="Commodity" parameterType="String">
-        SELECT <include refid="commodity"/> FROM
+        SELECT
+        <include refid="commodity"/>
+        FROM
         mq_commodity
         WHERE
         id=#{id}
@@ -96,4 +120,15 @@
         WHERE
         id = #{id}
     </update>
+    <!--手机端banner和精品推荐-->
+    <select id="findAdvertising" resultType="Commodity" parameterType="java.util.Map">
+        SELECT
+        <include refid="commodity"/>
+        FROM
+        mq_commodity
+        WHERE
+        commodity_state = #{commodityState}
+        ORDER BY create_date DESC
+        LIMIT #{pageNo},#{pageSize}
+    </select>
 </mapper>

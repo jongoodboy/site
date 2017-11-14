@@ -59,13 +59,12 @@
     //打开消息提示
     function loadingShow(msg, closeTime, icon) {
         $("#loading").modal('open');
-        if (msg != undefined) {
+        if (msg != undefined && msg != '') {
             $(".loading-titel").html(msg);
         }
-        if (closeTime == undefined) {
-            closeTime = 1000;
+        if (closeTime != undefined) {
+            setTimeout(loadingClose, closeTime)
         }
-        setTimeout(loadingClose, closeTime);
     }
     //关闭信息提示
     function loadingClose() {
@@ -77,7 +76,7 @@
     <div class="am-modal-dialog">
         <div class="am-modal-hd loading-titel">
             <span class="am-icon-spinner am-icon-spin"></span>
-            正在提交,请稍后!
+            数据加载中....
         </div>
     </div>
 </div>

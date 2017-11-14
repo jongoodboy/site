@@ -22,9 +22,7 @@
         FROM mq_order
         WHERE
         del_flag = '0'
-        <if test="userId != null and userId != ''">
-            AND user_id = #{userId}
-        </if>
+        AND user_id = #{userId}
         <if test="orderState != null and orderState != ''">
             AND order_state = #{orderState}
         </if>
