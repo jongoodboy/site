@@ -30,6 +30,10 @@ public class WxUserUlit {
     //商品
     @Resource
     private CommodityService commodityService;
+    //手机用户
+    @Resource
+    private MuserService mUserSerivce;
+
     @RequestMapping("/getCode")
     public String accessToken(String code, HttpServletRequest request, Model model) {
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
@@ -69,6 +73,20 @@ public class WxUserUlit {
             page = commodityService.findPage(page, commodity);
             model.addAttribute("page", page);
             model.addAttribute("commodityList", page.getList());
+            String openid = (String) request.getSession().getAttribute("openid");//用户OpenId
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("openId", openid);
+            Muser muser = mUserSerivce.findUser(paramMap);
+            if (muser != null) {//如果这微信用户已经在平台登录过
+                if (muser.getPhone() != null) {//如果已经绑定了手机号
+                    //返回首页
+                    request.getSession().setAttribute("mUser", muser);//存起来
+                }else{
+                    return "/mqds/m/bindPhone";//手机绑定页面
+                }
+            }else{
+                return "/mqds/m/bindPhone";//手机绑定页面
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
