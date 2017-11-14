@@ -27,6 +27,7 @@
         margin: 0;
         color: #333;
     }
+
     .am-divider-default {
         border-top: 1px solid #fdf6f6;
         margin: 0;
@@ -255,13 +256,11 @@
     });
     //选择地址
     function selectAddess(id) {
-       $.post("${ctx}/m/checkedDefault?adddressId=" + id + "&userId=${param.userId}", function (data) {
+        $.post("${ctx}/m/checkedDefault?adddressId=" + id + "&userId=${param.userId}", function (data) {
             if (data.code == "0") {
-                history.go(-1);
-                location.reload(-1);
+                self.location = document.referrer;
             }
         })
-
     }
 </script>
 </body>

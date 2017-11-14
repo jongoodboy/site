@@ -83,6 +83,7 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     function onBridgeReady() {
+        $(".am-btn-danger").html("支付中...").addClass("am-disabled");//设置为不可用
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
                     "appId": '${appid}',     //公众号名称，由商户传入
@@ -94,14 +95,17 @@
                 },
                 function (res) {
                     if (res.err_msg == "get_brand_wcpay_request:ok") {// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                        loadingShow("支付成功");
+                        $(".am-btn-danger").html("已支付");
                         paySuccess();
                     } else if (res.err_msg == "get_brand_wcpay_request:cancel") {//  支付过程中用户取消
-                        alert("你已经取消支付了");
-
+                        loadingShow("支付冲被取消");
+                        $(".am-btn-danger").html("确认支付").removeClass("am-disabled");
                     } else if (res.err_msg == " get_brand_wcpay_request:fail") {//  支付失败
-                        alert("支付失败");
+                        loadingShow("支付失败");
+                        $(".am-btn-danger").html("确认支付").removeClass("am-disabled");
                     }else{
-                        alert(res.err_msg);
+                        loadingShow(res.err_msg);
                     }
                 }
         );
