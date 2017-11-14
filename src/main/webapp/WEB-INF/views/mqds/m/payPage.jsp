@@ -99,7 +99,7 @@
                         $(".am-btn-danger").html("已支付");
                         paySuccess();
                     } else if (res.err_msg == "get_brand_wcpay_request:cancel") {//  支付过程中用户取消
-                        loadingShow("支付冲被取消");
+                        loadingShow("支付被您取消了");
                         $(".am-btn-danger").html("确认支付").removeClass("am-disabled");
                     } else if (res.err_msg == " get_brand_wcpay_request:fail") {//  支付失败
                         loadingShow("支付失败");

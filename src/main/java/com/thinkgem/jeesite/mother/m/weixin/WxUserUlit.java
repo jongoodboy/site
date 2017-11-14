@@ -27,8 +27,11 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "weixin")
 public class WxUserUlit {
+    //商品
+    @Resource
+    private CommodityService commodityService;
     @RequestMapping("/getCode")
-    public void accessToken(String code, HttpServletRequest request, Model model) {
+    public String accessToken(String code, HttpServletRequest request, Model model) {
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
         String src = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
         if (openId == null) {
@@ -53,11 +56,22 @@ public class WxUserUlit {
                 System.out.println("=============================");
                 System.out.println("Contents of get request ends");
                 System.out.println("=============================");
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        try {
+            Page<Commodity> page = new Page<Commodity>(1, 10);//分页查询
+            Commodity commodity = new Commodity();
+            page = commodityService.findPage(page, commodity);
+            model.addAttribute("page", page);
+            model.addAttribute("commodityList", page.getList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "/mqds/m/index";//首页
     }
 }
