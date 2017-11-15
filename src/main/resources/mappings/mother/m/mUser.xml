@@ -66,4 +66,22 @@
             AND phone = #{phone}
         </if>
     </select>
+    <!--设置用户为会员-->
+    <update id="updateUserIsVIP" parameterType="java.util.Map">
+        UPDATE mq_user
+        SET
+        is_vip = 0
+        WHERE
+        id = (
+           SELECT
+            o.user_id
+            FROM
+            mq_order o
+            RIGHT JOIN  mq_commodity c
+            ON o.commodity_id = c.id
+            WHERE o.order_number = #{orderNumber}
+            and c.commodity_state = #{commodityState}
+            LIMIT 1
+        )
+    </update>
 </mapper>

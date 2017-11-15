@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.mother.m.service;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
+import com.thinkgem.jeesite.mother.m.dao.MuserDao;
 import com.thinkgem.jeesite.mother.m.dao.OrderDao;
 import com.thinkgem.jeesite.mother.m.entity.Order;
 import com.thinkgem.jeesite.mother.m.entity.ReceiptAddress;
@@ -28,7 +29,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
     CommodityService comodityService;
     @Resource
     AddressService addressService;
-
+    @Resource
+    MuserDao muserDao;
     public int addList(List<Order> list) {
         return orderDao.addList(list);
     }
@@ -95,8 +97,14 @@ public class OrderService extends CrudService<OrderDao, Order> {
         }
         return returnMap;
     }
-   //修改订单状态
+   //修改订单状态并查看有没有购买必卖商品成为会员
     public int updateOrderState(Map<String,Object> map){
+        map.put("commodityState","3");//查找有没有必卖商品。有的话把该用户设置成为会员
+        try {
+            muserDao.updateUserIsVIP(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return orderDao.updateOrderState(map);
     }
 }

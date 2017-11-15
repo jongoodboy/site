@@ -80,7 +80,6 @@
         </div>
     </div>
 </div>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     function onBridgeReady() {
         $(".am-btn-danger").html("支付中...").addClass("am-disabled");//设置为不可用
