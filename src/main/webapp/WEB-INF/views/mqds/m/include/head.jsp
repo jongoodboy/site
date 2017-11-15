@@ -62,7 +62,10 @@
         if (msg != undefined && msg != '') {
             $(".loading-titel").html(msg);
         }
-        if (closeTime != undefined) {
+        if (closeTime == undefined) {
+            closeTime = 1000;
+        }
+        if(msg != undefined){
             setTimeout(loadingClose, closeTime)
         }
     }

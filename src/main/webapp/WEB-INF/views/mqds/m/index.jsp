@@ -99,9 +99,9 @@
 </footer>
 <script>
 
-    var userId = '${sessionScope.mUser.id}';
+    var phone = '${sessionScope.mUser.phone}';
     function openPage(url) {
-        if (userId == undefined) {//没有绑定过手机号
+        if (phone == "") {//没有绑定过手机号
             window.location.href = "${ctx}/m/bindPhone?url=" + url;
         } else {//已经绑定
             window.location.href = url;
@@ -131,7 +131,6 @@
     var userId = '${sessionScope.mUser.id}';//用户Id
     //页面初始数据
     function init() {
-
         isLoading = false;
         $.post("${ctx}/m/indexData", paramData, function (ret) {
             if (ret.code == "0") {

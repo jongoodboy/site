@@ -61,12 +61,14 @@ public class IndexController {
     //每次请求都会先进这里
     @ModelAttribute
     public void getMuser(HttpServletRequest request) {
-        Map<String, Object> paramMap = new HashedMap();
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
+        Map<String, Object> paramMap = new HashedMap();
         paramMap.put("openId", openId);
         Muser m = mUserSerivce.findUser(paramMap);
         if (m != null && m.getPhone() != null) {
             request.getSession().setAttribute("mUser", m);//存起来
+        }else{
+            request.getSession().removeAttribute("mUser");//清空
         }
     }
 

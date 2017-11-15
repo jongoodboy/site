@@ -61,11 +61,9 @@
         FROM mq_user
         WHERE
         1 = 1
+        AND open_id = #{openId}
         <if test="phone != null and phone != ''">
             AND phone = #{phone}
-        </if>
-        <if test="openId != null and openId != ''">
-            AND open_id = #{openId}
         </if>
     </select>
 </mapper>
