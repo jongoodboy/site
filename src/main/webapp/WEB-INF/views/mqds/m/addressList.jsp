@@ -177,7 +177,7 @@
             onConfirm: function (options) {
                 $.post("${ctx}/m/delAddress?adddressId=" + $(this.relatedTarget).attr("id"), function (data) {
                     if (data.code == "0") {
-                        window.location.href = window.location.href;//刷新
+                        window.location.href = window.location.href;//刷新当前页面
                     }
                 })
             },
@@ -240,7 +240,11 @@
         $.post("${ctx}/m/saveAddress", DATA, function (data) {
             if (data.code == "0") {
                 $("#open-bottom-model").modal('close');
-                window.location.href = window.location.href;//刷新
+                if('${isOrderPage}' != null && '${isOrderPage}' != undefined){
+                    self.location = document.referrer;//返回并刷新上一页面
+                }else{
+                    window.location.href = window.location.href;//刷新
+                }
             }
         })
     }
@@ -258,7 +262,7 @@
     function selectAddess(id) {
         $.post("${ctx}/m/checkedDefault?adddressId=" + id + "&userId=${param.userId}", function (data) {
             if (data.code == "0") {
-                self.location = document.referrer;
+                self.location = document.referrer;//返回并刷新上一页面
             }
         })
     }
