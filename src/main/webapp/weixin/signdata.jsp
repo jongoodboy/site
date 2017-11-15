@@ -1,0 +1,1 @@
+<%@ page import="com.thinkgem.jeesite.mother.m.weixin.utlis.Sign" %><%@ page contentType="text/html;charset=UTF-8" language="java" %><%String json = Sign.signJson(request.getParameter("www.muqinonline.com"));response.getWriter().write(json);%>

@@ -67,6 +67,7 @@
         display: inline-block;
     }
 </style>
+
 <body>
 <div class="content">
     <ul class="am-list am-list-static am-list-border">
@@ -145,5 +146,57 @@
         </ul>
     </div>
 </footer>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+    var url = "hhttp://www.muqinonline.com${ctx}/m";
+    $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
+        //微信分享
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: ret.appId, // 必填，公众号的唯一标识
+            timestamp: ret.timestamp, // 必填，生成签名的时间戳
+            nonceStr: ret.nonceStr, // 必填，生成签名的随机串
+            signature: ret.signature,// 必填，签名，见附录1
+            jsApiList: [
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareQZone'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.error(function(res) {
+            console.log(res);
+        });
+
+    })
+    wx.ready(function (){
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+            title: "我的一小店,赚了不少呢,一起来赚钱吧", // 分享标题
+            desc: "就是一个测试哦", // 分享描述
+            link: url, // 分享链接
+            imgUrl: "http://n.sinaimg.cn/photo/transform/20171115/Im15-fynshev6248469.jpg", // 分享图标
+            // type: 'link', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                /*	alert('测试：成功发送给朋友');*/
+            },
+            cancel: function () {
+                /*	alert('测试：取消了发送给朋友');*/
+            }
+        });
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+            title:"我的一小店,赚了不少呢,一起来赚钱吧", // 分享标题
+            desc: "测试分享", // 分享描述
+            link: url, // 分享链接
+            imgUrl: "http://n.sinaimg.cn/photo/transform/20171115/Im15-fynshev6248469.jpg", // 分享图标
+            success: function () {
+            },
+            cancel: function () {
+            }
+        });
+    });
+</script>
 </body>
 </html>

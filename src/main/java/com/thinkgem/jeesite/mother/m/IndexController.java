@@ -13,6 +13,7 @@ import com.thinkgem.jeesite.mother.m.service.MuserService;
 import com.thinkgem.jeesite.mother.m.service.OrderService;
 import com.thinkgem.jeesite.mother.m.service.ShoppingCatService;
 import com.thinkgem.jeesite.mother.m.weixin.*;
+import com.thinkgem.jeesite.mother.m.weixin.utlis.Sign;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,7 +68,7 @@ public class IndexController {
         Muser m = mUserSerivce.findUser(paramMap);
         if (m != null && m.getPhone() != null) {
             request.getSession().setAttribute("mUser", m);//存起来
-        }else{
+        } else {
             request.getSession().removeAttribute("mUser");//清空
         }
     }
@@ -620,5 +621,16 @@ public class IndexController {
         return returnMap;
     }
 
+    /**
+     * 获取微信分享配置
+     *
+     * @param url
+     * @return
+     */
+    @RequestMapping("/getWxConfig")
+    @ResponseBody
+    public Map<String, String> getWXConfig(String url) {
+        return Sign.sign(url);
+    }
 
 }
