@@ -143,7 +143,7 @@
                         if (banner[i].commodityImager != null) {
                             img = banner[i].commodityImager.split("|");
                         }
-                        strBanner += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + banner[i].id + '"> <img  class="lazy" data-original="' + img[1] + '"/></a></li>';
+                        strBanner += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + banner[i].id + '"> <img  class="lazy" src="' + img[1] + '"/></a></li>';
                     }
                     $("#banner").append(strBanner);//顶部banner图
                     $('#banner').parent().flexslider({
@@ -158,7 +158,7 @@
                         if (products[i].commodityImager != null) {
                             img = products[i].commodityImager.split("|");
                         }
-                        productsStr += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" data-original="' + img[1] + '"/></a></li>';
+                        productsStr += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + img[1] + '"/></a></li>';
                     }
                     $('#products').append(productsStr);
                     $('#products').parent().flexslider({
@@ -167,7 +167,6 @@
                         directionNav: false,
                         controlNav: false
                     });
-                    $("img.lazy").lazyload();//图片懒加载
                 }
                 var data = ret.listCommodity;//商品数据
                 var commodityListStr = "";//商品列表

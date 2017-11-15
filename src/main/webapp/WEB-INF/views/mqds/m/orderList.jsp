@@ -177,12 +177,12 @@
                         <!--头部-->
                         str += '<div class="orderoOperation">';
                         var orderTitle = "已完成";//头部显示
-                        var shoppingInfo = '共' + ret.data[i].commodityIndex + '件商品&nbsp;&nbsp;&nbsp;需付款:<span class="pay-money">￥' + ret.data[i].sumOrderMoney + '</span>'
+                        var infoText = "需付款";
                         var gopay = "去支付";
                         switch (ret.data[i].orderState){
                             case "0":
                                 orderTitle = "已完成";
-                                shoppingInfo = "交易完成!交易结束";
+                                infoText = "实付款";
                                 gopay = "再次购买";
                                 break;
                             case "1":
@@ -190,24 +190,25 @@
                                 break;
                             case "2":
                                 orderTitle = "待发货";
-                                shoppingInfo = "交易完成!等待卖家发货";
+                                infoText = "实付款";
                                 gopay = "我要催单";
                                 break;
                             case "3":
                                 orderTitle = "待收货";
-                                shoppingInfo = "交易完成!卖家已发货";
+                                infoText = "实付款";
                                 gopay = "确认收货";
                                 break;
                             case "4":
                                 orderTitle = "已取消";
-                                shoppingInfo = "交易已取消";
+                                infoText = "实付款";
                                 gopay = "重新购买";
                                 break;
                         }
+                        var shoppingInfo = '共' + ret.data[i].commodityIndex + '件商品&nbsp;&nbsp;&nbsp;'+infoText+':<span class="pay-money">￥' + ret.data[i].sumOrderMoney + '</span>'
                         str += '<span class="order-title">'+orderTitle+'</span></div>';
                         var shoppingListIndex = ret.data[i].shppingList.length;
                         if (shoppingListIndex == 1) {//如果只是一个商品
-                            str += '<ul class="one-shopping" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\')">';
+                            str += '<ul class="one-shopping" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\','+ret.data[i].orderState+')">';
                         } else {
                             str += '<ul class="am-slides" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\')">';
                         }
@@ -248,8 +249,8 @@
         init(index)
     }
     //订单详情
-    function orderDetail(orderNumber) {
-        window.location.href = "${ctx}/m/orderDetail?orderNumber=" + orderNumber
+    function orderDetail(orderNumber,payMoney,orderState) {
+        window.location.href = "${ctx}/m/orderDetail?orderNumber=" + orderNumber+"&payMoney="+payMoney+"&orderState="+orderState;
     }
     //去支付
     function pay(orderNumber, payMoney,orderState) {

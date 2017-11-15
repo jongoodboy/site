@@ -90,7 +90,10 @@
         if (html != '' && html != null) {//显示购物车提交过来的购物列表
             var html = html.split(',');
             var str = "";
-            for (var i = 1; i < html.length; i++) {
+            for (var i = 1; i < html.length; i++) {//最多显示三个商品的图片
+                if(i == 3){
+                    break;
+                }
                 str += "<li>" + html[i] + "</li>";
             }
         }

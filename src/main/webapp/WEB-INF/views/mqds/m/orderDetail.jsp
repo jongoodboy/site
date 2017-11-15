@@ -40,6 +40,13 @@
         h5 {
             margin: 0;
         }
+        .but-info{
+            color: #333;
+            line-height: 30px;
+        }
+        .am-btn-default{
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -50,19 +57,20 @@
             <h5>${address.consignee}${address.consigneePhone}</h5>
             <span>${address.province}${address.city}${address.county}${address.address}</span>
         </li>
+        <c:set value="0" var="commodityPice"></c:set>
         <c:forEach items="${listMap.commidityList}" var="itme" varStatus="index">
             <li class="buy-pay-stlye shppoing-list" onclick="commodityDetail('${itme.id}')">
                 <c:set var="img" value="${fn:split(itme.commodityImager,'|')}"></c:set>
-                    <ul class="nav-menu">
-                        <li>
-                            <img class="lazy" src="${img[0]}"/>
-                        </li>
-                        <li>
-                            <span>${itme.commodityName}</span><br/>
-                            <span>数量:${itme.commodityNumber}</span><br/>
-                            <span>￥${itme.commodityPice}</span>
-                        </li>
-                    </ul>
+                <ul class="nav-menu">
+                    <li>
+                        <img class="lazy" src="${img[0]}"/>
+                    </li>
+                    <li>
+                        <span>${itme.commodityName}</span><br/>
+                        <span>数量:${itme.commodityNumber}</span><br/>
+                        <span>￥${itme.commodityPice}</span>
+                    </li>
+                </ul>
             </li>
         </c:forEach>
         <li class="buy-pay-stlye">
@@ -76,21 +84,41 @@
             </ul>
         </li>
     </ul>
-   <%-- <div class="to-settle-accounts">
+    <div class="to-settle-accounts">
         <ul class="nav-menu">
-            &lt;%&ndash;  <li>
-                  <span class="payMoney">实付款:￥<span id="payMoney"></span></span>
-              </li>&ndash;%&gt;
+            <li>
+                <c:if test="${param.orderState == '4'}">
+                    <button type="button" class="am-btn am-btn-default">删除订单</button>
+                </c:if>
+                <c:if test="${param.orderState != '4'}">
+                    <span class="payMoney">实付款:￥<span id="payMoney">${param.payMoney}</span></span>
+                </c:if>
+            </li>
             <li class="right-menu">
-                <button type="button" class="am-btn am-btn-danger">去支付</button>
+                <c:if test="${param.orderState == '1'}">
+                    <button type="button" class="am-btn am-btn-danger">去支付</button>
+                </c:if>
+                <c:if test="${param.orderState == '2'}">
+                    <button type="button" class="am-btn but-info">已支付</button>
+                </c:if>
+                <c:if test="${param.orderState == '3'}">
+                    <button type="button" class="am-btn but-info">侍收货</button>
+                </c:if>
+                <c:if test="${param.orderState == '4'}">
+                    <button type="button" class="am-btn but-info">已取消</button>
+                </c:if>
             </li>
         </ul>
-    </div>--%>
+    </div>
 </div>
 <script>
-    function  commodityDetail(id) {
-        window.location.href="${ctx}/m/commodityDetail?commodityId="+id;
+    //商品详情
+    function commodityDetail(id) {
+        window.location.href = "${ctx}/m/commodityDetail?commodityId=" + id;
     }
+    $(".am-btn-danger").on("click",function () {
+        window.location.href = "${ctx}/m/payPage?orderNumber=${param.orderNumber}&payMoney=${param.payMoney}&orderBody=购买母亲云电商平台产品";
+    })
 </script>
 </body>
 </html>
