@@ -35,7 +35,7 @@
                 <li><%--<i class="my-icon like"></i>--%>￥</li>
                 <li class="active">${itme.commodityPice}
                     / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
-                <li style="float: right">运费:15元</li>
+                <li style="float: right">运费:${itme.freight == null ? 0 : itme.freight}元</li>
             </ul>
             <div>
                 <spen class="commodity-name">商品描述</spen>
@@ -66,7 +66,8 @@
                                 <li><%--<i class="my-icon like"></i>--%>￥</li>
                                 <li class="active">${itme.commodityPice}</li>
                             </ul>
-                            <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}" class="">
+                            <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}"
+                               class="">
                                 <spen class="buy">购买</spen>
                             </a>
                         </div>

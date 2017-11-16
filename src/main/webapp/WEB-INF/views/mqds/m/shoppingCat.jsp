@@ -90,7 +90,7 @@
                             <input type="checkbox" checked="checked"
                                    name="select" value="2" commodityId="${map.id }"
                                    commodityNumber="${map.commodityNumber}"
-                                   money="${map.commodityPice}" shoppingNumber="${map.shoppingNumber}" data-am-ucheck checked><!--商品单价用于计算-->
+                                   money="${map.commodityPice+100}" shoppingNumber="${map.shoppingNumber}" data-am-ucheck checked><!--商品单价用于计算-->
                         </label>
                     </div>
                     <c:set var="img" value="${fn:split(map.commodityImager, '|')}"></c:set>
@@ -106,8 +106,8 @@
                             </a>
                                 <%--  <span>颜色:黑色&nbsp;尺码:40</span>--%>
                             <ul class="nav-menu">
-                                <li><i class="my-icon like"></i></li>
-                                <li class="active">${map.commodityPice}</li>
+                                <li class="active">￥${map.commodityPice}</li>
+                                <li>运费:${map.freight == null ? 0 : map.freight}元</li>
                                 <li style="float: right">
                                     <span class="buy-span buy-del remove-number">-</span>
                                     <input value="${map.shoppingNumber}" class="buy-number" type="number"

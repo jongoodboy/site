@@ -80,6 +80,18 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">商品成本价:</label>
+        <div class="controls">
+            <form:input path="costPrice" htmlEscape="false" maxlength="200" type="number"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">运费:</label>
+        <div class="controls">
+            <form:input path="freight" htmlEscape="false" maxlength="200" type="number"/>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">商品图片:</label>
         <div class="controls">
             <sys:ckfinder input="images" type="images" uploadPath="/cms/article" selectMultiple="true"/>

@@ -24,6 +24,19 @@
     .am-slider-default {
         margin-bottom: 5px;
     }
+    .header{
+        position: relative;
+    }
+    .am-panel{
+        margin: 1px;
+    }
+    .am-panel .am-panel-bd{
+        font-size: 30px;
+    }
+    .am-img-thumbnail{
+        width: 100px;
+        height: 100px;
+    }
 </style>
 <body>
 <%--<header data-am-widget="header"--%>
@@ -44,6 +57,14 @@
 <%--</a>--%>
 <%--</div>--%>
 <%--</header>--%>
+<c:if test="${sessionScope.mUser.isVip == '0'}"> <!--如果会员-->
+    <div class="am-panel am-panel-default">
+        <div class="am-panel-bd">
+            <img class="am-img-thumbnail am-circle" src="http://s.amazeui.org/media/i/demos/bing-1.jpg"/>
+            您的店铺
+        </div>
+    </div>
+</c:if>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
     <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
@@ -51,6 +72,7 @@
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
         <li onclick="tapMenu(this,2)">热门</li>
+
     </ul>
 </div>
 <div class="content" id="content">
@@ -192,10 +214,10 @@
                 if (data.length < paramData.pageSize) {
                     isScroll = false;//不可以滑动了
                 }
-                if (data.length < paramData.pageSize && paramData.pageNo > 1) {
+              /*  if (data.length < paramData.pageSize && paramData.pageNo > 1) {
                     loadingShow("数据加载完啦", "2000");
                     return;
-                }
+                }*/
                 loadingClose();//关闭加载提示
             }
         })

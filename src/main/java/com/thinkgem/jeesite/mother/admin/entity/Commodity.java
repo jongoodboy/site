@@ -20,6 +20,8 @@ public class Commodity extends DataEntity<Commodity> {
     private Integer commodityNumber;//商品库存量
     private Integer commodityCompany;//商品单位(1.个2.条3.件4.根 -->)
     private Integer commodityRelease;//商品发布状态(0在售,1已下架)
+    private BigDecimal costPrice;//商品成本价
+    private BigDecimal freight;//运费
 
     public Integer getCommodityRelease() {
         return commodityRelease;
@@ -81,6 +83,22 @@ public class Commodity extends DataEntity<Commodity> {
 
     public void setCommodityNumber(Integer commodityNumber) {
         this.commodityNumber = commodityNumber;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public BigDecimal getFreight() {
+        return freight;
+    }
+
+    public void setFreight(BigDecimal freight) {
+        this.freight = freight;
     }
 
     public Integer getCommodityCompany() {

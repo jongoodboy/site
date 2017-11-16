@@ -106,6 +106,9 @@
                     <span>我的店铺</span>
                 </li>
                 <li>
+                    <span>分享我的店铺</span>
+                </li>
+                <li>
                     <a href="${ctx}/m/addressList?userId=${sessionScope.mUser.id}">
                         <span>收货地址管理</span>
                     </a>
@@ -160,9 +163,7 @@
             signature: ret.signature,// 必填，签名，见附录1
             jsApiList: [
                 'onMenuShareTimeline',
-                'onMenuShareAppMessage',
-                'onMenuShareQQ',
-                'onMenuShareQZone'
+                'onMenuShareAppMessage'
             ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         });
         wx.error(function(res) {

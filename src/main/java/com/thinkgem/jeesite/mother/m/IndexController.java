@@ -77,9 +77,9 @@ public class IndexController {
     @RequestMapping
     public String appIndex(HttpServletRequest request) {
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
-        if (openid == null) {
+       /* if (openid == null) {
             return "redirect:" + ConfigUtil.GET_CODE;//微信取code
-        }
+        }*/
         return "/mqds/m/index";//首页
     }
 

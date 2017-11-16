@@ -12,6 +12,8 @@
         commodity_number as "commodityNumber",
         commodity_company as "commodityCompany",
         commodity_release as "commodityRelease",
+        cost_price as "costPrice",
+        freight as "freight",
         create_by as "createBy",
         create_name as "createName",
         create_date as "createDate",
@@ -48,11 +50,11 @@
             and commodity_state = #{type}
         </if>
         <if test="commodityName != '' and commodityName != null">
-           AND commodity_name LIKE '%${commodityName}%'
+            AND commodity_name LIKE '%${commodityName}%'
         </if>
         AND del_flag = '0'
         ORDER BY create_date DESC
-        LIMIT  #{pageNo},#{pageSize}
+        LIMIT #{pageNo},#{pageSize}
     </select>
 
     <!--查看单条记录-->
@@ -78,6 +80,8 @@
         commodity_number,
         commodity_company,
         commodity_release,
+        cost_price,
+        freight,
         create_by,
         create_name,
         create_date,
@@ -94,6 +98,8 @@
       #{commodityNumber},
       #{commodityCompany},
       #{commodityRelease},
+      #{costPrice},
+      #{freight},
       #{createBy.id},
       #{createBy.name},
       #{createDate},
@@ -113,6 +119,8 @@
         commodity_number = #{commodityNumber},
         commodity_company = #{commodityCompany},
         commodity_release = #{commodityRelease},
+        cost_price  =#{costPrice},
+        freight = #{freight},
         update_by = #{createBy.id},
         update_name = #{createBy.name},
         update_date =  #{createDate},

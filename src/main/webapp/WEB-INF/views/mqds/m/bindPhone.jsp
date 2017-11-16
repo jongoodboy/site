@@ -130,7 +130,6 @@
     var codeBut = true;
     code.on("click", function () {
         if (codeBut) {
-            alert(1);
             codeBut = false;
             countDown();
         }
