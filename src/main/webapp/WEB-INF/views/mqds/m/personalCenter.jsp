@@ -148,7 +148,7 @@
 </footer>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
-    var url = "hhttp://www.muqinonline.com${ctx}/m";
+    var url = "http://www.muqinonline.com${ctx}/m";
     $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
         //微信分享
         wx.config({
