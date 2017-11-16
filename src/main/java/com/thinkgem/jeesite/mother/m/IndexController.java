@@ -74,12 +74,24 @@ public class IndexController {
     }
 
     //手机端商城首页
+
+    /**
+     *
+     * @param request
+     * @param code 分享的code
+     * @return
+     */
     @RequestMapping
-    public String appIndex(HttpServletRequest request) {
+    public String appIndex(HttpServletRequest request,String code) {
+        if(code != null){//把个人分享的code存起来方便订单支付之后把钱分成
+            request.getSession().setAttribute("code",code);
+        }else{
+            request.getSession().removeAttribute("code");
+        }
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
-       /* if (openid == null) {
+        if (openid == null) {
             return "redirect:" + ConfigUtil.GET_CODE;//微信取code
-        }*/
+        }
         return "/mqds/m/index";//首页
     }
 
@@ -407,20 +419,22 @@ public class IndexController {
     }
 
     /**
-     * 支付成功后改订单回已支付
+     * 支付成功后改订单回已支付 如果是必卖商品购买的人变成会员
      *
      * @param orderNumber
      * @return
      */
     @RequestMapping("updateOrderState")
     @ResponseBody
-    public Map<String, Object> updateOrderState(String orderNumber, String state) {
+    public Map<String, Object> updateOrderState(String orderNumber, String state,HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
+
         try {
             Map<String, Object> paramMap = new HashedMap();
             paramMap.put("orderNumber", orderNumber);
             paramMap.put("orderState", state);
             paramMap.put("updateDate", new Date());
+            paramMap.put("code",request.getSession().getAttribute("code"));//分享码
             orderService.updateOrderState(paramMap);//0已完成,1待付款,2.待发货,3已发货,4已取消)
             returnMap.put("code", "0");
             returnMap.put("msg", "修改订单成功");
@@ -591,7 +605,7 @@ public class IndexController {
         Map<String, Object> returnMap = new HashedMap();
         try {
             Muser muser = new Muser();
-            String code = "MQY"+phone.substring(3,phone.length());//生成个人分享码
+            String code = "MQY"+new Date().getTime();//生成个人分享码
             String openId = (String) request.getSession().getAttribute("openid");//微信openId
             muser.setOpenId(openId);
             muser.setCode(code);

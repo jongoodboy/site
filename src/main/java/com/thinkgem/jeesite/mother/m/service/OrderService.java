@@ -31,6 +31,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
     AddressService addressService;
     @Resource
     MuserDao muserDao;
+
     public int addList(List<Order> list) {
         return orderDao.addList(list);
     }
@@ -59,8 +60,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             list.add(com);//添加每个订单对应的商品
                             sumOrderMoney += (Float.parseFloat(o.getCommodityPrice()) * o.getCommodityNumber());
                         }
-                        map1.put("orderState",orderState);//订单状态 0已完成,1待付款,2.待发货,3已发货,4已取消,空为全部)
-                        map1.put("commodityIndex",commodityIndex);//订单对应的商品量
+                        map1.put("orderState", orderState);//订单状态 0已完成,1待付款,2.待发货,3已发货,4已取消,空为全部)
+                        map1.put("commodityIndex", commodityIndex);//订单对应的商品量
                         map1.put("shppingList", list);//订单对应所有商品列表
                         map1.put("sumOrderMoney", sumOrderMoney);//订单对应总金额
                         map1.put("sumOrderNnmber", listOrderNumber.get(i));//订单号
@@ -73,6 +74,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
         }
         return returnListMap;
     }
+
     //订单详情
     public Map<String, Object> findOrderDetailByOrderNumber(String orderNumber) {
         Map<String, Object> returnMap = new HashedMap();
@@ -88,20 +90,61 @@ public class OrderService extends CrudService<OrderDao, Order> {
                     com.setCommodityNumber(o.getCommodityNumber());//暂时存放每个商品购买的数量
                     list.add(com);//添加每个订单对应的商品
                 }
-               ReceiptAddress readdress =  addressService.findListfById(listOrderNumber.get(0).getAddressId());//查询收货地址
+                ReceiptAddress readdress = addressService.findListfById(listOrderNumber.get(0).getAddressId());//查询收货地址
                 returnMap.put("commidityList", list);//订单对应所有商品列表
-                returnMap.put("address",readdress);//订单地址
+                returnMap.put("address", readdress);//订单地址
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return returnMap;
     }
-   //修改订单状态并查看有没有购买必卖商品成为会员
-    public int updateOrderState(Map<String,Object> map){
-        map.put("commodityState","3");//查找有没有必卖商品。有的话把该用户设置成为会员
+
+    //修改订单状态并查看有没有购买必卖商品成为会员
+    public int updateOrderState(Map<String, Object> map) {
+        map.put("commodityState", "3");//查找有没有必卖商品。有的话把该用户设置成为会员
         try {
-            muserDao.updateUserIsVIP(map);
+            String code = (String) map.get("code");//分享码
+            if (code != null) {//如果有分享码
+                Map<String, Object> muerMap = muserDao.findCode(code);//根据Code分享码查询分享人的Id和他的上线
+                if (muerMap != null) {//如是查到数据
+                    BigDecimal parentMoney = new BigDecimal(0);//分享人的所提的钱
+                    String parentId = (String) muerMap.get("Id");//分享人的Id
+                    String grandFather = (String) muerMap.get("ParentId");//分享人的上线
+                    BigDecimal grandFatherMoney = new BigDecimal(0);//分享人的上线所提的钱
+                    List<String> paramList = new ArrayList<String>();
+                    paramList.add(map.get("orderNumber").toString());//根据订单号查询所有的商品
+                    List<Order> listOrder = orderDao.findOrderListByOrderNumber(paramList);//订单号对应的所有商品
+                    for (int i = 0; i < listOrder.size(); i++) {
+                        Order o = listOrder.get(i);
+                        Commodity com = comodityService.get(o.getCommodityId());//查询得到每个商品
+                     /*   float v = com.getCommodityPice().floatValue() - com.getCostPrice().floatValue();//售价减去成本价等于利润*/
+                        float v = com.getCommodityPice().floatValue();//售价于利润
+                        BigDecimal parentThisMoney = new BigDecimal(v * 0.08).setScale(2, BigDecimal.ROUND_HALF_UP);//拿8%的利润给分享人
+                        parentMoney = parentMoney.add(parentThisMoney);
+                        if(grandFather != null && grandFather != ""){//如果分享人还有上线
+                            BigDecimal grandFatherThisMoney = new BigDecimal(v * 0.02).setScale(2, BigDecimal.ROUND_HALF_UP);//拿2%的利润给分享人的线
+                            grandFatherMoney = grandFatherMoney.add(grandFatherThisMoney);
+                        }
+                    }
+                    //把钱转到分享人的账户上
+                    List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
+                    Map<String,Object> parentMap = new HashedMap();
+                    parentMap.put("id",parentId);
+                    parentMap.put("money",parentMoney);
+                    list.add(parentMap);
+                    if(grandFather != null && grandFather != ""){//如果分享人还有上线把全转到分享人上线的账号 只有2%
+                        Map<String,Object> grandFatherMap = new HashedMap();
+                        grandFatherMap.put("id",grandFather);
+                        grandFatherMap.put("money",grandFatherMoney);
+                        list.add(grandFatherMap);
+                    }
+                    muserDao.updateMoney(list);
+
+                    map.put("parent",parentId);//设置购买人的上线
+                }
+            }
+            muserDao.updateUserIsVIP(map);//设置成为会员,如果购买别人分享的店铺设置我的上线
         } catch (Exception e) {
             e.printStackTrace();
         }

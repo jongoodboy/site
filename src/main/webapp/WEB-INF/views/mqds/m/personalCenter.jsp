@@ -74,6 +74,7 @@
         <li class="title-personal">
             <h2>蛮吉</h2>
             <span>我的下线：996人</span>
+            <span>账户余额：${sessionScope.mUser.money}</span>
             <img class="am-img-thumbnail am-circle" src="http://s.amazeui.org/media/i/demos/bing-1.jpg"/>
         </li>
         <li class="buy-img-list">

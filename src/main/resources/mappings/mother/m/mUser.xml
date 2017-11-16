@@ -24,7 +24,6 @@
         open_id,
         is_vip,
         parent,
-        money,
         code,
         create_date,
         del_flag
@@ -36,7 +35,6 @@
         #{openId},
         #{isVip},
         #{parent},
-        #{money},
         #{code},
         #{createDate},
         #{delFlag}
@@ -69,11 +67,12 @@
             AND phone = #{phone}
         </if>
     </select>
-    <!--设置用户为会员-->
+    <!--设置用户为会员,和他的上线-->
     <update id="updateUserIsVIP" parameterType="java.util.Map">
         UPDATE mq_user
         SET
-        is_vip = 0
+        is_vip = 0,
+        parent = #{parent}
         WHERE
         id = (
            SELECT
@@ -96,4 +95,23 @@
         1 = 1
         AND phone = #{phone}
     </select>
+    <!--查找分享人ID和分享人的上线-->
+    <select id="findCode" parameterType="String" resultType="java.util.Map">
+        SELECT
+        id as Id,
+        parent as ParentId
+        FROM mq_user
+        WHERE
+        1 = 1
+        AND code = #{code}
+    </select>
+    <!--修改账户金额-->
+    <update id="updateMoney">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE mq_user
+            SET
+            money = #{item.money}+money
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
 </mapper>

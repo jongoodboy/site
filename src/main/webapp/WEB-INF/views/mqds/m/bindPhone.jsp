@@ -121,6 +121,8 @@
         $.post("${ctx}/m/bind?phone=" + phone, function (data) {
             if (data.code == "0") {
                 window.location.href = url;
+            }else{
+                loadingShow(ret.msg);
             }
         })
     }
