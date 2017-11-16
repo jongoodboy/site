@@ -149,6 +149,7 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     var url = "http://www.muqinonline.com${ctx}/m";
+    //url必须是获取的当前的页面路径
     $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
         //微信分享
         wx.config({
