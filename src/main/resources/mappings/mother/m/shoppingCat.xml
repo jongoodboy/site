@@ -52,7 +52,8 @@
         com.id as id,
         commodity_price as commodityPice,
         cat.commodity_number as shoppingNumber,
-        com.commodity_number as commodityNumber
+        com.commodity_number as commodityNumber,
+         com.freight as freight
         FROM
         mq_shopping_cat cat
         LEFT JOIN mq_commodity com ON

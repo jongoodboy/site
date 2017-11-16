@@ -210,7 +210,7 @@
                         if (shoppingListIndex == 1) {//如果只是一个商品
                             str += '<ul class="one-shopping" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\','+ret.data[i].orderState+')">';
                         } else {
-                            str += '<ul class="am-slides" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\')">';
+                            str += '<ul class="am-slides" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\','+ret.data[i].orderState+')">';
                         }
                         for (var j = 0; j < ret.data[i].shppingList.length; j++) {
                             var img = ret.data[i].shppingList[j].commodityImager.split("|");

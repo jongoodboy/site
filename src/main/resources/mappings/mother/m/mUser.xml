@@ -9,6 +9,7 @@
       is_vip as "isVip",
       parent as "parent",
       money as "money",
+      code as "code",
       create_date as "createDate",
       update_date as "updateDate",
       del_flag as "delFlag"
@@ -24,6 +25,7 @@
         is_vip,
         parent,
         money,
+        code,
         create_date,
         del_flag
         )
@@ -35,6 +37,7 @@
         #{isVip},
         #{parent},
         #{money},
+        #{code},
         #{createDate},
         #{delFlag}
         )
@@ -84,4 +87,13 @@
             LIMIT 1
         )
     </update>
+    <!--验证手机号是否已经被绑定过-->
+    <select id="verification" parameterType="String" resultType="Muser">
+        SELECT
+        <include refid="mUser"/>
+        FROM mq_user
+        WHERE
+        1 = 1
+        AND phone = #{phone}
+    </select>
 </mapper>

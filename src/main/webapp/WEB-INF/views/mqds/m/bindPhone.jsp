@@ -68,7 +68,7 @@
     }
 
     .version {
-        display: inline-block;
+        display: block;
         width: 100%;
         text-align: center;
         position: absolute;
@@ -90,7 +90,7 @@
 <div class="content">
     <ul class="am-list">
         <li class="am-g am-list-item-dated">
-            手机号<input class="am-list-item-hd" maxlength="11" id="phone">
+            手机号<input class="am-list-item-hd" maxlength="11" id="phone" onblur="verification()">
         </li>
         <li class="am-g am-list-item-dated">
             验证码<input class="am-list-item-hd" maxlength="6" id="code">
@@ -98,7 +98,7 @@
         </li>
     </ul>
     <button type="button" class="am-btn am-btn-default am-radius" onclick="bindPhone()">绑定</button>
-    <span class="am-icon-weixin"></span>
+    <%--<span class="am-icon-weixin"></span>--%>
     <span class="version">母亲云电商&copy;2017</span>
 </div>
 </body>
@@ -129,12 +129,20 @@
     var code = $(".am-list-date");
     var codeBut = true;
     code.on("click", function () {
+        var phone = $("#phone").val();
+        if (phone == "") {
+            return;
+        }
+        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))) {
+            loadingShow("请输入正确的手机号");
+            return;
+        }
         if (codeBut) {
             codeBut = false;
             countDown();
         }
     })
-
+    //多少秒之后可以再获取验证码
     function countDown() {
         code.html(index + "s后再获取");
         index--;
@@ -145,6 +153,25 @@
             return;
         }
         setTimeout(countDown, "1000");
+    }
+    //验证手机是否已经被绑定过
+    function verification() {
+        codeBut = false;
+        var phone = $("#phone").val();
+        if (phone == "") {
+            return;
+        }
+        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))) {
+            loadingShow("请输入正确的手机号");
+            return;
+        }
+        $.post("${ctx}/m/verification?phone=" + phone, function (ret) {
+            if(ret.code == "1"){//号码没有绑定过。
+                codeBut = true;
+            }else{
+                loadingShow(ret.msg);
+            }
+        })
     }
 </script>
 </html>

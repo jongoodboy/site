@@ -13,4 +13,5 @@ import java.util.Map;
 public interface MuserDao extends CrudDao<Muser> {
     Muser findUser(Map<String, Object> map);
     int updateUserIsVIP(Map<String, Object> map);
+    Muser verification(String phone);
 }

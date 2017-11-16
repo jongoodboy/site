@@ -15,6 +15,7 @@ public class Muser extends DataEntity<Muser> {
     private String isVip;//是否是会员(0是,1不是)
     private String parent;//我的上线
     private BigDecimal money;//账户余额
+    private String code;//个人分享码
 
     public String getPhone() {
         return phone;
@@ -62,5 +63,13 @@ public class Muser extends DataEntity<Muser> {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

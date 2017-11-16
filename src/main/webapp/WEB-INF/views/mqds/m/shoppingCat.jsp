@@ -90,7 +90,7 @@
                             <input type="checkbox" checked="checked"
                                    name="select" value="2" commodityId="${map.id }"
                                    commodityNumber="${map.commodityNumber}"
-                                   money="${map.commodityPice+100}" shoppingNumber="${map.shoppingNumber}" data-am-ucheck checked><!--商品单价用于计算-->
+                                   money="${map.commodityPice + map.freight}" shoppingNumber="${map.shoppingNumber}" data-am-ucheck checked><!--商品单价用于计算-->
                         </label>
                     </div>
                     <c:set var="img" value="${fn:split(map.commodityImager, '|')}"></c:set>

@@ -5,17 +5,6 @@
 <head>
     <%@include file="include/head.jsp" %>
     <style>
-        #show-shopping img {
-            width: 100%;
-        }
-
-        #show-shopping p {
-            margin: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
         li.buy-pay-stlye {
             margin-top: 5px;
         }
@@ -67,8 +56,8 @@
                     </li>
                     <li>
                         <span>${itme.commodityName}</span><br/>
-                        <span>数量:${itme.commodityNumber}</span><br/>
-                        <span>￥${itme.commodityPice}</span>
+                        <span>￥${itme.commodityPice}<span>&nbsp;&nbsp;运费:${itme.freight == null ? 0 : itme.freight }</span></span><br/>
+                        <span>数量:${itme.commodityNumber}</span>
                     </li>
                 </ul>
             </li>

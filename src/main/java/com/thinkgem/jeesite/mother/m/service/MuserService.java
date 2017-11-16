@@ -18,4 +18,7 @@ public class MuserService extends CrudService<MuserDao,Muser> {
     public Muser findUser(Map<String,Object> map){
        return muserDao.findUser(map);
     }
+    public Muser verification(String phone){
+        return muserDao.verification(phone);
+    }
 }

@@ -582,17 +582,19 @@ public class IndexController {
     /**
      * 绑定手机号
      *
-     * @param code 验证码
+     * @param phoneCode 验证码
      * @return
      */
     @RequestMapping("/bind")
     @ResponseBody
-    public Map<String, Object> bindPhone(String phone, String code, HttpServletRequest request) {
+    public Map<String, Object> bindPhone(String phone, String phoneCode, HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
         try {
             Muser muser = new Muser();
+            String code = "MQY"+phone.substring(3,phone.length());//生成个人分享码
             String openId = (String) request.getSession().getAttribute("openid");//微信openId
             muser.setOpenId(openId);
+            muser.setCode(code);
             muser.setPhone(phone);//绑定的手机号
             muser.setIsVip("1");//默认不是会员
             mUserSerivce.save(muser);//保存用户信息
@@ -602,6 +604,33 @@ public class IndexController {
             e.printStackTrace();
             returnMap.put("code", "-1");
             returnMap.put("msg", "绑定失败");
+        }
+        return returnMap;
+    }
+
+    /**
+     * 验证手机号是否已经被绑定过
+     *
+     * @param phone 手机号
+     * @return
+     */
+    @RequestMapping("/verification")
+    @ResponseBody
+    public Map<String, Object> verification(String phone) {
+        Map<String, Object> returnMap = new HashedMap();
+        try {
+            Muser m = mUserSerivce.verification(phone);//验证手机号是否已经被绑定过
+            if (m != null) {
+                returnMap.put("code", "0");
+                returnMap.put("msg", "该号码已经被绑定过");
+            }else{
+                returnMap.put("code", "1");
+                returnMap.put("msg", "该号码可用");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnMap.put("code", "-1");
+            returnMap.put("msg", "验证出错");
         }
         return returnMap;
     }
