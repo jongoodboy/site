@@ -108,7 +108,7 @@
             address:'${address.province}'+'${address.city}'+'${address.county}'+'${address.address}' ,//收货地址
             userId: '${sessionScope.mUser.id}', //个人Id
             consignee:'${address.consignee}',
-            consigneePhone:'${address.consignee}'
+            consigneePhone:'${address.consigneePhone}'
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
