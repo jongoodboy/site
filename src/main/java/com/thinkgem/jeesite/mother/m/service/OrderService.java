@@ -140,7 +140,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         list.add(grandFatherMap);
                     }
                     muserDao.updateMoney(list);
-                    if(map.get("isVIP").equals("1")){//如果之前还不是会员才他的上线  如果已经是会员就不管。他的上线还是他第一次变成会员时的上线ID
+                    String isVip = (String) map.get("isVIP");//0是会员1不是
+                    if(isVip != null && isVip.equals("1")){//如果之前还不是会员才他的上线  如果已经是会员就不管。他的上线还是他第一次变成会员时的上线ID
                         map.put("parent",parentId);//设置购买人的上线
                     }
                 }

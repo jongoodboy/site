@@ -426,7 +426,7 @@ public class IndexController {
             paramMap.put("orderState", state);
             paramMap.put("updateDate", new Date());
             paramMap.put("code",request.getSession().getAttribute("code"));//分享码
-            paramMap.put("isVIP",isVIP);
+            paramMap.put("isVIP",isVIP);//会员状态0是1不是
             orderService.updateOrderState(paramMap);//0已完成,1待付款,2.待发货,3已发货,4已取消)
             returnMap.put("code", "0");
             returnMap.put("msg", "修改订单成功");
