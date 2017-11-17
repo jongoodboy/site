@@ -28,7 +28,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
     @Resource
     CommodityService comodityService;
     @Resource
-    AddressService addressService;
+    ReceiptAddressService addressService;
     @Resource
     MuserDao muserDao;
 
@@ -140,8 +140,9 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         list.add(grandFatherMap);
                     }
                     muserDao.updateMoney(list);
-
-                    map.put("parent",parentId);//设置购买人的上线
+                    if(map.get("isVIP").equals("1")){//如果之前还不是会员才他的上线  如果已经是会员就不管。他的上线还是他第一次变成会员时的上线ID
+                        map.put("parent",parentId);//设置购买人的上线
+                    }
                 }
             }
             muserDao.updateUserIsVIP(map);//设置成为会员,如果购买别人分享的店铺设置我的上线

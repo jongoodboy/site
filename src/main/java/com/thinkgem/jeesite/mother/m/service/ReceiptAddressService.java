@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Service
 @Transactional(readOnly = false)
-public class AddressService extends CrudService<ReceiptAddressDao, ReceiptAddress> {
+public class ReceiptAddressService extends CrudService<ReceiptAddressDao, ReceiptAddress> {
     @Resource
     ReceiptAddressDao receiptAddressDao;
 

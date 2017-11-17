@@ -80,9 +80,9 @@
 </style>
 <body>
 <div class="content">
+    <c:set value="${param.isOrderPage}" var="isOrderPage"></c:set>  <!--如果是生成订单页面点过来的-->
+    <c:set value="${param.addressId}" var="addressId"></c:set>  <!--如果是生成订单页面点过来的-->
     <ul class="am-list am-list-static am-list-border">
-        <c:set value="${param.isOrderPage}" var="isOrderPage"></c:set>  <!--如果是生成订单页面点过来的-->
-        <c:set value="${param.addressId}" var="addressId"></c:set>  <!--如果是生成订单页面点过来的-->
         <c:forEach var="itme" items="${list}">
             <li  <c:if
                     test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
@@ -235,14 +235,18 @@
             province: locationList[0] == undefined ? "" : locationList[0],//省
             city: locationList[1] == undefined ? "" : locationList[1],//市
             county: locationList[2] == undefined ? "" : locationList[2],//区/县
-            userId: '${param.userId}'//个人Id
+            userId: '${param.userId}',//个人Id
+            isDefault: "1"//是否是默认地址 默认不是 (0是,1不是)
+        }
+        if ('${list}' == '[]') {//如果没有添加过地址
+            DATA.isDefault = "0"//设置第一个为默认地址
         }
         $.post("${ctx}/m/saveAddress", DATA, function (data) {
             if (data.code == "0") {
                 $("#open-bottom-model").modal('close');
-                if('${isOrderPage}' != null && '${isOrderPage}' != undefined){
+                if ('${isOrderPage}' != null && '${isOrderPage}' != undefined) {
                     self.location = document.referrer;//返回并刷新上一页面
-                }else{
+                } else {
                     window.location.href = window.location.href;//刷新
                 }
             }

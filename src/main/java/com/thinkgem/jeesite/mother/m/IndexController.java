@@ -8,7 +8,7 @@ import com.thinkgem.jeesite.mother.m.entity.Muser;
 import com.thinkgem.jeesite.mother.m.entity.Order;
 import com.thinkgem.jeesite.mother.m.entity.ReceiptAddress;
 import com.thinkgem.jeesite.mother.m.entity.ShoppingCat;
-import com.thinkgem.jeesite.mother.m.service.AddressService;
+import com.thinkgem.jeesite.mother.m.service.ReceiptAddressService;
 import com.thinkgem.jeesite.mother.m.service.MuserService;
 import com.thinkgem.jeesite.mother.m.service.OrderService;
 import com.thinkgem.jeesite.mother.m.service.ShoppingCatService;
@@ -23,20 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
 
 /**
  * 商城列表
@@ -57,7 +48,7 @@ public class IndexController {
     @Resource
     private MuserService mUserSerivce;
     @Resource
-    private AddressService addressService;
+    private ReceiptAddressService addressService;
 
     //每次请求都会先进这里
     @ModelAttribute
@@ -426,7 +417,7 @@ public class IndexController {
      */
     @RequestMapping("updateOrderState")
     @ResponseBody
-    public Map<String, Object> updateOrderState(String orderNumber, String state,HttpServletRequest request) {
+    public Map<String, Object> updateOrderState(String orderNumber, String state,String isVIP,HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
 
         try {
@@ -435,6 +426,7 @@ public class IndexController {
             paramMap.put("orderState", state);
             paramMap.put("updateDate", new Date());
             paramMap.put("code",request.getSession().getAttribute("code"));//分享码
+            paramMap.put("isVIP",isVIP);
             orderService.updateOrderState(paramMap);//0已完成,1待付款,2.待发货,3已发货,4已取消)
             returnMap.put("code", "0");
             returnMap.put("msg", "修改订单成功");
@@ -553,7 +545,6 @@ public class IndexController {
     public Map<String, Object> saveAddress(ReceiptAddress receiptAddress, String userId) {
         Map<String, Object> returnMap = new HashedMap();
         receiptAddress.setUserId(userId);
-        receiptAddress.setIsDefault("1");//默认不是地址
         try {
             addressService.save(receiptAddress);
             returnMap.put("msg", "添加地址成功");
