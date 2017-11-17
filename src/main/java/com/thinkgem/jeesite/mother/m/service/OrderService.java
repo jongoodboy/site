@@ -60,7 +60,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             list.add(com);//添加每个订单对应的商品
                             sumOrderMoney += (Float.parseFloat(o.getCommodityPrice()) * o.getCommodityNumber());
                         }
-                        map1.put("orderState", orderState);//订单状态 0已完成,1待付款,2.待发货,3已发货,4已取消,空为全部)
+                        map1.put("orderState", orderState);//订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
                         map1.put("commodityIndex", commodityIndex);//订单对应的商品量
                         map1.put("shppingList", list);//订单对应所有商品列表
                         map1.put("sumOrderMoney", sumOrderMoney);//订单对应总金额
@@ -90,9 +90,10 @@ public class OrderService extends CrudService<OrderDao, Order> {
                     com.setCommodityNumber(o.getCommodityNumber());//暂时存放每个商品购买的数量
                     list.add(com);//添加每个订单对应的商品
                 }
-                ReceiptAddress readdress = addressService.findListfById(listOrderNumber.get(0).getAddressId());//查询收货地址
                 returnMap.put("commidityList", list);//订单对应所有商品列表
-                returnMap.put("address", readdress);//订单地址
+                returnMap.put("address", listOrderNumber.get(0).getAddress());//订单地址
+                returnMap.put("consignee", listOrderNumber.get(0).getConsignee());//订单收货人
+                returnMap.put("consigneePhone", listOrderNumber.get(0).getConsigneePhone());//订单收货人
             }
         } catch (Exception e) {
             e.printStackTrace();

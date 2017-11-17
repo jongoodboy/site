@@ -7,7 +7,9 @@
         commodity_id as "commodityId",
         user_id as "userId",
         order_state as "orderState",
-        address_id as "addressId",
+        address as "address",
+        consignee as "consignee",
+        consignee_phone as "consigneePhone",
         commodity_number as "commodityNumber",
         commodity_price as "commodityPrice",
         create_date as "createDate",
@@ -55,7 +57,9 @@
         commodity_id,
         user_id,
         order_state,
-        address_id,
+        address,
+        consignee,
+        consignee_phone,
         commodity_number,
         commodity_price,
         create_date,
@@ -69,7 +73,9 @@
             #{itme.commodityId},
             #{itme.userId},
             #{itme.orderState},
-            #{itme.addressId},
+            #{itme.address},
+            #{consignee},
+            #{consigneePhone},
             #{itme.commodityNumber},
             #{itme.commodityPrice},
             #{itme.createDate},
@@ -96,4 +102,17 @@
         WHERE
         order_number = #{orderNumber}
     </update>
+    <!--后台管理查询订单列表-->
+    <select id="findList" resultType="Order" parameterType="Order">
+        SELECT
+        <include refid="order"/>
+        FROM
+        mq_order
+        WHERE
+        1 = 1
+        <if test="orderState != '' and orderState != null">
+            and order_state = #{orderState}
+        </if>
+        AND del_flag = '0'
+    </select>
 </mapper>

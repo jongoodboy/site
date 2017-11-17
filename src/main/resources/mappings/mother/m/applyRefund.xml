@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.ApplyRefundDao">
+    <sql id="applyrefund">
+      id as "id",
+      apply_orderNumber as "applyOrderNumber",
+      apply_money as "applyMoney",
+      refunt_state as "refuntState",
+      create_by as "createBy",
+      create_date as "createDate",
+      update_date as "updateDate",
+      update_by as "updateBy",
+      update_name as "updateName",
+      apply_describe as "applyDescribe",
+      refund_describe as "refundDescribe",
+      del_flag as "delFlag"
+    </sql>
+    <!--申请退款-->
+    <insert id="insert" parameterType="ApplyRefund">
+        INSERT INTO mq_apply_refund
+       (
+          id,
+          apply_orderNumber,
+          apply_money,
+          create_by,
+          create_date,
+          apply_describe
+        )
+        VALUES (
+        #{id},
+        #{applyOrderNumber},
+        #{applyMoney},
+        #{createBy.id},
+        #{createDate},
+        #{applyDescribe}
+        )
+    </insert>
+    <!--处理申请-->
+    <update id="updateFund" parameterType="java.util.Map">
+      UPDATE mq_apply_refund
+      SET
+      refunt_state = #{refuntState},
+      update_date = #{updateDate},
+      update_name = #{updateName},
+      update_by = #{updateBy}
+      refund_describe = #{refundDescribe}
+      WHERE
+      id = #{id}
+    </update>
+    <!--后台查看所有退款申请-->
+    <select id="findList" resultType="ApplyRefund" parameterType="ApplyRefund">
+        SELECT
+        <include refid="applyrefund"/>
+        FROM mq_apply_refund
+        WHERE del_flag = '0'
+        <if test="refuntState != null and refuntState != ''">
+            refunt_state = #{refuntState}
+        </if>
+        ORDER BY create_date
+    </select>
+</mapper>

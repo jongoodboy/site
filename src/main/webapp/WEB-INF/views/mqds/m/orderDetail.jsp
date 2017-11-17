@@ -29,11 +29,13 @@
         h5 {
             margin: 0;
         }
-        .but-info{
+
+        .but-info {
             color: #333;
             line-height: 30px;
         }
-        .am-btn-default{
+
+        .am-btn-default {
             margin-top: 5px;
         }
     </style>
@@ -43,8 +45,8 @@
     <ul class="am-list am-list-static am-list-border">
         <li>
             <c:set var="address" value="${listMap.address}"></c:set>
-            <h5>${address.consignee}${address.consigneePhone}</h5>
-            <span>${address.province}${address.city}${address.county}${address.address}</span>
+            <h5>${consignee}${consigneePhone}</h5>
+            <span>${address}</span>
         </li>
         <c:set value="0" var="commodityPice"></c:set>
         <c:forEach items="${listMap.commidityList}" var="itme" varStatus="index">
@@ -76,12 +78,7 @@
     <div class="to-settle-accounts">
         <ul class="nav-menu">
             <li>
-                <c:if test="${param.orderState == '4'}">
-                    <button type="button" class="am-btn am-btn-default">删除订单</button>
-                </c:if>
-                <c:if test="${param.orderState != '4'}">
-                    <span class="payMoney">实付款:￥<span id="payMoney">${param.payMoney}</span></span>
-                </c:if>
+                <span class="payMoney">实付款:￥<span id="payMoney">${param.payMoney}</span></span>
             </li>
             <li class="right-menu">
                 <c:if test="${param.orderState == '1'}">
@@ -94,7 +91,10 @@
                     <button type="button" class="am-btn but-info">侍收货</button>
                 </c:if>
                 <c:if test="${param.orderState == '4'}">
-                    <button type="button" class="am-btn but-info">已取消</button>
+                    <button type="button" class="am-btn but-info">退款中</button>
+                </c:if>
+                <c:if test="${param.orderState == '5'}">
+                    <button type="button" class="am-btn but-info">已退款</button>
                 </c:if>
             </li>
         </ul>
@@ -105,7 +105,7 @@
     function commodityDetail(id) {
         window.location.href = "${ctx}/m/commodityDetail?commodityId=" + id;
     }
-    $(".am-btn-danger").on("click",function () {
+    $(".am-btn-danger").on("click", function () {
         window.location.href = "${ctx}/m/payPage?orderNumber=${param.orderNumber}&payMoney=${param.payMoney}&orderBody=购买母亲云电商平台产品";
     })
 </script>

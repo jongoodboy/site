@@ -4,115 +4,11 @@
 <!--订单列表-->
 <head>
     <%@include file="include/head.jsp" %>
+    <link href="${ctxStatic}/m/css/orderList.css" rel="stylesheet">
 </head>
-<style>
-    .am-header-default {
-        background: #fff;
-        text-align: center;
-    }
-
-    .am-header-default a {
-        color: #333;
-    }
-
-    .am-header-default li.active a {
-        color: red;
-    }
-
-    .am-header-default li.active {
-        border-bottom: 2px solid red;
-    }
-
-    .am-slider-default {
-        margin: 0;
-        height: 200px;
-        position: relative;
-    }
-
-    .am-slider {
-        margin-top: 10px;
-    }
-
-    .am-slider li {
-        height: 80px;
-    }
-
-    .orderoOperation {
-        clear: both;
-        text-align: right;
-        width: 100%;
-        padding: 5px;
-    }
-
-    .orderoOperation .shopping-info, .order-title {
-        margin-right: 10px;
-    }
-
-    .orderoOperation .am-divider {
-        padding: 0;
-        margin: 5px 0;
-    }
-
-    .orderoOperation .go-pay {
-        display: inline-block;
-        padding: 3px;
-        border: 1px solid red;
-        text-align: center;
-        margin-right: 10px;
-        color: red;
-        margin-bottom: 5px;
-    }
-
-    .order-title {
-        color: red;
-    }
-
-    .bottom {
-        position: absolute;
-        bottom: 0
-    }
-
-    .am-viewport {
-        background: #f9f9f9;
-        padding: 3px 0;
-    }
-
-    .pay-money {
-        font-weight: bold;
-    }
-
-    .one-shopping {
-        list-style: none;
-        padding: 0;
-        height: 80px;
-        background: #f9f9f9;
-        margin: 0;
-        overflow: hidden;
-    }
-
-    .one-shopping li {
-        width: 100px;
-        float: left;
-    }
-
-    .one-shopping p {
-        float: left;
-        width: 66%;
-        font-size: 12px;
-        padding: 10px 0;
-        margin: 0;
-    }
-
-    .no-data {
-        text-align: center;
-        position: absolute;
-        width: 100%;
-        top: 30%;
-    }
-</style>
 <body>
 <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
-    <ul class="am-navbar-nav am-cf am-avg-sm-5">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li class="all">
             <a href="javascript:findData('')" class="">
                 <span>全部</span>
@@ -131,11 +27,6 @@
         <li class="receipt">
             <a href="javascript:findData(3)" class="">
                 <span>待收货</span>
-            </a>
-        </li>
-        <li>
-            <a href="javascript:findData(4)" class="">
-                <span>已取消</span>
             </a>
         </li>
     </ul>
@@ -199,9 +90,14 @@
                                 gopay = "确认收货";
                                 break;
                             case "4":
-                                orderTitle = "已取消";
+                                orderTitle = "退款中";
                                 infoText = "实付款";
-                                gopay = "重新购买";
+                                gopay = "取消申请";
+                                break;
+                            case "5":
+                                orderTitle = "已退款";
+                                infoText = "实付款";
+                                gopay = "退款成功";
                                 break;
                         }
                         var shoppingInfo = '共' + ret.data[i].commodityIndex + '件商品&nbsp;&nbsp;&nbsp;'+infoText+':<span class="pay-money">￥' + ret.data[i].sumOrderMoney + '</span>'
@@ -268,7 +164,10 @@
                 loadingShow("确认收货功能开发中!")
                 break;
             case 4:
-                loadingShow("重新购买功能开发中!")
+                loadingShow("取消退款!")
+                break;
+            case 5:
+                loadingShow("退款成功!")
                 break;
         }
 

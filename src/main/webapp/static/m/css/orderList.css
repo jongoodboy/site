@@ -1,0 +1,103 @@
+.am-header-default {
+    background: #fff;
+    text-align: center;
+}
+
+.am-header-default a {
+    color: #333;
+}
+
+.am-header-default li.active a {
+    color: red;
+}
+
+.am-header-default li.active {
+    border-bottom: 2px solid red;
+}
+
+.am-slider-default {
+    margin: 0;
+    height: 200px;
+    position: relative;
+}
+
+.am-slider {
+    margin-top: 10px;
+}
+
+.am-slider li {
+    height: 80px;
+}
+
+.orderoOperation {
+    clear: both;
+    text-align: right;
+    width: 100%;
+    padding: 5px;
+}
+
+.orderoOperation .shopping-info, .order-title {
+    margin-right: 10px;
+}
+
+.orderoOperation .am-divider {
+    padding: 0;
+    margin: 5px 0;
+}
+
+.orderoOperation .go-pay {
+    display: inline-block;
+    padding: 3px;
+    border: 1px solid red;
+    text-align: center;
+    margin-right: 10px;
+    color: red;
+    margin-bottom: 5px;
+}
+
+.order-title {
+    color: red;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0
+}
+
+.am-viewport {
+    background: #f9f9f9;
+    padding: 3px 0;
+}
+
+.pay-money {
+    font-weight: bold;
+}
+
+.one-shopping {
+    list-style: none;
+    padding: 0;
+    height: 80px;
+    background: #f9f9f9;
+    margin: 0;
+    overflow: hidden;
+}
+
+.one-shopping li {
+    width: 100px;
+    float: left;
+}
+
+.one-shopping p {
+    float: left;
+    width: 66%;
+    font-size: 12px;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.no-data {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 30%;
+}

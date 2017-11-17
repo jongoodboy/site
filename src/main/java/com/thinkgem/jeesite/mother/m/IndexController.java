@@ -4,14 +4,8 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
-import com.thinkgem.jeesite.mother.m.entity.Muser;
-import com.thinkgem.jeesite.mother.m.entity.Order;
-import com.thinkgem.jeesite.mother.m.entity.ReceiptAddress;
-import com.thinkgem.jeesite.mother.m.entity.ShoppingCat;
-import com.thinkgem.jeesite.mother.m.service.ReceiptAddressService;
-import com.thinkgem.jeesite.mother.m.service.MuserService;
-import com.thinkgem.jeesite.mother.m.service.OrderService;
-import com.thinkgem.jeesite.mother.m.service.ShoppingCatService;
+import com.thinkgem.jeesite.mother.m.entity.*;
+import com.thinkgem.jeesite.mother.m.service.*;
 import com.thinkgem.jeesite.mother.m.weixin.*;
 import com.thinkgem.jeesite.mother.m.weixin.utlis.Sign;
 import org.apache.commons.collections.map.HashedMap;
@@ -47,8 +41,12 @@ public class IndexController {
     //手机用户
     @Resource
     private MuserService mUserSerivce;
+    //收货地址
     @Resource
     private ReceiptAddressService addressService;
+    //退款
+    @Resource
+    private ApplyRefundService applyRefundService;
 
     //每次请求都会先进这里
     @ModelAttribute
@@ -67,16 +65,15 @@ public class IndexController {
     //手机端商城首页
 
     /**
-     *
      * @param request
-     * @param code 分享的code
+     * @param code    分享的code
      * @return
      */
     @RequestMapping
-    public String appIndex(HttpServletRequest request,String code) {
-        if(code != null){//把个人分享的code存起来方便订单支付之后把钱分成
-            request.getSession().setAttribute("code",code);
-        }else{
+    public String appIndex(HttpServletRequest request, String code) {
+        if (code != null) {//把个人分享的code存起来方便订单支付之后把钱分成
+            request.getSession().setAttribute("code", code);
+        } else {
             request.getSession().removeAttribute("code");
         }
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
@@ -275,7 +272,7 @@ public class IndexController {
         paramMap.put("pageNo", pageNo);
         paramMap.put("pageSize", pageSize);
         paramMap.put("userId", userId);
-        paramMap.put("orderState", orderState);// (0已完成,1待付款,2.待发货,3已发货,4已取消,空为全部)
+        paramMap.put("orderState", orderState);// (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
         try {
             List<Map<String, Object>> list = orderService.findOrderList(paramMap);
             returnMap.put("msg", "订单查询成功");
@@ -295,14 +292,14 @@ public class IndexController {
      * @param commodityId    商品id 多个用","分割
      * @param buyNumber      每个商品购买的数量多个用","分割
      * @param commodityPrice 每个商品单价多个用","分割
-     * @param addressId      收货地址id
+     * @param address        收货地址
      * @param userId         个人Id
      * @return
      */
     @RequestMapping("/saveOrder")
     @ResponseBody
     public Map<String, Object> saveOrder(String commodityId, String buyNumber,
-                                         String commodityPrice, String addressId, String userId) {
+                                         String commodityPrice, String address, String consignee, String consigneePhone, String userId) {
         List<Order> list = new ArrayList<Order>();
         Map<String, Object> returnMap = new HashedMap();
         Map<String, Object> map = new HashedMap();
@@ -322,7 +319,9 @@ public class IndexController {
             order.setCommodityNumber(Integer.parseInt(buyNumberList[i]));//设置商品购买的数量
             order.setCommodityPrice(commodityPriceList[i]);//设置商品购买的单价
             order.setOrderState("1");//待付款
-            order.setAddressId(addressId);
+            order.setAddress(address);
+            order.setConsignee(consignee);
+            order.setConsigneePhone(consigneePhone);
             order.setOrderNumber(orderNumber);
             order.setCreateDate(d);
             list.add(order);//用于生成订单
@@ -336,7 +335,9 @@ public class IndexController {
                 order.setCommodityNumber(Integer.parseInt(buyNumber));//设置商品购买的数量
                 order.setCommodityPrice(commodityPrice);//设置商品购买的单价
                 order.setOrderState("1");//待付款
-                order.setAddressId(addressId);
+                order.setAddress(address);
+                order.setConsignee(consignee);
+                order.setConsigneePhone(consigneePhone);
                 order.setOrderNumber(orderNumber);
                 order.setCreateDate(d);
                 list.add(order);//用于生成订单
@@ -417,7 +418,7 @@ public class IndexController {
      */
     @RequestMapping("updateOrderState")
     @ResponseBody
-    public Map<String, Object> updateOrderState(String orderNumber, String state,String isVIP,HttpServletRequest request) {
+    public Map<String, Object> updateOrderState(String orderNumber, String state, String isVIP, HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
 
         try {
@@ -425,9 +426,9 @@ public class IndexController {
             paramMap.put("orderNumber", orderNumber);
             paramMap.put("orderState", state);
             paramMap.put("updateDate", new Date());
-            paramMap.put("code",request.getSession().getAttribute("code"));//分享码
-            paramMap.put("isVIP",isVIP);//会员状态0是1不是
-            orderService.updateOrderState(paramMap);//0已完成,1待付款,2.待发货,3已发货,4已取消)
+            paramMap.put("code", request.getSession().getAttribute("code"));//分享码
+            paramMap.put("isVIP", isVIP);//会员状态0是1不是
+            orderService.updateOrderState(paramMap);//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
             returnMap.put("code", "0");
             returnMap.put("msg", "修改订单成功");
         } catch (Exception e) {
@@ -558,6 +559,37 @@ public class IndexController {
     }
 
     /**
+     * 手机端退费列表
+     *
+     * @return
+     */
+    @RequestMapping("/refund")
+    public String refund() {
+        return "mqds/m/refund";
+    }
+
+    /**
+     * 申请退款
+     *
+     * @return
+     */
+    @RequestMapping("/applyFund")
+    @ResponseBody
+    public Map<String, Object> applyFund(ApplyRefund applyRefund) {
+        Map<String, Object> returnMap = new HashedMap();
+        try {
+            applyRefundService.save(applyRefund);
+            returnMap.put("msg", "申请成功");
+            returnMap.put("code", "0");
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnMap.put("msg", "申请失败");
+            returnMap.put("code", "-1");
+        }
+        return returnMap;
+    }
+
+    /**
      * 手机端银行卡列表
      *
      * @return
@@ -596,7 +628,7 @@ public class IndexController {
         Map<String, Object> returnMap = new HashedMap();
         try {
             Muser muser = new Muser();
-            String code = "MQY"+new Date().getTime();//生成个人分享码
+            String code = "MQY" + new Date().getTime();//生成个人分享码
             String openId = (String) request.getSession().getAttribute("openid");//微信openId
             muser.setOpenId(openId);
             muser.setCode(code);
@@ -628,7 +660,7 @@ public class IndexController {
             if (m != null) {
                 returnMap.put("code", "0");
                 returnMap.put("msg", "该号码已经被绑定过");
-            }else{
+            } else {
                 returnMap.put("code", "1");
                 returnMap.put("msg", "该号码可用");
             }

@@ -121,7 +121,7 @@
     }
     //支付成功之后把订单改为已支付，待发货
     function paySuccess() {
-        //0已完成,1待付款,2.待发货,3已发货,4已取消)
+        //(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
         $.post("${ctx}/m/updateOrderState?orderNumber=${param.orderNumber}&state=2&isVIP=${sessionScope.mUser.isVip}", function (ret) {
             if (ret.code == "0") {
                 window.location.href = ctx + "/m";//返回首页

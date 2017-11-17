@@ -105,12 +105,14 @@
             commodityId: '${param.buyCommodityId}',//商品id 多个用","分割
             buyNumber: '${param.buyNumber}',//每个商品购买的数量多个用","分割
             commodityPrice: '${param.commodityPrice}',//每个商品单价多个用","分割
-            addressId: $("#addressId").val(),//收货地址
-            userId: '${sessionScope.mUser.id}' //个人Id
+            address:'${address.province}'+'${address.city}'+'${address.county}'+'${address.address}' ,//收货地址
+            userId: '${sessionScope.mUser.id}', //个人Id
+            consignee:'${address.consignee}',
+            consigneePhone:'${address.consignee}'
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
-            if (subData.addressId == undefined || subData.addressId == null) {
+            if (subData.consignee == undefined || subData.consignee == null) {
                 loadingShow("请先选择收货人");
                 return;
             }
