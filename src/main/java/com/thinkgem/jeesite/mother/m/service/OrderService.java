@@ -153,4 +153,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
         }
         return orderDao.updateOrderState(map);
     }
+    //后台发货
+    public int delivery(Order order){
+        return orderDao.delivery(order);
+    }
 }

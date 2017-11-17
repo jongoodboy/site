@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.mother.m.dao;
 
+import com.sun.tools.corba.se.idl.constExpr.Or;
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.mother.m.entity.Order;
@@ -20,4 +21,6 @@ public interface OrderDao extends CrudDao<Order> {
     List<Order> findOrderListByOrderNumber(List<String> list);
 
     int updateOrderState(Map<String,Object> map);
+    //后台发货
+    int delivery(Order order);
 }

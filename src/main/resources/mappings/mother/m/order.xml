@@ -12,6 +12,10 @@
         consignee_phone as "consigneePhone",
         commodity_number as "commodityNumber",
         commodity_price as "commodityPrice",
+        express as "express",
+        express_number as "expressNumber",
+        delivery_time as "deliveryTime",
+        delivery_peolpe as "deliveryPeolpe",
         create_date as "createDate",
         update_date as "updateDate",
         del_flag as "delFlag"
@@ -114,5 +118,21 @@
             and order_state = #{orderState}
         </if>
         AND del_flag = '0'
+        ORDER BY order_number
+        <if test="orderState == 3"> <!--已发货排序-->
+            ,delivery_time DESC
+        </if>
     </select>
+    <!--后台发货 -->
+    <update id="delivery" parameterType="Order">
+        UPDATE mq_order
+        SET
+        order_state = #{orderState},
+        express = #{express},
+        express_number = #{expressNumber},
+        delivery_time = #{deliveryTime},
+        delivery_peolpe = #{deliveryPeolpe}
+        WHERE
+        id = #{id}
+    </update>
 </mapper>
