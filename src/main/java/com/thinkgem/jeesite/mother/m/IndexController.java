@@ -558,17 +558,7 @@ public class IndexController {
         return returnMap;
     }
 
-    /**
-     * 手机端退费列表
-     *
-     * @return
-     */
-    @RequestMapping("/refund")
-    public String refund() {
-        return "mqds/m/refund";
-    }
-
-    /**
+        /**
      * 申请退款
      *
      * @return
@@ -579,6 +569,10 @@ public class IndexController {
         Map<String, Object> returnMap = new HashedMap();
         try {
             applyRefundService.save(applyRefund);
+            Map<String,Object> paramMap = new HashedMap();
+            paramMap.put("id",applyRefund.getApplyOrderId());//订单ID
+            paramMap.put("orderState","4");//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
+            orderService.updateRefund(paramMap);//
             returnMap.put("msg", "申请成功");
             returnMap.put("code", "0");
         } catch (Exception e) {

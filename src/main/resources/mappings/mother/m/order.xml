@@ -135,4 +135,12 @@
         WHERE
         id = #{id}
     </update>
+    <!--根据订单ID修改订单 主要用于退款功能-->
+    <update id="updateRefund" parameterType="Order">
+        UPDATE mq_order
+        SET
+        order_state = #{orderState}
+        WHERE
+        id = #{id}
+    </update>
 </mapper>

@@ -23,4 +23,6 @@ public interface OrderDao extends CrudDao<Order> {
     int updateOrderState(Map<String,Object> map);
     //后台发货
     int delivery(Order order);
+    //退费操作
+    int updateRefund(Map<String, Object> map);
 }

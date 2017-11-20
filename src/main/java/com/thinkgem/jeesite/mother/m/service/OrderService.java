@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.mother.m.service;
 
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
 import com.thinkgem.jeesite.mother.m.dao.MuserDao;
@@ -42,22 +43,36 @@ public class OrderService extends CrudService<OrderDao, Order> {
         try {
             List<String> listOrderNumber = orderDao.findOrderNumber(map);//查询个人订单号分组
             if (listOrderNumber != null && listOrderNumber.size() > 0) {//有下过订单
+                DictUtils dic = new DictUtils();//字典表
                 for (int i = 0; i < listOrderNumber.size(); i++) {
                     List<String> paramList = new ArrayList<String>();
                     paramList.add(listOrderNumber.get(i));
                     List<Order> listOrder = orderDao.findOrderListByOrderNumber(paramList);//订单号对应的所有商品
                     if (listOrder != null && listOrder.size() > 0) {
                         Map<String, Object> map1 = new HashedMap();
-                        List<Commodity> list = new ArrayList<Commodity>();//返回页面订单对应所有商品列表
+                        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();//返回页面订单对应所有商品列表
                         float sumOrderMoney = 0;//每个订单总金额
-                        Integer commodityIndex = 0;//每个订单对应的商品数量
-                        String orderState = "";
+                        Integer commodityIndex = 0;//每个订单对应的商品总数量
+                        String orderState = "";//订单状态
                         for (int j = 0; j < listOrder.size(); j++) {
                             Order o = listOrder.get(j);
                             Commodity com = comodityService.get(o.getCommodityId());//查询得到每个商品
-                            orderState = o.getOrderState();
+                            Map<String, Object> commodityMap = new HashedMap();//组装商品数据返回前台
+                            if (j == 0) {
+                                orderState = o.getOrderState();
+                            }
                             commodityIndex += o.getCommodityNumber();
-                            list.add(com);//添加每个订单对应的商品
+                            commodityMap.put("comName", com.getCommodityName());//商品名称
+                            commodityMap.put("comState", o.getOrderState());//每一个商品的订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
+                            commodityMap.put("comId", com.getId());//商品ID
+                            commodityMap.put("orderId", o.getId());//订单ID
+                            commodityMap.put("comNumber", o.getCommodityNumber());//订单对应的购买商品的数量
+                            commodityMap.put("comCompany", dic.getDictLabel(com.getCommodityCompany().toString(), "commodity_company", ""));//商品单位(1.个2.条3.件4.根 -->)
+                            commodityMap.put("comPrice", o.getCommodityPrice());//生成订单时商品的价格
+                            commodityMap.put("comImage", com.getCommodityImager());//商品图片
+                            commodityMap.put("comExpress", dic.getDictLabel(o.getExpress(), "express_type", ""));//快递公司
+                            commodityMap.put("comExpressNumber", o.getExpressNumber());//快递号
+                            list.add(commodityMap);//添加每个订单对应的商品
                             sumOrderMoney += (Float.parseFloat(o.getCommodityPrice()) * o.getCommodityNumber());
                         }
                         map1.put("orderState", orderState);//订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
@@ -123,27 +138,27 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         float v = com.getCommodityPice().floatValue();//售价于利润
                         BigDecimal parentThisMoney = new BigDecimal(v * 0.08).setScale(2, BigDecimal.ROUND_HALF_UP);//拿8%的利润给分享人
                         parentMoney = parentMoney.add(parentThisMoney);
-                        if(grandFather != null && grandFather != ""){//如果分享人还有上线
+                        if (grandFather != null && grandFather != "") {//如果分享人还有上线
                             BigDecimal grandFatherThisMoney = new BigDecimal(v * 0.02).setScale(2, BigDecimal.ROUND_HALF_UP);//拿2%的利润给分享人的线
                             grandFatherMoney = grandFatherMoney.add(grandFatherThisMoney);
                         }
                     }
                     //把钱转到分享人的账户上
-                    List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
-                    Map<String,Object> parentMap = new HashedMap();
-                    parentMap.put("id",parentId);
-                    parentMap.put("money",parentMoney);
+                    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+                    Map<String, Object> parentMap = new HashedMap();
+                    parentMap.put("id", parentId);
+                    parentMap.put("money", parentMoney);
                     list.add(parentMap);
-                    if(grandFather != null && grandFather != ""){//如果分享人还有上线把全转到分享人上线的账号 只有2%
-                        Map<String,Object> grandFatherMap = new HashedMap();
-                        grandFatherMap.put("id",grandFather);
-                        grandFatherMap.put("money",grandFatherMoney);
+                    if (grandFather != null && grandFather != "") {//如果分享人还有上线把全转到分享人上线的账号 只有2%
+                        Map<String, Object> grandFatherMap = new HashedMap();
+                        grandFatherMap.put("id", grandFather);
+                        grandFatherMap.put("money", grandFatherMoney);
                         list.add(grandFatherMap);
                     }
                     muserDao.updateMoney(list);
                     String isVip = (String) map.get("isVIP");//0是会员1不是
-                    if(isVip != null && isVip.equals("1")){//如果之前还不是会员才他的上线  如果已经是会员就不管。他的上线还是他第一次变成会员时的上线ID
-                        map.put("parent",parentId);//设置购买人的上线
+                    if (isVip != null && isVip.equals("1")) {//如果之前还不是会员才他的上线  如果已经是会员就不管。他的上线还是他第一次变成会员时的上线ID
+                        map.put("parent", parentId);//设置购买人的上线
                     }
                 }
             }
@@ -153,8 +168,14 @@ public class OrderService extends CrudService<OrderDao, Order> {
         }
         return orderDao.updateOrderState(map);
     }
+
     //后台发货
-    public int delivery(Order order){
+    public int delivery(Order order) {
         return orderDao.delivery(order);
+    }
+
+    //申请退费处理退费
+    public int updateRefund(Map<String, Object> map) {
+        return orderDao.updateRefund(map);
     }
 }

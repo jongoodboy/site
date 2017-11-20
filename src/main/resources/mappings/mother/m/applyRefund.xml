@@ -13,6 +13,7 @@
       update_name as "updateName",
       apply_describe as "applyDescribe",
       refund_describe as "refundDescribe",
+      apply_order_id as "applyOrderId",
       del_flag as "delFlag"
     </sql>
     <!--申请退款-->
@@ -24,7 +25,8 @@
           apply_money,
           create_by,
           create_date,
-          apply_describe
+          apply_describe,
+          apply_order_id
         )
         VALUES (
         #{id},
@@ -32,7 +34,8 @@
         #{applyMoney},
         #{createBy.id},
         #{createDate},
-        #{applyDescribe}
+        #{applyDescribe},
+        #{applyOrderId}
         )
     </insert>
     <!--处理申请-->

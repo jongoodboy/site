@@ -34,8 +34,21 @@
 <div class="content">
     <!--订单列表-->
 </div>
+<div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">申请退款描述</div>
+        <div class="am-modal-bd">
+            <textarea type="text" class="am-modal-prompt-input"></textarea>
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>提交申请</span>
+        </div>
+    </div>
+</div>
 </body>
 <script>
+    var userId = 'bd994867b9d84bca905836b2f963ec5d';
     switch ('${param.index}') {
         case '1'://全部
             addClass(".all");
@@ -60,17 +73,17 @@
     }
     function init(orderState) {
         $(".content").html('');
-        $.post("${ctx}/m/orderListDate?orderState=" + orderState+"&userId=${sessionScope.mUser.id}", function (ret) {
+        $.post("${ctx}/m/orderListDate?orderState=" + orderState + "&userId=" + userId, function (ret) {
             if (ret.code == "0") {
                 if (ret.data.length > 0) {
                     for (var i = 0; i < ret.data.length; i++) {
-                        var str = '<div class="am-slider am-slider-default am-slider-carousel boutique">';
+                        var str = '<div class="am-slider am-slider-default am-slider-carousel boutique" >';
                         <!--头部-->
-                        str += '<div class="orderoOperation">';
+                        str += '<div class="orderoOperation" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\',' + ret.data[i].orderState + ')">';
                         var orderTitle = "已完成";//头部显示
                         var infoText = "需付款";
                         var gopay = "去支付";
-                        switch (ret.data[i].orderState){
+                        switch (ret.data[i].orderState) {
                             case "0":
                                 orderTitle = "已完成";
                                 infoText = "实付款";
@@ -85,7 +98,7 @@
                                 gopay = "我要催单";
                                 break;
                             case "3":
-                                orderTitle = "待收货";
+                                orderTitle = "已发货";
                                 infoText = "实付款";
                                 gopay = "确认收货";
                                 break;
@@ -100,29 +113,60 @@
                                 gopay = "退款成功";
                                 break;
                         }
-                        var shoppingInfo = '共' + ret.data[i].commodityIndex + '件商品&nbsp;&nbsp;&nbsp;'+infoText+':<span class="pay-money">￥' + ret.data[i].sumOrderMoney + '</span>'
-                        str += '<span class="order-title">'+orderTitle+'</span></div>';
+                        var shoppingInfo = '共' + ret.data[i].commodityIndex + '件商品&nbsp;&nbsp;&nbsp;' + infoText + ':<span class="pay-money">￥' + ret.data[i].sumOrderMoney + '</span>'
+                        str += '<span class="orderNumber">订单号:' + ret.data[i].sumOrderNnmber + '</span><span class="order-title">' + orderTitle + '</span></div>';
                         var shoppingListIndex = ret.data[i].shppingList.length;
-                        if (shoppingListIndex == 1) {//如果只是一个商品
-                            str += '<ul class="one-shopping" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\','+ret.data[i].orderState+')">';
-                        } else {
-                            str += '<ul class="am-slides" onclick="orderDetail(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\','+ret.data[i].orderState+')">';
-                        }
+                        str += '<ul class="one-shopping">';
                         for (var j = 0; j < ret.data[i].shppingList.length; j++) {
-                            var img = ret.data[i].shppingList[j].commodityImager.split("|");
-                            str += '<li><img class="lazy" src="' + img[1] + '"/></li>';
-                            if (shoppingListIndex == 1) {//如果只是一个商品
-                                str += '<p>' + ret.data[i].shppingList[j].commodityName + '</p>'
+                            var commodityStateSpan = "暂无物流信息";
+                            var commodityState = ret.data[i].shppingList[j].comState;//每个商品的发货状态
+                            var operation = "";//操作提示
+                            switch (commodityState) {
+                                case "0":
+                                    commodityStateSpan = "已完成";
+                                    break;
+                                case "1":
+                                    commodityStateSpan = "等待付款";
+                                    break;
+                                case "2":
+                                    operation = "我要催单";
+                                    break;
+                                case "3":
+                                    commodityStateSpan = "物流信息:" + ret.data[i].shppingList[j].comExpress + "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber;
+                                    operation = "申请退款"
+                                    break;
+                                case "4":
+                                    commodityStateSpan = "退款中";
+                                    operation = "受理中";
+                                    break;
+                                case "5":
+                                    commodityStateSpan = "已退款";
+                                    break;
+                            }
+                            var img = ret.data[i].shppingList[j].comImage.split("|");
+                            str += '<li><img class="lazy" src="' + img[1] + '"/>';
+                            str += '<div><span class="commodityName">' + ret.data[i].shppingList[j].comName + '</span><br>';
+                            str += '<span>数量:' + ret.data[i].shppingList[j].comNumber + '' + ret.data[i].shppingList[j].comCompany + '</span><br>';
+                            if (operation != "") {
+                                var refundMoney = ret.data[i].shppingList[j].comPrice * ret.data[i].shppingList[j].comNumber;
+                                str += '<span class="refund" onclick="operation(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].shppingList[j].orderId + '\',\'' + refundMoney +
+                                        '\',' + ret.data[i].shppingList[j].comState + ')">' + operation + '</span>'
+
+                            }
+                            str += '</div></li>';
+                            if (gopay != "去支付") {//不等于待付款(去支付) 才有物流信息
+                                str += '<span class="cxpress">单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
+                                str += '<span class="cxpress">' + commodityStateSpan + '</span>';
                             }
                         }
                         str += '</ul>';
                         <!--底部-->
                         str += '<div class="orderoOperation bottom">';
-                        str += '<span class="shopping-info">'+shoppingInfo+'</span>';
-                        str += '<hr data-am-widget="divider" style="" class="am-divider am-divider-default"/>';
-                        str += '<span class="go-pay" onclick="pay(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\','+ret.data[i].orderState+')">'+gopay+'</span></div>'
-
-                        str += '</div>'
+                        str += '<span class="shopping-info">' + shoppingInfo + '</span>';
+                        if (ret.data[i].orderState == 1) {//只有没有支付过订单才会显示去支付的按钮！其他操作暂时隐藏
+                            str += '<span class="go-pay" onclick="pay(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].sumOrderMoney + '\',' + ret.data[i].orderState + ')">' + gopay + '</span>';
+                        }
+                        str += '</div></div>'
                         $(".content").append(str);
                     }
                     $('.am-slider').flexslider({
@@ -145,32 +189,49 @@
         init(index)
     }
     //订单详情
-    function orderDetail(orderNumber,payMoney,orderState) {
-        window.location.href = "${ctx}/m/orderDetail?orderNumber=" + orderNumber+"&payMoney="+payMoney+"&orderState="+orderState;
+    function orderDetail(orderNumber, payMoney, orderState) {
+        window.location.href = "${ctx}/m/orderDetail?orderNumber=" + orderNumber + "&payMoney=" + payMoney + "&orderState=" + orderState;
     }
     //去支付
-    function pay(orderNumber, payMoney,orderState) {
-        switch (orderState){
-            case 0:
-                loadingShow("再次购买功能开发中!")
-                break;
+    function pay(orderNumber, payMoney, orderState) {
+        switch (orderState) {
             case 1:
-                window.location.href = "${ctx}/m/payPage?orderNumber=" + orderNumber + "&payMoney=" + payMoney+"&orderBody=购买母亲云电商平台产品";
-                break;
-            case 2:
-               loadingShow("催单成功!")
-                break;
-            case 3:
-                loadingShow("确认收货功能开发中!")
-                break;
-            case 4:
-                loadingShow("取消退款!")
-                break;
-            case 5:
-                loadingShow("退款成功!")
+                window.location.href = "${ctx}/m/payPage?orderNumber=" + orderNumber + "&payMoney=" + payMoney + "&orderBody=购买母亲云电商平台产品";
                 break;
         }
 
+    }
+    var paramData = {
+        applyOrderNumber: 0,//退款单号
+        applyOrderId: "",//订单号对应的订单ID
+        applyMoney: 0,//退款金额
+        applyDescribe: "",//退款申请描述
+        createBy: userId//申请退款人Id
+    }
+    //申请退费
+    function operation(orderNnmber, orderId, orderMoney, orderState) {
+        switch (orderState) {
+            case 2:
+                loadingShow("催单成功!")
+                break;
+            case 3:
+                paramData.applyOrderNumber = orderNnmber;
+                paramData.applyMoney = orderMoney;
+                paramData.applyOrderId = orderId;
+                $('#my-prompt').modal({
+                    relatedTarget: this,
+                    onConfirm: function (e) {
+                        paramData.applyDescribe = e.data
+                        $.post("${ctx}/m/applyFund", paramData, function (ret) {
+
+                        })
+                    },
+                    onCancel: function (e) {
+
+                    }
+                });
+                break;
+        }
     }
 </script>
 </html>

@@ -14,6 +14,7 @@ public class ApplyRefund extends DataEntity<ApplyRefund> {
     private String refuntState;//申请退款状态(0退款成功,1退款中,-1退款失败)
     private String applyDescribe;//申请退款描述
     private String refundDescribe;//退款处理描述
+    private String applyOrderId;//申请退款的订单Id
 
     public String getApplyOrderNumber() {
         return applyOrderNumber;
@@ -53,5 +54,13 @@ public class ApplyRefund extends DataEntity<ApplyRefund> {
 
     public void setRefundDescribe(String refundDescribe) {
         this.refundDescribe = refundDescribe;
+    }
+
+    public String getApplyOrderId() {
+        return applyOrderId;
+    }
+
+    public void setApplyOrderId(String applyOrderId) {
+        this.applyOrderId = applyOrderId;
     }
 }

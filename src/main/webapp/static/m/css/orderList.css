@@ -17,16 +17,11 @@
 
 .am-slider-default {
     margin: 0;
-    height: 200px;
     position: relative;
 }
 
 .am-slider {
     margin-top: 10px;
-}
-
-.am-slider li {
-    height: 80px;
 }
 
 .orderoOperation {
@@ -57,10 +52,17 @@
 
 .order-title {
     color: red;
+    display: inline-block;
+    float: right;
+}
+
+.orderNumber {
+    display: inline-block;
+    float: left;
 }
 
 .bottom {
-    position: absolute;
+    border-top:1px solid #f9f9f9;
     bottom: 0
 }
 
@@ -76,23 +78,19 @@
 .one-shopping {
     list-style: none;
     padding: 0;
-    height: 80px;
-    background: #f9f9f9;
     margin: 0;
     overflow: hidden;
+    clear: both;
 }
 
-.one-shopping li {
-    width: 100px;
-    float: left;
-}
-
-.one-shopping p {
-    float: left;
+.one-shopping div {
+    float: right;
     width: 66%;
+    height: 100%;
     font-size: 12px;
     padding: 10px 0;
     margin: 0;
+    position: relative;
 }
 
 .no-data {
@@ -100,4 +98,43 @@
     position: absolute;
     width: 100%;
     top: 30%;
+}
+
+.one-shopping li {
+    width: 100%;
+    background: #f9f9f9;
+    height: 80px;
+}
+
+.one-shopping img {
+    width: 33%;
+}
+
+.refund {
+    display: block;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+.orderNumber {
+    font-size: 12px;
+}
+.commodityName{
+    display: inline-block;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cxpress{
+    display: inline-block;
+    font-size: 12px;
+    display: inline-block;
+    font-size: 12px;
+    width: 100%;
+    text-align: right;
+    padding-right: 10px;
 }
