@@ -136,11 +136,20 @@
         id = #{id}
     </update>
     <!--根据订单ID修改订单 主要用于退款功能-->
-    <update id="updateRefund" parameterType="Order">
+    <update id="updateRefund" parameterType="java.util.Map">
         UPDATE mq_order
         SET
         order_state = #{orderState}
         WHERE
         id = #{id}
     </update>
+    <!--查看单条记录-->
+    <select id="get" resultType="Order" parameterType="String">
+        SELECT
+        <include refid="order"/>
+        FROM
+        mq_order
+        WHERE
+        id=#{id}
+    </select>
 </mapper>

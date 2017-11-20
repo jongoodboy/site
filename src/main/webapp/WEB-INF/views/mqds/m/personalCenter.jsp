@@ -162,6 +162,7 @@
 </footer>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
+    alert('${sessionScope.jb}');
     var isVip = '${isVip}';
     if(isVip == "0"){//如果是会员才能分享自己的分享码
         var url = "http://www.muqinonline.com${ctx}/m?code=${sessionScope.mUser.code}";

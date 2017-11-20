@@ -6,6 +6,11 @@
     <%@include file="include/head.jsp" %>
     <link href="${ctxStatic}/m/css/orderList.css" rel="stylesheet">
 </head>
+<style>
+    .am-modal-btn{
+        width: 50%;
+    }
+</style>
 <body>
 <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
@@ -223,7 +228,12 @@
                     onConfirm: function (e) {
                         paramData.applyDescribe = e.data
                         $.post("${ctx}/m/applyFund", paramData, function (ret) {
-
+                            if (ret.code == "0") {
+                                loadingShow(ret.msg);
+                                init("");
+                            }else{
+                                loadingShow(ret.msg);
+                            }
                         })
                     },
                     onCancel: function (e) {

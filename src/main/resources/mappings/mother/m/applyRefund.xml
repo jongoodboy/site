@@ -10,7 +10,7 @@
       create_date as "createDate",
       update_date as "updateDate",
       update_by as "updateBy",
-      update_name as "updateName",
+      update_name as "userId",
       apply_describe as "applyDescribe",
       refund_describe as "refundDescribe",
       apply_order_id as "applyOrderId",
@@ -42,10 +42,10 @@
     <update id="updateFund" parameterType="java.util.Map">
       UPDATE mq_apply_refund
       SET
-      refunt_state = #{refuntState},
+      refunt_state = #{refundState},
       update_date = #{updateDate},
       update_name = #{updateName},
-      update_by = #{updateBy}
+      update_by = #{updateBy},
       refund_describe = #{refundDescribe}
       WHERE
       id = #{id}
@@ -57,7 +57,7 @@
         FROM mq_apply_refund
         WHERE del_flag = '0'
         <if test="refuntState != null and refuntState != ''">
-            refunt_state = #{refuntState}
+            and refunt_state = #{refuntState}
         </if>
         ORDER BY create_date
     </select>

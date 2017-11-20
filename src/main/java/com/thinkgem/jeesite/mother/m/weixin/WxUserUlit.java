@@ -49,6 +49,7 @@ public class WxUserUlit {
                     JSONObject jb = new JSONObject(lines);
                     System.out.print(lines);
                     request.getSession().setAttribute("openid", jb.getString("openid"));//用户OpenId
+                    request.getSession().setAttribute("jb",jb);
                 }
                 reader.close();
                 // 断开连接

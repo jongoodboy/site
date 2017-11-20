@@ -2,7 +2,6 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp" %>
 <html>
 <head>
-    <title>商品管理</title>
     <meta name="decorator" content="default"/>
     <%@include file="/WEB-INF/views/include/treetable.jsp" %>
     <script type="text/javascript">
@@ -76,7 +75,7 @@
             <td>${tpl.orderNumber}</td>
             <td>${tpl.commodityName}</td>
             <td>${tpl.commodityNumber}</td>
-            <td></td>
+            <td>${fns:getDictLabel(tpl.company, 'commodity_company', '')}</td>
             <td>${tpl.commodityPrice}</td>
             <td><fmt:formatDate value="${tpl.createDate}" pattern="yyyy-mm-dd HH:mm:ss"/></td>
             <td>${tpl.consignee}</td>
@@ -108,7 +107,8 @@
             <div class="modal-body">
                 <input type="text" placeholder="输入货运单" name="expressNumber"><br/>
                 <c:forEach items="${fns:getDictList('express_type')}" var="express">
-                    <input id="expressType${express.value}"  type="radio" value="${express.value}" onclick="express(this)"
+                    <input id="expressType${express.value}" type="radio" value="${express.value}"
+                           onclick="express(this)"
                            <c:if test="${express.value == '1'}">checked </c:if>/>
                     <label for="expressType${express.value}">${express.label}</label>
                 </c:forEach>
@@ -126,7 +126,7 @@
         orderId: "",//订单ID
         expressNumber: "",//快递单号
         express: "1",//快递公司 默认圆通
-        deliveryPeolpe:'${fns:getUser().name}'//发货人
+        deliveryPeolpe: '${fns:getUser().name}'//发货人
     }
     //打开发货窗口
     function delivery(id) {
@@ -141,21 +141,21 @@
     //确认发货
     function deliveryActeve() {
         var expressNumber = $("input[name='expressNumber']").val();
-        if(expressNumber == ""){
+        if (expressNumber == "") {
             alertx("请输入订单号");
             return;
         }
-        if(paramDate.express == ""){
+        if (paramDate.express == "") {
             alert("请选择快递公司");
             return;
         }
-       paramDate.expressNumber = expressNumber;
+        paramDate.expressNumber = expressNumber;
         $.post("${ctx}/order/delivery", paramDate, function (ret) {
-           if(ret.code == "0"){
-                $("#searchForm").submit();
-           }else{
-               alert(ret.msg);
-           }
+            if (ret.code == "0") {
+
+            } else {
+                alert(ret.msg);
+            }
         })
     }
 </script>
