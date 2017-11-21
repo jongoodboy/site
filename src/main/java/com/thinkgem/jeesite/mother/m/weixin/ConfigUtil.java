@@ -12,6 +12,7 @@ public class ConfigUtil {
     public final static String SIGN_TYPE = "MD5";//签名加密方式
     public final static String NOTIFY_URL = "http://www.muqinonline.com/front/m/payCallBack"; //用于告知微信服务器 支付成功回调
     public final static String REDIRECT_URI = "http://www.muqinonline.com/site/weixin/getCode"; //微信获取code回调页面
+
 /**
  * 微信基础接口地址
  */

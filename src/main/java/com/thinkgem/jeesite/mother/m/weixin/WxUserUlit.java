@@ -30,6 +30,7 @@ public class WxUserUlit {
     //手机用户
     @Resource
     private MuserService mUserSerivce;
+
     @RequestMapping("/getCode")
     public String accessToken(String code, HttpServletRequest request, Model model) {
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
@@ -43,13 +44,16 @@ public class WxUserUlit {
                 System.out.println("=============================");
                 System.out.println("Contents of get request");
                 System.out.println("=============================");
+                String access_token = "";
+                openId = "";
                 String lines;
                 while ((lines = reader.readLine()) != null) {
                 /*//lines = new String(lines.getBytes(), "utf-8");*/
                     JSONObject jb = new JSONObject(lines);
                     System.out.print(lines);
-                    request.getSession().setAttribute("openid", jb.getString("openid"));//用户OpenId
-                    request.getSession().setAttribute("jb",jb);
+                    openId = jb.getString("openid");
+                    request.getSession().setAttribute("openid", openId);//用户OpenId
+                    access_token = jb.getString("access_token");
                 }
                 reader.close();
                 // 断开连接
@@ -57,7 +61,18 @@ public class WxUserUlit {
                 System.out.println("=============================");
                 System.out.println("Contents of get request ends");
                 System.out.println("=============================");
-
+                String getAccessTokenSrc = " https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openId+"&lang=zh_CN ";
+                URL getaccessToken = new URL(getAccessTokenSrc);
+                HttpsURLConnection httpsConn1 = (HttpsURLConnection) getaccessToken.openConnection();//获取微信个人头像的昵称
+                BufferedReader reader1 = new BufferedReader(new InputStreamReader(httpsConn1.getInputStream(), "utf-8"));//设置编码,否则中文乱码
+                String lines1;
+                while ((lines1 = reader1.readLine()) != null) {
+                    JSONObject jb = new JSONObject(lines1);
+                    System.out.print(lines1 + "==============================");
+                    request.getSession().setAttribute("jb", jb);
+                }
+                reader1.close();
+                httpsConn1.disconnect();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -65,18 +80,17 @@ public class WxUserUlit {
             }
         }
         try {
-            String openid = (String) request.getSession().getAttribute("openid");//用户OpenId
             Map<String, Object> paramMap = new HashedMap();
-            paramMap.put("openId", openid);
+            paramMap.put("openId", openId);
             Muser muser = mUserSerivce.findUser(paramMap);
             if (muser != null) {//如果这微信用户已经在平台登录过
                 if (muser.getPhone() != null) {//如果已经绑定了手机号
                     //返回首页
                     request.getSession().setAttribute("mUser", muser);//存起来
-                }else{
+                } else {
                     return "/mqds/m/bindPhone";//手机绑定页面
                 }
-            }else{
+            } else {
                 return "/mqds/m/bindPhone";//手机绑定页面
             }
         } catch (Exception e) {

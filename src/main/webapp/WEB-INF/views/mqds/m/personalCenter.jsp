@@ -74,10 +74,10 @@
     <s:set var="isVip" value="${sessionScope.mUser.isVip}"></s:set>
     <ul class="am-list am-list-static am-list-border">
         <li class="title-personal">
-            <h2>蛮吉</h2>
+            <h2>${sessionScope.jb.getString("nickname")}</h2><!--微信名 -->
             <%--<span>我的下线：996人</span>--%>
             <span>账户余额：${sessionScope.mUser.money} <a href="#">提现</a></span>
-            <img class="am-img-thumbnail am-circle" src="http://s.amazeui.org/media/i/demos/bing-1.jpg"/>
+            <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/><!--微信头像-->
         </li>
         <li class="buy-img-list">
             <ul class="nav-menu">
@@ -162,9 +162,8 @@
 </footer>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
-    alert('${sessionScope.jb}');
     var isVip = '${isVip}';
-    if(isVip == "0"){//如果是会员才能分享自己的分享码
+    if (isVip == "0") {//如果是会员才能分享自己的分享码
         var url = "http://www.muqinonline.com${ctx}/m?code=${sessionScope.mUser.code}";
         //url必须是获取的当前的页面路径
         $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
@@ -180,12 +179,12 @@
                     'onMenuShareAppMessage'
                 ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
-            wx.error(function(res) {
+            wx.error(function (res) {
                 console.log(res);
             });
 
         })
-        wx.ready(function (){
+        wx.ready(function () {
             //分享给朋友
             wx.onMenuShareAppMessage({
                 title: "我的一小店,赚了不少呢,一起来赚钱吧", // 分享标题
@@ -203,7 +202,7 @@
             });
             //分享到朋友圈
             wx.onMenuShareTimeline({
-                title:"我的一小店,赚了不少呢,一起来赚钱吧", // 分享标题
+                title: "我的一小店,赚了不少呢,一起来赚钱吧", // 分享标题
                 desc: "测试分享", // 分享描述
                 link: url, // 分享链接
                 imgUrl: "http://n.sinaimg.cn/photo/transform/20171115/Im15-fynshev6248469.jpg", // 分享图标
