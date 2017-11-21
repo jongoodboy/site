@@ -106,7 +106,9 @@
         <li>
             <ul class="personal-list">
                 <li>
-                    <span>我的店铺</span>
+                    <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
+                        <span>我的店铺</span>
+                    </a>
                 </li>
                 <!--如果不是会员分享出去的不是自己的分享码-->
                 <c:if test="${isVip == '0'}">

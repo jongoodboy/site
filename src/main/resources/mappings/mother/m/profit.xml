@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.m.dao.ProfitDao">
+    <sql id="profit">
+        id as "id",
+        profit_order_number as "profitOrderNumber",
+        profit_commodity_id as "profitCommodityId",
+        profit_user_id as "profitUserId",
+        profit_money as "profitMoney",
+        profit_date as "profitDate",
+        profit_state as "profitState",
+        profit_remak as "profitRemak",
+        fee_deduction as "feeDeduction",
+        income_proportion as "incomeProportion"
+    </sql>
+    <!--批量添加收益-->
+    <insert id="insertList" parameterType="Profit">
+        INSERT INTO mq_profit
+        (
+        id,
+        profit_order_number,
+        profit_commodity_id,
+        profit_user_id,
+        profit_money,
+        profit_date,
+        profit_state,
+        profit_remak,
+        fee_deduction,
+        income_proportion
+        )
+        VALUES
+        <foreach collection="list" item="itme" index="index" separator=",">
+            (
+            #{itme.id},
+            #{itme.profitOrderNumber},
+            #{itme.profitCommodityId},
+            #{itme.profitUserId},
+            #{itme.profitMoney},
+            #{itme.profitDate},
+            #{itme.profitState},
+            #{itme.profitRemak},
+            #{itme.feeDeduction},
+            #{itme.incomeProportion}
+            )
+        </foreach>
+    </insert>
+
+    <select id="findProfit" parameterType="java.util.Map" resultType="java.util.Map">
+        (
+        SELECT SUM(profit_money) as "money"
+        FROM
+        mq_profit
+        WHERE
+        profit_date LIKE CONCAT('', #{toDateProfit}, '%')
+        AND profit_state = '0'
+        )
+        UNION ALL
+        (
+        SELECT SUM(profit_money) as "money"
+        FROM
+        mq_profit
+        WHERE
+        income_proportion = '2%'
+        AND
+        profit_date LIKE CONCAT('', #{toMonthFormat}, '%')
+        AND profit_state = '0'
+        )
+        UNION ALL
+        (
+        SELECT SUM(profit_money) as "money"
+        FROM
+        mq_profit
+        WHERE
+        income_proportion = '8%'
+        AND
+        profit_date LIKE CONCAT('', #{toMonthFormat}, '%')
+        AND profit_state = '0'
+        )
+        <if test="list != null and list != ''">
+            UNION ALL
+            <foreach collection="list" item="itme" index="index" separator="UNION ALL">
+                (
+                SELECT SUM(profit_money) as "money"
+                FROM
+                mq_profit
+                WHERE
+                profit_date BETWEEN #{itme.stateDate} AND #{itme.endDate}
+                AND profit_state = '0'
+                )
+            </foreach>
+        </if>
+    </select>
+</mapper>

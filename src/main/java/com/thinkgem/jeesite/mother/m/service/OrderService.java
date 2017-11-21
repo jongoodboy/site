@@ -1,12 +1,15 @@
 package com.thinkgem.jeesite.mother.m.service;
 
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
 import com.thinkgem.jeesite.mother.m.dao.MuserDao;
 import com.thinkgem.jeesite.mother.m.dao.OrderDao;
+import com.thinkgem.jeesite.mother.m.dao.ProfitDao;
 import com.thinkgem.jeesite.mother.m.entity.Order;
+import com.thinkgem.jeesite.mother.m.entity.Profit;
 import com.thinkgem.jeesite.mother.m.entity.ReceiptAddress;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +36,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
     ReceiptAddressService addressService;
     @Resource
     MuserDao muserDao;
+    @Resource
+    ProfitDao profitDao;
 
     public int addList(List<Order> list) {
         return orderDao.addList(list);
@@ -131,18 +137,44 @@ public class OrderService extends CrudService<OrderDao, Order> {
                     List<String> paramList = new ArrayList<String>();
                     paramList.add(map.get("orderNumber").toString());//根据订单号查询所有的商品
                     List<Order> listOrder = orderDao.findOrderListByOrderNumber(paramList);//订单号对应的所有商品
+                    Date profitDate = new Date();//设置收益时间为了统一放在循环外
+                    List<Profit> profitList = new ArrayList<Profit>();//批量插入收益表
                     for (int i = 0; i < listOrder.size(); i++) {
                         Order o = listOrder.get(i);
                         Commodity com = comodityService.get(o.getCommodityId());//查询得到每个商品
                      /*   float v = com.getCommodityPice().floatValue() - com.getCostPrice().floatValue();//售价减去成本价等于利润*/
                         float v = com.getCommodityPice().floatValue();//售价于利润
                         BigDecimal parentThisMoney = new BigDecimal(v * 0.08).setScale(2, BigDecimal.ROUND_HALF_UP);//拿8%的利润给分享人
-                        parentMoney = parentMoney.add(parentThisMoney);
+                        parentMoney = parentMoney.add(parentThisMoney);//分享人总收益
+                        Profit profit = new Profit();//收益表
+                        profit.setId(IdGen.uuid());//设置收益表的ID
+                        profit.setProfitOrderNumber(o.getOrderNumber());//设置收益订单号
+                        profit.setProfitCommodityId(com.getId());//设置收益的商品id
+                        profit.setProfitUserId(parentId);//设置收益人Id
+                        profit.setProfitMoney(parentThisMoney);//收益金额
+                        profit.setProfitDate(profitDate);//设置收益时间
+                        profit.setProfitState("0");//设置收益状态0正常收益1异常退款扣除收益
+                        profit.setProfitRemak("店铺卖出了:" + com.getCommodityName());
+                        profit.setIncomeProportion("8%");
+                        profitList.add(profit);
                         if (grandFather != null && grandFather != "") {//如果分享人还有上线
                             BigDecimal grandFatherThisMoney = new BigDecimal(v * 0.02).setScale(2, BigDecimal.ROUND_HALF_UP);//拿2%的利润给分享人的线
-                            grandFatherMoney = grandFatherMoney.add(grandFatherThisMoney);
+                            grandFatherMoney = grandFatherMoney.add(grandFatherThisMoney);//分享人上线总收益
+                            Profit profitGrandFather = new Profit();//收益表
+                            profitGrandFather.setId(IdGen.uuid());//设置上线收益表的ID
+                            profitGrandFather.setProfitOrderNumber(o.getOrderNumber());//设置上线收益订单号
+                            profitGrandFather.setProfitCommodityId(com.getId());//设置上线收益的商品id
+                            profitGrandFather.setProfitUserId(grandFather);//设置上线收益人Id
+                            profitGrandFather.setProfitMoney(grandFatherThisMoney);//上线收益金额
+                            profitGrandFather.setProfitDate(profitDate);//设置上线收益时间
+                            profitGrandFather.setProfitState("0");//设置上线收益状态0正常收益1异常退款扣除收益
+                            profitGrandFather.setProfitRemak("店铺卖出了:" + com.getCommodityName());
+                            profitGrandFather.setIncomeProportion("2%");
+                            profitList.add(profitGrandFather);
                         }
                     }
+                    //批量添加到收益表
+                    profitDao.insertList(profitList);
                     //把钱转到分享人的账户上
                     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
                     Map<String, Object> parentMap = new HashedMap();

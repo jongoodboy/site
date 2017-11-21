@@ -36,9 +36,9 @@ public class SendCode {
     //随机数
     private static final String NONCE = "123456";
     //短信模板ID
-    private static final String TEMPLATEID = "3057527";
+    private static final String TEMPLATEID = "3144164";
     //手机号
-    private static final String MOBILE = "18785114373";
+    private static final String MOBILE = "13984871489";
     //验证码长度，范围4～10，默认为4
     private static final String CODELEN = "6";
 

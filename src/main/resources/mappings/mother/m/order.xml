@@ -16,6 +16,7 @@
         express_number as "expressNumber",
         delivery_time as "deliveryTime",
         delivery_peolpe as "deliveryPeolpe",
+        share_code as "shareCode",
         create_date as "createDate",
         update_date as "updateDate",
         del_flag as "delFlag"
@@ -67,7 +68,8 @@
         commodity_number,
         commodity_price,
         create_date,
-        del_flag
+        del_flag,
+        share_code
         )
         VALUES
         <foreach collection="list" item="itme" separator=",">
@@ -83,7 +85,8 @@
             #{itme.commodityNumber},
             #{itme.commodityPrice},
             #{itme.createDate},
-            #{itme.delFlag}
+            #{itme.delFlag},
+            #{shareCode}
             )
         </foreach>
 

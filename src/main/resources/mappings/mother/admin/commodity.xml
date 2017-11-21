@@ -50,7 +50,7 @@
             and commodity_state = #{type}
         </if>
         <if test="commodityName != '' and commodityName != null">
-            AND commodity_name LIKE '%${commodityName}%'
+            AND commodity_name LIKE CONCAT('%',#{commodityName},'%')
         </if>
         AND del_flag = '0'
         ORDER BY create_date DESC

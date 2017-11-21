@@ -20,6 +20,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -47,6 +49,9 @@ public class IndexController {
     //退款
     @Resource
     private ApplyRefundService applyRefundService;
+    //收益
+    @Resource
+    private ProfitService profitService;
 
     //每次请求都会先进这里
     @ModelAttribute
@@ -298,12 +303,13 @@ public class IndexController {
      */
     @RequestMapping("/saveOrder")
     @ResponseBody
-    public Map<String, Object> saveOrder(String commodityId, String buyNumber,
+    public Map<String, Object> saveOrder(HttpServletRequest request, String commodityId, String buyNumber,
                                          String commodityPrice, String address, String consignee, String consigneePhone, String userId) {
         List<Order> list = new ArrayList<Order>();
         Map<String, Object> returnMap = new HashedMap();
         Map<String, Object> map = new HashedMap();
         Date d = new Date();
+        String shareCode = (String) request.getSession().getAttribute("code");//分享人的分享码
         SimpleDateFormat foramt = new SimpleDateFormat("yyyMMddHHmmss");
         String orderNumber = foramt.format(d) + new Date().getTime();//生成订单号
         String[] commodityIdList = commodityId.split(",");//截取每一个商品id
@@ -324,6 +330,7 @@ public class IndexController {
             order.setConsigneePhone(consigneePhone);
             order.setOrderNumber(orderNumber);
             order.setCreateDate(d);
+            order.setShareCode(shareCode);
             list.add(order);//用于生成订单
         }
         try {
@@ -558,7 +565,7 @@ public class IndexController {
         return returnMap;
     }
 
-        /**
+    /**
      * 申请退款
      *
      * @return
@@ -569,9 +576,9 @@ public class IndexController {
         Map<String, Object> returnMap = new HashedMap();
         try {
             applyRefundService.save(applyRefund);
-            Map<String,Object> paramMap = new HashedMap();
-            paramMap.put("id",applyRefund.getApplyOrderId());//订单ID
-            paramMap.put("orderState","4");//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("id", applyRefund.getApplyOrderId());//订单ID
+            paramMap.put("orderState", "4");//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
             orderService.updateRefund(paramMap);//
             returnMap.put("msg", "申请成功");
             returnMap.put("code", "0");
@@ -604,7 +611,7 @@ public class IndexController {
     }
 
 
-    //登录页面
+    //绑定手机号页面
     @RequestMapping("/bindPhone")
     public String bindPhone() {
         return "mqds/m/bindPhone";
@@ -691,6 +698,33 @@ public class IndexController {
     @ResponseBody
     public Map<String, String> getWXConfig(String url) {
         return Sign.sign(url);
+    }
+
+    /**
+     * 我的店铺
+     *
+     * @return
+     */
+    @RequestMapping("/personalStores")
+    public String personalStores(Model model) {
+        Date dateProfit = new Date();
+        SimpleDateFormat toDateFormat = new SimpleDateFormat("yyyy-MM-dd");//今日收益
+        String toDateProfit = toDateFormat.format(dateProfit);
+        SimpleDateFormat toMonthFormat = new SimpleDateFormat("yyyy-MM");//当月收益
+        String toMonthProfit = toMonthFormat.format(dateProfit);
+        Map<String, Object> paramMap = new HashedMap();
+        paramMap.put("toDateProfit", toDateProfit);
+        paramMap.put("toMonthFormat", toMonthProfit);
+        List<Map<String, Object>> listMap = profitService.findProfit(paramMap);
+        model.addAttribute("toDateProfit", listMap.get(0) == null ? "0.00" : listMap.get(0).get("money"));
+        model.addAttribute("team", listMap.get(1) == null ? "0.00" : listMap.get(1).get("money"));
+        model.addAttribute("shop", listMap.get(2) == null ? "0.00" : listMap.get(2).get("money"));
+        model.addAttribute("week1", listMap.get(3) == null ? "0.00" : listMap.get(3).get("money"));
+        model.addAttribute("week2", listMap.get(4) == null ? "0.00" : listMap.get(4).get("money"));
+        model.addAttribute("week3", listMap.get(5) == null ? "0.00" : listMap.get(5).get("money"));
+        model.addAttribute("week4", listMap.get(6) == null ? "0.00" : listMap.get(6).get("money"));
+        model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));
+        return "mqds/m/personalStores";
     }
 
 }

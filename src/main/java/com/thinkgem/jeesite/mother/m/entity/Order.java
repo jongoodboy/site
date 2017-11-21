@@ -22,6 +22,15 @@ public class Order extends DataEntity<Order> {
     private String expressNumber;//快递单号
     private Date deliveryTime;//发货时间
     private String deliveryPeolpe;//发货人
+    private String shareCode;//分享码
+
+    public String getShareCode() {
+        return shareCode;
+    }
+
+    public void setShareCode(String shareCode) {
+        this.shareCode = shareCode;
+    }
 
     public String getExpress() {
         return express;
