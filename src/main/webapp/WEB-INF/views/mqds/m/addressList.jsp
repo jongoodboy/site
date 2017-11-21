@@ -166,6 +166,7 @@
         })
     })
     $(".am-btn-danger").on("click", function () {
+        $("#reset").click();
         $("#open-bottom-model").modal('open');
     })
     $(".close-model").on("click", function () {
@@ -244,7 +245,7 @@
         $.post("${ctx}/m/saveAddress", DATA, function (data) {
             if (data.code == "0") {
                 $("#open-bottom-model").modal('close');
-                if ('${isOrderPage}' != null && '${isOrderPage}' != undefined) {
+                if ('${isOrderPage}' != null && '${isOrderPage}' != undefined && '${isOrderPage}' != "") {
                     self.location = document.referrer;//返回并刷新上一页面
                 } else {
                     window.location.href = window.location.href;//刷新

@@ -1,6 +1,8 @@
 package com.thinkgem.jeesite.mother.m.ShortMessage;
 
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,12 +14,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 发送验证码
  *
  * @author liuxuanlin
  */
+@Controller
+@RequestMapping(value = "${frontPath}/phone")
 public class SendCode {
     //发送验证码的请求路径URL
     private static final String
@@ -32,11 +38,12 @@ public class SendCode {
     //短信模板ID
     private static final String TEMPLATEID = "3057527";
     //手机号
-    private static final String MOBILE = "13888888888";
+    private static final String MOBILE = "18785114373";
     //验证码长度，范围4～10，默认为4
     private static final String CODELEN = "6";
 
-    public static void main(String[] args) throws Exception {
+    @RequestMapping
+    public static void test() throws IOException {
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(SERVER_URL);
