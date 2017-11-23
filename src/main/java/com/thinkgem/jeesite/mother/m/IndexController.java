@@ -702,11 +702,11 @@ public class IndexController {
 
     /**
      * 我的店铺
-     *
+     *@param userId 当前用户Id
      * @return
      */
     @RequestMapping("/personalStores")
-    public String personalStores(Model model) {
+    public String personalStores(Model model,String userId) {
         Date dateProfit = new Date();
         SimpleDateFormat toDateFormat = new SimpleDateFormat("yyyy-MM-dd");//今日收益
         String toDateProfit = toDateFormat.format(dateProfit);
@@ -715,16 +715,36 @@ public class IndexController {
         Map<String, Object> paramMap = new HashedMap();
         paramMap.put("toDateProfit", toDateProfit);
         paramMap.put("toMonthFormat", toMonthProfit);
+        paramMap.put("userId",userId);
         List<Map<String, Object>> listMap = profitService.findProfit(paramMap);
-        model.addAttribute("toDateProfit", listMap.get(0) == null ? "0.00" : listMap.get(0).get("money"));
-        model.addAttribute("team", listMap.get(1) == null ? "0.00" : listMap.get(1).get("money"));
-        model.addAttribute("shop", listMap.get(2) == null ? "0.00" : listMap.get(2).get("money"));
-        model.addAttribute("week1", listMap.get(3) == null ? "0.00" : listMap.get(3).get("money"));
-        model.addAttribute("week2", listMap.get(4) == null ? "0.00" : listMap.get(4).get("money"));
-        model.addAttribute("week3", listMap.get(5) == null ? "0.00" : listMap.get(5).get("money"));
-        model.addAttribute("week4", listMap.get(6) == null ? "0.00" : listMap.get(6).get("money"));
-        model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));
+        model.addAttribute("toDateProfit", listMap.get(0) == null ? "0.00" : listMap.get(0).get("money"));//今日收益
+        model.addAttribute("team", listMap.get(1) == null ? "0.00" : listMap.get(1).get("money"));//团队收益
+        model.addAttribute("shop", listMap.get(2) == null ? "0.00" : listMap.get(2).get("money"));//开店收益
+        model.addAttribute("week1", listMap.get(3) == null ? "0.00" : listMap.get(3).get("money"));//第一周的收益
+        model.addAttribute("week2", listMap.get(4) == null ? "0.00" : listMap.get(4).get("money"));//第二周的收益
+        model.addAttribute("week3", listMap.get(5) == null ? "0.00" : listMap.get(5).get("money"));//第三周的收益
+        model.addAttribute("week4", listMap.get(6) == null ? "0.00" : listMap.get(6).get("money"));//第四周的收益
+        model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));//第五周的收益
         return "mqds/m/personalStores";
     }
-
+    /**
+     * 我的店铺本月收益详情
+     *@param userId 当前用户Id
+     * @return
+     */
+    @RequestMapping("/monthProfitDetail")
+    @ResponseBody
+    public Map<String,Object> monthProfitDetail(String userId) {
+        Map<String,Object> retMap = new HashedMap();
+        try {
+            retMap.put("data", profitService.monthProfitDetail());
+            retMap.put("code","0");
+            retMap.put("msg","查询成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            retMap.put("code","-1");
+            retMap.put("msg","查询失败");
+        }
+        return retMap;
+    }
 }

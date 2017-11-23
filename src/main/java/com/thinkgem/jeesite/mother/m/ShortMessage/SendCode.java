@@ -6,7 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -16,6 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 发送验证码
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author liuxuanlin
  */
 @Controller
-@RequestMapping(value = "${frontPath}/phone")
+@RequestMapping(value = "${frontPath}/getPhoneCode")
 public class SendCode {
     //发送验证码的请求路径URL
     private static final String
@@ -37,13 +40,14 @@ public class SendCode {
     private static final String NONCE = "123456";
     //短信模板ID
     private static final String TEMPLATEID = "3144164";
-    //手机号
-    private static final String MOBILE = "13984871489";
+    //手机号测试
+    private static final String MOBILE = "18785114373";
     //验证码长度，范围4～10，默认为4
     private static final String CODELEN = "6";
 
     @RequestMapping
-    public static void test() throws IOException {
+    @ResponseBody
+    public static Map<String,Object> getPhoneCode(String phone) throws IOException {
 
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(SERVER_URL);
@@ -68,7 +72,7 @@ public class SendCode {
          * 3.params是根据你模板里面有几个参数，那里面的参数也是jsonArray格式
          */
         nvps.add(new BasicNameValuePair("templateid", TEMPLATEID));
-        nvps.add(new BasicNameValuePair("mobile", MOBILE));
+        nvps.add(new BasicNameValuePair("mobile", phone));//手机号
         nvps.add(new BasicNameValuePair("codeLen", CODELEN));
 
         httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
@@ -79,7 +83,9 @@ public class SendCode {
          * 1.打印执行结果，打印结果一般会200、315、403、404、413、414、500
          * 2.具体的code有问题的可以参考官网的Code状态表
          */
-        System.out.println(EntityUtils.toString(response.getEntity(), "utf-8"));
+        Map<String,Object> returnMap = new HashedMap();
+        returnMap.put("data",EntityUtils.toString(response.getEntity(), "utf-8"));
+        return returnMap;
 
     }
 }

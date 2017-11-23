@@ -71,8 +71,10 @@
     <update id="updateUserIsVIP" parameterType="java.util.Map">
         UPDATE mq_user
         SET
-        is_vip = 0,
-        parent = #{parent}
+        is_vip = 0
+        <if test="parent != null and parent != ''">
+            ,parent = #{parent}
+        </if>
         WHERE
         id = (
            SELECT

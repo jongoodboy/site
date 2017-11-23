@@ -106,7 +106,7 @@
         <li>
             <ul class="personal-list">
                 <li>
-                    <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
+                    <a href="${ctx}/m/personalStores?userId=bd994867b9d84bca905836b2f963ec5d">
                         <span>我的店铺</span>
                     </a>
                 </li>

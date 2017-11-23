@@ -15,4 +15,6 @@ public interface ProfitDao extends CrudDao<Profit> {
     int insertList(List<Profit> list);
 
     List<Map<String, Object>> findProfit(Map<String, Object> map);
+
+    List<Map<String, Object>> monthProfitDetail(Map<String, Object> map);
 }

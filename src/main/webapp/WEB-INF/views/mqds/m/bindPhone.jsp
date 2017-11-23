@@ -105,11 +105,13 @@
 <script>
     var url = '${param.url}';
     if (url == "") {
-        url = window.location.href;
+        url = "${ctx}/m";
     }
+    var phoneCode = "";//手机验证码
     //绑定
     function bindPhone() {
         var phone = $("#phone").val();
+        var code = $("#code").val();
         if (phone == "") {
             loadingShow("手机号不能为空");
             return;
@@ -118,10 +120,18 @@
             loadingShow("请输入正确的手机号");
             return;
         }
+        if (code == "") {
+            loadingShow("请输入验证码");
+            return;
+        }
+        if (code != phoneCode) {
+            loadingShow("验证码不正确");
+            return;
+        }
         $.post("${ctx}/m/bind?phone=" + phone, function (data) {
             if (data.code == "0") {
                 window.location.href = url;
-            }else{
+            } else {
                 loadingShow(ret.msg);
             }
         })
@@ -141,7 +151,20 @@
         }
         if (codeBut) {
             codeBut = false;
-            countDown();
+            $.post("${ctx}/m/verification?phone=" + phone, function (ret) {//验证手机是否已经被绑定过
+                codeBut = true;
+                if (ret.code == "1") {//号码没有绑定过。
+                    countDown();
+                    $.post("${ctx}/getPhoneCode?phone=" + phone, function (ret) {
+                        var data = JSON.parse(ret.data);
+                        phoneCode = data.obj;//短信验证码
+                    })
+                } else {
+                    loadingShow(ret.msg);
+                }
+            })
+
+
         }
     })
     //多少秒之后可以再获取验证码
@@ -156,24 +179,7 @@
         }
         setTimeout(countDown, "1000");
     }
-    //验证手机是否已经被绑定过
-    function verification() {
-        codeBut = false;
-        var phone = $("#phone").val();
-        if (phone == "") {
-            return;
-        }
-        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))) {
-            loadingShow("请输入正确的手机号");
-            return;
-        }
-        $.post("${ctx}/m/verification?phone=" + phone, function (ret) {
-            if(ret.code == "1"){//号码没有绑定过。
-                codeBut = true;
-            }else{
-                loadingShow(ret.msg);
-            }
-        })
-    }
+
+
 </script>
 </html>

@@ -13,7 +13,7 @@
 </style>
 <body>
 <header data-am-widget="header" class="am-header am-header-default am-header-fixed">
-    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+    <ul class="am-navbar-nav am-cf am-avg-sm-5">
         <li class="all">
             <a href="javascript:findData('')" class="">
                 <span>全部</span>
@@ -32,6 +32,11 @@
         <li class="receipt">
             <a href="javascript:findData(3)" class="">
                 <span>待收货</span>
+            </a>
+        </li>
+        <li class="complete">
+            <a href="javascript:findData(0)" class="">
+                <span>已完成</span>
             </a>
         </li>
     </ul>
@@ -66,6 +71,10 @@
         case '3'://待收货
             addClass(".receipt");
             init("3")
+            break
+        case '0'://已完成
+            addClass(".complete");
+            init("0")
             break
     }
     $(".am-navbar-nav li").on("click", function () {
