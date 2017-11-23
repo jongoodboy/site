@@ -17,4 +17,11 @@ public interface ProfitDao extends CrudDao<Profit> {
     List<Map<String, Object>> findProfit(Map<String, Object> map);
 
     List<Map<String, Object>> monthProfitDetail(Map<String, Object> map);
+
+    List<Map<String, Object>> findReFundByOrderNumberAndCommodityId(Map<String, Object> map);
+
+    int subtraction(List<Map<String, Object>> list);
+
+    int profitLoss(List<Map<String, Object>> list);
+
 }

@@ -46,7 +46,7 @@ public class ReFundConteroller {
             page = applyRefundService.findPage(page, applyRefund);
             List<ApplyRefund> list = page.getList();
             if (list.size() > 0) {
-                for (int i = 0; i < list.size(); i++) {//如查有退款
+                for (int i = 0; i < list.size(); i++) {//如果有退款
                     ApplyRefund refund = list.get(i);
                     Order o = orderService.get(refund.getApplyOrderId());
                     Commodity com = commodityService.get(o.getCommodityId());
@@ -55,6 +55,7 @@ public class ReFundConteroller {
                     map.put("applyDescribe", refund.getApplyDescribe());//申请退款描述
                     map.put("refundDescribe", refund.getRefundDescribe());//退款处理描述
                     map.put("comName", com.getCommodityName());//商品名称
+                    map.put("comId", com.getId());//商品Id
                     map.put("ordPrice", o.getCommodityPrice());//生成订单时商品的价格
                     map.put("ordNumber", o.getCommodityNumber());//购买的数量
                     map.put("applyFundMoney", refund.getApplyMoney());//申请退费的金额
@@ -79,32 +80,38 @@ public class ReFundConteroller {
 
     /**
      * @param refundState    (0已退款，1退款中，-1退款失败）
-     * @param refundId       款ID
+     * @param refundId       退款ID
      * @param refundPeolpe   退款人
      * @param refundDescribe 退款操作人描述
      * @param orderId        订单的ID
      * @param updateBy       处理退款人的ID
+     * @param orderNumber    订单号(用于扣除分成)
+     * @param commodityId    商品Id(用于扣除分成)
      * @return
      */
     @RequestMapping("/operation")
     @ResponseBody
-    public Map<String, Object> operation(String refundState, String refundId, String refundPeolpe, String refundDescribe, String orderId, String updateBy) {
+    public Map<String, Object> operation(String refundState, String refundId,
+                                         String refundPeolpe, String refundDescribe,
+                                         String orderId, String updateBy, String orderNumber, String commodityId) {
         Map<String, Object> returnMap = new HashedMap();
-        Map<String,Object> paramMap = new HashedMap();
-        paramMap.put("refundState",refundState);
-        paramMap.put("id",refundId);
-        paramMap.put("updateName",refundPeolpe);
-        paramMap.put("refundDescribe",refundDescribe);
-        paramMap.put("orderId",orderId);
-        paramMap.put("updateBy",updateBy);
-        paramMap.put("updateDate",new Date());
+        Map<String, Object> paramMap = new HashedMap();
+        paramMap.put("refundState", refundState);
+        paramMap.put("id", refundId);
+        paramMap.put("updateName", refundPeolpe);
+        paramMap.put("refundDescribe", refundDescribe);
+        paramMap.put("orderId", orderId);
+        paramMap.put("updateBy", updateBy);
+        paramMap.put("orderNumber", orderNumber);
+        paramMap.put("commodityId", commodityId);
+        paramMap.put("updateDate", new Date());
         try {
             applyRefundService.updateFund(paramMap);
-            returnMap.put("code","0");
-            returnMap.put("msg","退款操作成功");
+            returnMap.put("code", "0");
+            returnMap.put("msg", "退款操作成功");
         } catch (Exception e) {
-            returnMap.put("code","-1");
-            returnMap.put("msg","退款操作失败");
+            returnMap.put("code", "-1");
+            returnMap.put("msg", "退款操作失败");
             e.printStackTrace();
         }
         return returnMap;

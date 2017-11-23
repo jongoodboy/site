@@ -3,12 +3,16 @@ package com.thinkgem.jeesite.mother.m.service;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.mother.m.dao.ApplyRefundDao;
 import com.thinkgem.jeesite.mother.m.dao.OrderDao;
+import com.thinkgem.jeesite.mother.m.dao.ProfitDao;
 import com.thinkgem.jeesite.mother.m.entity.ApplyRefund;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +24,8 @@ public class ApplyRefundService extends CrudService<ApplyRefundDao, ApplyRefund>
     ApplyRefundDao applyRefundDao;
     @Resource
     OrderDao orderDao;
+    @Resource
+    ProfitDao profitDao;
 
     @Transactional(readOnly = false)
     public int updateFund(Map<String, Object> map) {
@@ -38,6 +44,25 @@ public class ApplyRefundService extends CrudService<ApplyRefundDao, ApplyRefund>
                 orderMap.put("id", orderId);
                 orderMap.put("orderState", refundState);
                 index = orderDao.updateRefund(orderMap);
+                if (index > 0) {//表示已经状态退款已经成功   实际去扣除收益人的收益 用订单号和商品Id
+                    String orderNumber = (String) map.get("orderNumber");//订单号
+                    String commodityId = (String) map.get("commodityId");//商品ID
+                    Map<String, Object> paramMap = new HashedMap();
+                    paramMap.put("orderNumber", orderNumber);
+                    paramMap.put("commodityId", commodityId);
+                    List<Map<String, Object>> refundUserAndMoney = profitDao.findReFundByOrderNumberAndCommodityId(paramMap);
+                    if (refundUserAndMoney != null && refundUserAndMoney.size() > 0) {
+                        profitDao.subtraction(refundUserAndMoney);//批量扣除收益人的收益
+                        Date d = new Date();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String data = format.format(d);
+                        for (int i = 0; i < refundUserAndMoney.size(); i++) {
+                            refundUserAndMoney.get(i).put("feeDeduction","您的账户于:"+data
+                                    +"从账户余额扣除:"+refundUserAndMoney.get(i).get("profitMoney")+"元,扣款原因,商品已经退款!");
+                        }
+                        profitDao.profitLoss(refundUserAndMoney);//把收益表个人收益修改为异常退款
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

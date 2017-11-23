@@ -28,7 +28,8 @@
         .form-search .ul-form li {
             margin-right: 40px;
         }
-        textarea{
+
+        textarea {
             width: 80%;
         }
     </style>
@@ -45,10 +46,10 @@
     <ul class="ul-form">
         <li>
             <label>退款状态：</label>
-                <input id="commodityRelease1" name="refuntState"
-                       onclick="$('#searchForm').submit();" type="radio" value="1"
-                       <c:if test="${applyRefund.refuntState == '1'}">checked </c:if>/>
-                <label for="commodityRelease1">退款中</label>
+            <input id="commodityRelease1" name="refuntState"
+                   onclick="$('#searchForm').submit();" type="radio" value="1"
+                   <c:if test="${applyRefund.refuntState == '1'}">checked </c:if>/>
+            <label for="commodityRelease1">退款中</label>
             <input id="commodityRelease2" name="refuntState"
                    onclick="$('#searchForm').submit();" type="radio" value="0"
                    <c:if test="${applyRefund.refuntState == '0'}">checked </c:if>/>
@@ -101,7 +102,7 @@
             <td><fmt:formatDate value="${tpl.applyUpdateDate}" pattern="yyyy-mm-dd HH:mm:ss"/></td>
             <td>
                 <c:if test="${tpl.applyRefuntState == '1'}"> <!--申请退款中-->
-                    <a href="javascript:delivery('${tpl.refundId}','${tpl.orderId}')">同意退款</a>
+                    <a href="javascript:delivery('${tpl.refundId}','${tpl.orderId}','${tpl.orderNumber}','${tpl.comId}')">同意退款</a>
                 </c:if>
             </td>
         </tr>
@@ -131,31 +132,35 @@
     var paramDate = {
         refundState: "0",//(0已退款，1退款中，-1退款失败）
         refundId: "",//退款ID
-        refundPeolpe:'${fns:getUser().name}',//退款人
-        refundDescribe:"",//退款操作人描述
-        orderId:"",//订单的ID
-        updateBy:'${fns:getUser().id}' //退款人Id
+        refundPeolpe: '${fns:getUser().name}',//退款人
+        refundDescribe: "",//退款操作人描述
+        orderId: "",//订单的ID
+        updateBy: '${fns:getUser().id}', //退款人Id
+        orderNumber: "",//订单号用于扣除已经分成的上线
+        commodityId: ""//商品Id用于扣除已经分成的上线
     }
-    //打开发货窗口
-    function delivery(id,orderId) {
+    //退款窗口
+    function delivery(id, orderId, orderNumber, commodityId) {
         paramDate.refundId = id;
         paramDate.orderId = orderId;
+        paramDate.orderNumber = orderNumber;
+        paramDate.commodityId = commodityId;
         $('#myModal').modal('show');
     }
     //确认退款
     function refund() {
         var refundDescribe = $("#refundDescribe").val();
-        if(refundDescribe == ""){
+        if (refundDescribe == "") {
             alertx("请输入退款描述");
             return;
         }
-       paramDate.refundDescribe = refundDescribe;
+        paramDate.refundDescribe = refundDescribe;
         $.post("${ctx}/refund/operation", paramDate, function (ret) {
-           if(ret.code == "0"){
+            if (ret.code == "0") {
                 $("#searchForm").submit();
-           }else{
-               alert(ret.msg);
-           }
+            } else {
+                alert(ret.msg);
+            }
         })
     }
 </script>
