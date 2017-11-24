@@ -29,10 +29,13 @@
         FROM mq_order
         WHERE
         del_flag = '0'
-        AND user_id = #{userId}
-        <if test="orderState != null and orderState != ''">
-            AND order_state = #{orderState}
+        <if test="orderState == '-1'">
+            AND order_state = 0
         </if>
+        <if test="orderState != null and orderState != '-1'">
+            AND order_state = ${orderState}
+        </if>
+        AND user_id = #{userId}
         ORDER BY order_number DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
@@ -86,7 +89,7 @@
             #{itme.commodityPrice},
             #{itme.createDate},
             #{itme.delFlag},
-            #{shareCode}
+            #{itme.shareCode}
             )
         </foreach>
 

@@ -143,6 +143,7 @@
     code.on("click", function () {
         var phone = $("#phone").val();
         if (phone == "") {
+            loadingShow("手机号不能为空");
             return;
         }
         if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))) {

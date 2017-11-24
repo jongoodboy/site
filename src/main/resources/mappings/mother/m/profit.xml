@@ -53,7 +53,7 @@
         WHERE
         profit_date LIKE CONCAT('', #{toDateProfit}, '%')
         AND profit_state = '0'
-        AND profit_user_id #{userId}
+        AND profit_user_id = #{userId}
         )
         UNION ALL
         (
@@ -65,7 +65,7 @@
         AND
         profit_date LIKE CONCAT('', #{toMonthFormat}, '%')
         AND profit_state = '0'
-        AND profit_user_id #{userId}
+        AND profit_user_id = #{userId}
         )
         UNION ALL
         (
@@ -77,7 +77,7 @@
         AND
         profit_date LIKE CONCAT('', #{toMonthFormat}, '%')
         AND profit_state = '0'
-        AND profit_user_id #{userId}
+        AND profit_user_id = #{userId}
         )
         <if test="list != null and list != ''">
             UNION ALL
@@ -89,7 +89,7 @@
                 WHERE
                 profit_date BETWEEN #{itme.stateDate} AND #{itme.endDate}
                 AND profit_state = '0'
-                AND profit_user_id #{userId}
+                AND profit_user_id = #{userId}
                 )
             </foreach>
         </if>
@@ -105,7 +105,7 @@
                 WHERE
                 profit_date BETWEEN #{stateDate} AND #{endDate}
                 AND profit_state = '0'
-                AND profit_user_id   #{userId}
+                AND profit_user_id  = #{userId}
     </select>
     <!--该订单该商品对应原收益人和收益金额-->
     <select id="findReFundByOrderNumberAndCommodityId" parameterType="java.util.Map" resultType="java.util.Map">

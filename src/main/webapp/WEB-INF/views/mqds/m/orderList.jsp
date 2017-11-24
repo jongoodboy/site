@@ -35,7 +35,7 @@
             </a>
         </li>
         <li class="complete">
-            <a href="javascript:findData(0)" class="">
+            <a href="javascript:findData(-1)" class="">
                 <span>已完成</span>
             </a>
         </li>
@@ -87,7 +87,7 @@
     }
     function init(orderState) {
         $(".content").html('');
-        $.post("${ctx}/m/orderListDate?orderState=" + orderState + "&userId=" + userId, function (ret) {
+        $.post("${ctx}/m/orderListDate?orderState=" + orderState + "&userId="+userId, function (ret) {
             if (ret.code == "0") {
                 if (ret.data.length > 0) {
                     for (var i = 0; i < ret.data.length; i++) {
