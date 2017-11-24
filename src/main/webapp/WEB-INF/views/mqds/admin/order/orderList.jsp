@@ -151,10 +151,9 @@
         }
         paramDate.expressNumber = expressNumber;
         $.post("${ctx}/order/delivery", paramDate, function (ret) {
+            alertx(ret.msg);
             if (ret.code == "0") {
-
-            } else {
-                alert(ret.msg);
+                $("#searchForm").submit();
             }
         })
     }

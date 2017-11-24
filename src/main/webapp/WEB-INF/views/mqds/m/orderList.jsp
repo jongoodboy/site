@@ -137,21 +137,21 @@
                             var operation = "";//操作提示
                             switch (commodityState) {
                                 case "0":
-                                    commodityStateSpan = "已完成";
+                                    commodityStateSpan = "交易已完成";
                                     break;
                                 case "1":
                                     commodityStateSpan = "等待付款";
                                     break;
                                 case "2":
-                                    operation = "我要催单";
+                                    operation = "申请退款";
                                     break;
                                 case "3":
                                     commodityStateSpan = "物流信息:" + ret.data[i].shppingList[j].comExpress + "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber;
-                                    operation = "申请退款"
+                                    operation = "确认收货"
                                     break;
                                 case "4":
-                                    commodityStateSpan = "退款中";
-                                    operation = "受理中";
+                                    commodityStateSpan = "退款申请受理中";
+                                    operation = "";
                                     break;
                                 case "5":
                                     commodityStateSpan = "已退款";
@@ -226,15 +226,16 @@
     function operation(orderNnmber, orderId, orderMoney, orderState) {
         switch (orderState) {
             case 2:
-                loadingShow("催单成功!")
-                break;
-            case 3:
                 paramData.applyOrderNumber = orderNnmber;
                 paramData.applyMoney = orderMoney;
                 paramData.applyOrderId = orderId;
                 $('#my-prompt').modal({
                     relatedTarget: this,
                     onConfirm: function (e) {
+                        if(e.data == ""){
+                            loadingShow("请输入申请描述")
+                            return;
+                        }
                         paramData.applyDescribe = e.data
                         $.post("${ctx}/m/applyFund", paramData, function (ret) {
                             if (ret.code == "0") {
@@ -249,6 +250,16 @@
 
                     }
                 });
+                break;
+            case 3:
+                $.post("${ctx}/m/confirmReceipt?orderId="+orderId, paramData, function (ret) {
+                    if (ret.code == "0") {
+                        loadingShow(ret.msg);
+                        init("");
+                    }else{
+                        loadingShow(ret.msg);
+                    }
+                })
                 break;
         }
     }

@@ -110,7 +110,12 @@
         order_state = #{orderState},
         update_date = #{updateDate}
         WHERE
-        order_number = #{orderNumber}
+        <if test="orderNumber != null and orderNumber != ''">
+            order_number = #{orderNumber}
+        </if>
+        <if test="orderId != null and orderId != ''">
+            id = #{orderId}
+        </if>
     </update>
     <!--后台管理查询订单列表-->
     <select id="findList" resultType="Order" parameterType="Order">

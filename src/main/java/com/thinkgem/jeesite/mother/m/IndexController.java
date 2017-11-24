@@ -447,6 +447,31 @@ public class IndexController {
     }
 
     /**
+     * 确认收货
+     *
+     * @return
+     */
+    @RequestMapping("confirmReceipt")
+    @ResponseBody
+    public Map<String, Object> confirmReceipt(String orderId) {
+        Map<String, Object> returnMap = new HashedMap();
+
+        try {
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("orderId",orderId);
+            paramMap.put("orderState","0");//订单对应的商品已完成交易
+            paramMap.put("updateDate", new Date());
+            orderService.confirmReceipt(paramMap);//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
+            returnMap.put("code", "0");
+            returnMap.put("msg", "确认收货成功!");
+        } catch (Exception e) {
+            returnMap.put("code", "-1");
+            returnMap.put("msg", "确认收货失败!");
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+    /**
      * 手机端个人中心
      *
      * @return

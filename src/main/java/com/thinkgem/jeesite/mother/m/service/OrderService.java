@@ -210,4 +210,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
     public int updateRefund(Map<String, Object> map) {
         return orderDao.updateRefund(map);
     }
+    //确认收货
+    public int confirmReceipt(Map<String,Object> map){
+        return orderDao.updateOrderState(map);
+    }
 }
