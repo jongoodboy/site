@@ -88,13 +88,17 @@ public class WxUserUlit {
                     //返回首页
                     request.getSession().setAttribute("mUser", muser);//存起来
                 } else {
-                    return "/mqds/m/index";//手机绑定页面
+                    return "/mqds/m/bindPhone";//手机绑定页面
                 }
             } else {
-                return "/mqds/m/index";//手机绑定页面
+                return "/mqds/m/bindPhone";//手机绑定页面
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+       String personalStores = (String) request.getAttribute("personalStores");//标识我要创业
+        if(personalStores != null && personalStores != ""){
+          return "redirect:http://www.muqinonline.com/site/front/m/personalStores";
         }
         return "/mqds/m/index";//首页
     }

@@ -731,7 +731,12 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/personalStores")
-    public String personalStores(Model model,String userId) {
+    public String personalStores(Model model,String userId,HttpServletRequest request) {
+        String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
+        if (openid == null) {
+            request.setAttribute("personalStores","personalStores");//标识我要创业
+            return "redirect:" + ConfigUtil.GET_CODE;//微信取code
+        }
         Date dateProfit = new Date();
         SimpleDateFormat toDateFormat = new SimpleDateFormat("yyyy-MM-dd");//今日收益
         String toDateProfit = toDateFormat.format(dateProfit);
