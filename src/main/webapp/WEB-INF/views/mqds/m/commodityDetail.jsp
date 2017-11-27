@@ -196,7 +196,7 @@
         $(this).removeAttr("disabled");//设置为可用
     })
     $(document).ready(function () {
-        $("article img").css("width", "100%");//设置商品描图片
+        $("article p img").attr("style", "");//设置商品描图片
     })
     //立即购买
     function buyNow() {

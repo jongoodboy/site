@@ -146,16 +146,19 @@
         <ul class="am-navbar-nav am-cf am-avg-sm-4">
             <li>
                 <a href="${ctx}/m" class="">
+                    <i class="icon-home"></i>
                     <span>首页</span>
                 </a>
             </li>
             <li>
                 <a href="${ctx}/m/shoppingCat?userId=${sessionScope.mUser.id}" class="">
+                    <i class="shopping-cat"></i>
                     <span>购物车</span>
                 </a>
             </li>
             <li class="active">
                 <a href="javascript:void (0)" class="">
+                    <i class="personal-center"></i>
                     <span>我的</span>
                 </a>
             </li>

@@ -6,13 +6,30 @@
 </head>
 <style>
     .boutique .am-slides li {
-        height: 150px;
+        height: 190px;
+        margin-right: 0.7%!important;
     }
-
+    .img-name{
+        color: #5d5959;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        letter-spacing: 1px;
+    }
+    #commodityLsit>li{
+        border-bottom: 10px solid #eee;
+    }
     .boutique .am-slides li img {
-        height: 100%;
+        height: 88%;
     }
-
+    .am-gallery-bordered .am-gallery-desc{
+        margin: 0 5%;
+        margin-top: 10px;
+    }
+    .am-gallery-bordered .am-gallery-desc hr{
+        border-top: 1px dashed #cfd2cf;
+    }
     .boutique .am-slides .am-slider-desc {
         height: 30px;
         font-size: 12px;
@@ -37,6 +54,20 @@
         width: 100px;
         height: 100px;
     }
+   .am-gallery-item a>h3{
+       margin:0 5%;
+       font-size: 16px;
+       font-weight: bold;
+       color: #5d5959;
+       overflow:hidden;
+       text-overflow:ellipsis;
+       display:-webkit-box;
+       -webkit-box-orient:vertical;
+       -webkit-line-clamp:2;
+       line-height: 25px;
+       margin-top: 6px;
+       letter-spacing: 1px;
+   }
 </style>
 <body>
 <%--<header data-am-widget="header"--%>
@@ -68,7 +99,7 @@
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
     <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
-    <button class="but-search"><span class="am-icon-search"></span></button>
+    <button class="but-search"><span class="sousuo"></span></button>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
         <li onclick="tapMenu(this,2)">热门</li>
@@ -84,9 +115,8 @@
             </ul>
         </div>
 
-        <div class="am-slider am-slider-default am-slider-carousel boutique"
-             data-am-flexslider="{itemWidth: 150, itemMargin: 5, slideshow: false,directionNav:false,controlNav:false}">
-            <span>推荐精品</span>
+        <div class="am-slider am-slider-default am-slider-carousel boutique">
+            <span class="title">推荐精品</span>
             <ul class="am-slides" id="products">
                 <!--推荐精品 -->
             </ul>
@@ -101,18 +131,21 @@
     <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default"
          id="">
         <ul class="am-navbar-nav am-cf am-avg-sm-4">
-            <li class="active">
+            <li class="active home">
                 <a href="${ctx}/m" class="">
+                    <i class="icon-home"></i>
                     <span>首页</span>
                 </a>
             </li>
             <li onclick="openPage('${ctx}/m/shoppingCat?userId=${sessionScope.mUser.id}')">
                 <a href="javascript:void(0);" class="">
+                    <i class="shopping-cat"></i>
                     <span>购物车</span>
                 </a>
             </li>
             <li onclick="openPage('${ctx}/m/personalCenter')">
                 <a href="javascript:void(0);" class="">
+                    <i class="personal-center"></i>
                     <span>我的</span>
                 </a>
             </li>
@@ -180,15 +213,20 @@
                         if (products[i].commodityImager != null) {
                             img = products[i].commodityImager.split("|");
                         }
-                        productsStr += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + img[1] + '"/></a></li>';
+                        productsStr += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + img[1] + '"/>';
+                        productsStr += '<span class="img-name">'+products[i].commodityName+'</span></a></li>';
                     }
                     $('#products').append(productsStr);
                     $('#products').parent().flexslider({
-                        itemWidth: 150,
+                        itemWidth: 280,
+                        smoothHeight:true,
                         slideshow: false,
                         directionNav: false,
                         controlNav: false
                     });
+                    if(productsStr == ""){//如果没有精品图片
+                        $('#products').parent().hide();
+                    }
                 }
                 var data = ret.listCommodity;//商品数据
                 var commodityListStr = "";//商品列表
@@ -199,12 +237,17 @@
                     }
                     commodityListStr += '<li><div class="am-gallery-item">';
                     commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" data-original="' + img[1] + '"/>';
-                    commodityListStr += '<h3 class="am-gallery-title">' + data[i].commodityName + '</h3></a>';
-                    commodityListStr += '<div class="am-gallery-desc"><ul class="nav-menu"><li><i class="my-icon like"></i></li>';
-                    commodityListStr += '<li class="active">99k</li></ul><ul class="nav-menu"><li><%--<i class="my-icon like"></i>--%>￥</li>';
-                    commodityListStr += '<li class="active">' + data[i].commodityPice + '</li></ul>';
+                    commodityListStr += '<h3>' + data[i].commodityName + '</h3></a>';
+                    commodityListStr += '<div class="am-gallery-desc"><hr/><%--<ul class="nav-menu"><li><i class="my-icon like"></i></li>';
+                    commodityListStr += '<li class="active"><99k</li>--%></ul><ul class="nav-menu"><li><%--<i class="my-icon like"></i>--%>￥</li>';
+                    var price = data[i].commodityPice;
+                    if ((/(^[1-9]\d*$)/.test(price)))
+                    {
+                        price +=".00"
+                    }
+                    commodityListStr += '<li class="active">' + price + '</li><li>';
                     commodityListStr += '<a href="${ctx}/m/orderPage?newBuy=yes&commodityId=' + data[i].id + '&userId=' + userId + '">';
-                    commodityListStr += '<spen class="buy">购买</spen></a></div></div></li>';
+                    commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';
                 }
                 if (commodityListStr != "") {
                     $("#commodityLsit").append(commodityListStr);//商品列表

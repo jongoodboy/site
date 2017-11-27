@@ -46,13 +46,14 @@
         mq_commodity
         WHERE
         1 = 1
+        AND del_flag = '0'
+        AND commodity_state NOT IN (1,3)
         <if test="type != '' and type != null">
-            and commodity_state = #{type}
+            AND commodity_state = #{type}
         </if>
         <if test="commodityName != '' and commodityName != null">
             AND commodity_name LIKE CONCAT('%',#{commodityName},'%')
         </if>
-        AND del_flag = '0'
         ORDER BY create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>

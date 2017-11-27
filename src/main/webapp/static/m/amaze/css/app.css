@@ -1,12 +1,23 @@
 body{
-    background: #f9f9f9;
+   /* background: #f9f9f9;*/
+    font-family: Microsoft YaHei;
 }
 .am-header .am-header-nav {
     top: 16px;
 }
 
 .am-slider-manual {
-    height: 30% !important;
+    height: 40% !important;
+}
+.boutique{
+    padding: 3% 0 5% 5%;
+    border-bottom: 10px solid #eee;
+    margin-bottom: 0px !important;
+}
+.boutique span.title{
+    font-size: 15px;
+    display: inline-block;
+    margin-bottom: 5px;
 }
 #loading .am-modal-dialog .am-modal-hd{
     padding: 10px;
@@ -30,16 +41,27 @@ img.lazy {
     /* height: 30px; */
     border: 0;
     border-radius: 3px;
+    padding-left: 30px;
+    margin-bottom: 8px;
+    line-height: 24px;
+    font-size: 13px;
+    letter-spacing:1px;
+
 }
 
 .but-search {
     position: absolute;
     top: 0px;
-    right: 5%;
+    left: 5%;
     padding: 7px;
     border: 0;
-    color: #fff;
-    background: red;
+    color: #ccc;
+    background: none;
+}
+.but-search [class*=am-icon-] {
+    display: inline-block;
+    font-style: normal;
+    font-size: 20px;
 }
 
 .nav-menu{
@@ -50,6 +72,11 @@ img.lazy {
 .nav-menu li{
     float: left;
     margin-right: 5px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+.header .nav-menu li:nth-child(2){
+    margin-left: 16px;
 }
 .nav-menu li.active{
     color: #e65c5c;
@@ -59,9 +86,6 @@ img.lazy {
 }
 .am-gallery,.am-gallery-bordered>li{
     padding: 0;
-}
-.am-gallery-bordered .am-gallery-item img{
-    height: 200px;
 }
 .am-gallery-bordered .am-gallery-item{
     box-shadow: none;
@@ -84,7 +108,7 @@ img.lazy {
 }
 .am-gallery-desc .nav-menu{
     width: 100%;
-    color: #333;
+    color: #5d5959;
 }
 .am-gallery-desc{
     position: relative;
@@ -101,14 +125,46 @@ img.lazy {
 .am-navbar-default .am-navbar-nav{
     background: #fff;
 }
-.am-navbar .am-navbar-nav .active{
-    background: #e65c5c;
+.am-navbar .am-navbar-nav i{
+    display: block;
+    width: 100%;
+    height: 29px;
 }
-.am-navbar .am-navbar-nav .active a{
-    color: #fff;
+.am-navbar .am-navbar-nav .active .icon-home{
+    background: url("../../img/shouye1.png") center center no-repeat;
+    background-size: 18px 18px;
+}
+.am-navbar .am-navbar-nav .icon-home{
+    background: url("../../img/shouye2.png") center center no-repeat;
+    background-size: 18px 18px;
+}
+.am-navbar .am-navbar-nav .active .shopping-cat{
+    background: url("../../img/gouwu1.png") center center no-repeat;
+    background-size: 18px 20px;
+}
+.am-navbar .am-navbar-nav .shopping-cat{
+    background: url("../../img/gouwu2.png") center center no-repeat;
+    background-size: 18px 20px;
+}
+
+.am-navbar .am-navbar-nav .active .personal-center{
+    background: url("../../img/wode1.png") center center no-repeat;
+    background-size: 19px 19px;
+}
+.am-navbar .am-navbar-nav .personal-center{
+    background: url("../../img/wode2.png") center center no-repeat;
+    background-size: 19px 19px;
+}
+.sousuo{
+    display: block;
+    width: 17px;
+    height: 20px;
+    background: url(../../img/sousuo.png) center center no-repeat;
+    background-size: 100%;
 }
 .am-navbar-default a{
     color: #5d5959;
+    font-size: 12px;
 }
 .commodity-name{
     display: inline-block;
@@ -124,9 +180,6 @@ img.lazy {
     position: fixed;
     bottom: 0;
     z-index: 999;
-}
-.am-navbar-nav a{
-    line-height: 49px;
 }
 .to-settle-accounts .am-ucheck-icons {
     margin-top: 5px;
@@ -215,13 +268,13 @@ li.right-menu .am-btn-danger{
 li.buy-sum-number {
     float: right;
     line-height: 50px;
-    color: #333;
+    color: #5d5959;
 }
 .buy-pay-stlye{
     height: 50px;
 }
 .buy-pay-stlye>.nav-menu{
-    color: #333!important;
+    color: #5d5959!important;
     width: 100%;
 }
 .buy-number{
