@@ -103,8 +103,8 @@
 </div>
 </body>
 <script>
-    var url = '${param.url}';
-    if (url == "") {
+    var url = '';//${param.url}
+    if (url == '') {
         url = "${ctx}/m";
     }
     var phoneCode = "";//手机验证码

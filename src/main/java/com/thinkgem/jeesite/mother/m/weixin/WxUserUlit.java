@@ -88,10 +88,10 @@ public class WxUserUlit {
                     //返回首页
                     request.getSession().setAttribute("mUser", muser);//存起来
                 } else {
-                    return "/mqds/m/bindPhone";//手机绑定页面
+                    return "/mqds/m/index";//手机绑定页面
                 }
             } else {
-                return "/mqds/m/bindPhone";//手机绑定页面
+                return "/mqds/m/index";//手机绑定页面
             }
         } catch (Exception e) {
             e.printStackTrace();
