@@ -19,6 +19,7 @@
     }
     #commodityLsit>li{
         border-bottom: 10px solid #eee;
+        background: #fff;
     }
     .boutique .am-slides li img {
         height: 88%;
@@ -103,7 +104,6 @@
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
         <li onclick="tapMenu(this,2)">热门</li>
-
     </ul>
 </div>
 <div class="content" id="content">

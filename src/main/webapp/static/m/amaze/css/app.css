@@ -1,5 +1,5 @@
-body{
-   /* background: #f9f9f9;*/
+html,body{
+    background: #fff;
     font-family: Microsoft YaHei;
 }
 .am-header .am-header-nav {
