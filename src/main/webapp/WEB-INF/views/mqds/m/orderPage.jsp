@@ -32,9 +32,9 @@
             </li>
         </c:if>
         <c:if test="${address == null}"> <!--如果没有默认地址-->
-        <li class="selectAddress">
-            <span>请填写收货人信息</span>
-        </li>
+            <li class="selectAddress">
+                <span>请填写收货人信息</span>
+            </li>
         </c:if>
         <li class="buy-img-list">
             <ul class="nav-menu" id="show-shopping">
@@ -91,7 +91,7 @@
             var html = html.split(',');
             var str = "";
             for (var i = 1; i < html.length; i++) {//最多显示三个商品的图片
-                if(i == 3){
+                if (i == 3) {
                     break;
                 }
                 str += "<li>" + html[i] + "</li>";
@@ -105,10 +105,10 @@
             commodityId: '${param.buyCommodityId}',//商品id 多个用","分割
             buyNumber: '${param.buyNumber}',//每个商品购买的数量多个用","分割
             commodityPrice: '${param.commodityPrice}',//每个商品单价多个用","分割
-            address:'${address.province}'+'${address.city}'+'${address.county}'+'${address.address}' ,//收货地址
+            address: '${address.province}' + '${address.city}' + '${address.county}' + '${address.address}',//收货地址
             userId: '${sessionScope.mUser.id}', //个人Id
-            consignee:'${address.consignee}',
-            consigneePhone:'${address.consigneePhone}'
+            consignee: '${address.consignee}',
+            consigneePhone: '${address.consigneePhone}'
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
@@ -141,11 +141,11 @@
                         var str = "<li><a href='${ctx}/m/commodityDetail?commodityId='" + ret.data.id + ">";
                         str += "<img src=" + imgSrc[1] + "></a></li>"
                         str += "<li><p>" + ret.data.commodityName + "</p>";
-                        str += "<span style='color: red'>￥" + ret.data.commodityPice + "</span></li>"
+                        str += "<span style='color: red'>￥" + ret.data.commodityPice + "</span>&nbsp;运费:￥" + ret.data.freight + "</li>"
                         $("#show-shopping").append(str).find("li:nth-child(3)").css("width", "75%").css("color", "#333");
                     }
                     commodityPrice = parseFloat(ret.data.commodityPice, 2).toFixed(2);//商品单价
-                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityPrice);//显示实付金额
+                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityPrice + ret.data.freight);//显示实付金额
                 }
             })
         }
@@ -191,7 +191,7 @@
         })
         //选择地址
         $(".selectAddress").on("click", function () {
-            window.location.href = "${ctx}/m/addressList?userId=${sessionScope.mUser.id}&isOrderPage=yes&addressId="+$(this).find("input").val();
+            window.location.href = "${ctx}/m/addressList?userId=${sessionScope.mUser.id}&isOrderPage=yes&addressId=" + $(this).find("input").val();
         })
     })
 </script>

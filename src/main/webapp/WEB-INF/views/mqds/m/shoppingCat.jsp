@@ -44,7 +44,7 @@
     }
 
     .buy-number {
-        width: 30px;
+        width: 35px;
         border: 0;
         text-align: center;
         color: #333;
@@ -66,16 +66,16 @@
         height: 100%;
     }
 
-    .sum-money {
-        font-size: 15px;
-        margin-left: 20px;
-    }
     .shopping-cat-null{
         display: inline-block;
         text-align: center;
         width: 100%;
         line-height: 50px;
         font-size: 20px;
+    }
+    .buy-add-number{
+        position: absolute;
+        right: 0;
     }
 </style>
 <body>
@@ -107,8 +107,8 @@
                                 <%--  <span>颜色:黑色&nbsp;尺码:40</span>--%>
                             <ul class="nav-menu">
                                 <li class="active">￥${map.commodityPice}</li>
-                                <li>运费:${map.freight == null ? 0 : map.freight}元</li>
-                                <li style="float: right">
+                                <li>运费:${map.freight == null ? 0 : map.freight}</li>
+                                <li class="buy-add-number">
                                     <span class="buy-span buy-del remove-number">-</span>
                                     <input value="${map.shoppingNumber}" class="buy-number" type="number"
                                            onkeyup="setNumber(this)">
@@ -124,23 +124,6 @@
             <span class="shopping-cat-null">您的购物车空空如也!</span>
         </c:if>
     </ul>
-    <!-- 去结算-->
-    <div class="to-settle-accounts">
-        <ul class="nav-menu">
-            <li>
-                <label class="am-checkbox am-secondary">
-                    <input type="checkbox" checked="checked" class="selectAll" value="3" data-am-ucheck checked> 全选
-                    <span class="sum-money">合计:￥<span class="buySumMoney"></span></span>
-                </label>
-            </li>
-            <li class="right-menu">
-                <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>" >去结算(
-                    <spna class="buyNumber"></spna>
-                    )
-                </button>
-            </li>
-        </ul>
-    </div>
     <spen class="commodity-name">为您推荐</spen>
     <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
         data-am-gallery="{  }">
@@ -170,6 +153,48 @@
         </c:forEach>
     </ul>
 </div>
+<!-- 去结算-->
+<div class="to-settle-accounts to-settle-accounts-shoppong-cat">
+    <ul class="nav-menu">
+        <li>
+            <label class="am-checkbox am-secondary">
+                <input type="checkbox" checked="checked" class="selectAll" value="3" data-am-ucheck checked>
+                <span style="line-height: 25px;font-size: 14px">全选 &nbsp;&nbsp;合计:￥<span class="buySumMoney"></span></span>
+            </label>
+
+        </li>
+        <li class="right-menu">
+            <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>" >去结算(
+                <spna class="buyNumber"></spna>
+                )
+            </button>
+        </li>
+    </ul>
+</div>
+<footer>
+    <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default">
+        <ul class="am-navbar-nav am-cf am-avg-sm-4">
+            <li>
+                <a href="${ctx}/m" class="">
+                    <i class="icon-home"></i>
+                    <span>首页</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="javascript:void (0)" class="">
+                    <i class="shopping-cat"></i>
+                    <span>购物车</span>
+                </a>
+            </li>
+            <li>
+                <a href="${ctx}/m/personalCenter" class="">
+                    <i class="personal-center"></i>
+                    <span>我的</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</footer>
 <script>
     var selectInput = $("input[name='select']");//购物车列表
     var selectAll = $(".selectAll");//全选

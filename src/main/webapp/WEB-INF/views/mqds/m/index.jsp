@@ -3,13 +3,15 @@
 <html>
 <head>
     <%@include file="include/head.jsp" %>
+
 </head>
 <style>
     .boutique .am-slides li {
-        height: 190px;
-        margin-right: 0.7%!important;
+        height: 20%;
+        margin-right: 0.7% !important;
     }
-    .img-name{
+
+    .img-name {
         color: #5d5959;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -17,20 +19,22 @@
         display: block;
         letter-spacing: 1px;
     }
-    #commodityLsit>li{
+
+    #commodityLsit > li {
         border-bottom: 10px solid #eee;
         background: #fff;
     }
-    .boutique .am-slides li img {
-        height: 88%;
-    }
-    .am-gallery-bordered .am-gallery-desc{
+
+
+    .am-gallery-bordered .am-gallery-desc {
         margin: 0 5%;
         margin-top: 10px;
     }
-    .am-gallery-bordered .am-gallery-desc hr{
+
+    .am-gallery-bordered .am-gallery-desc hr {
         border-top: 1px dashed #cfd2cf;
     }
+
     .boutique .am-slides .am-slider-desc {
         height: 30px;
         font-size: 12px;
@@ -42,33 +46,45 @@
     .am-slider-default {
         margin-bottom: 5px;
     }
-    .header{
+
+    .header {
         position: relative;
     }
-    .am-panel{
+
+    .am-panel {
         margin: 1px;
     }
-    .am-panel .am-panel-bd{
+
+    .am-panel .am-panel-bd {
         font-size: 30px;
     }
-    .am-img-thumbnail{
+
+    .am-img-thumbnail {
         width: 100px;
         height: 100px;
     }
-   .am-gallery-item a>h3{
-       margin:0 5%;
-       font-size: 16px;
-       font-weight: bold;
-       color: #5d5959;
-       overflow:hidden;
-       text-overflow:ellipsis;
-       display:-webkit-box;
-       -webkit-box-orient:vertical;
-       -webkit-line-clamp:2;
-       line-height: 25px;
-       margin-top: 6px;
-       letter-spacing: 1px;
-   }
+
+    .am-gallery-item a > h3 {
+        margin: 0 5%;
+        font-size: 16px;
+        font-weight: bold;
+        color: #5d5959;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-height: 25px;
+        margin-top: 6px;
+        letter-spacing: 1px;
+    }
+    .products img{
+        height: 80%;
+    }
+    .products .swiper-slide{
+        width:70% !important;
+        margin-right: 3%;
+    }
 </style>
 <body>
 <%--<header data-am-widget="header"--%>
@@ -89,6 +105,7 @@
 <%--</a>--%>
 <%--</div>--%>
 <%--</header>--%>
+
 <c:if test="${sessionScope.mUser.isVip == '0'}"> <!--如果会员-->
     <div class="am-panel am-panel-default">
         <div class="am-panel-bd">
@@ -110,17 +127,21 @@
     <!--必卖商品-->
     <div data-tab-panel-0 class="am-tab-panel am-active">
         <div data-am-widget="slider" class="am-slider am-slider-manual am-slider-c4">
-            <ul class="am-slides tt" id="banner">
-                <!--必卖商品banner -->
-            </ul>
+            <div class="swiper-container banner">
+                <div class="swiper-wrapper" id="banner">
+                    <!--必卖商品banner -->
+                </div>
+            </div>
+        </div>
+        <div class="am-slider am-slider-default am-slider-carousel boutique" style="height: 40%;">
+            <span class="title">推荐精品</span>
+            <div class="swiper-container products">
+                <div class="swiper-wrapper" id="products">
+                    <!--推荐精品 -->
+                </div>
+            </div>
         </div>
 
-        <div class="am-slider am-slider-default am-slider-carousel boutique">
-            <span class="title">推荐精品</span>
-            <ul class="am-slides" id="products">
-                <!--推荐精品 -->
-            </ul>
-        </div>
         <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
             data-am-gallery="{  }" id="commodityLsit">
             <!--商品列表-->
@@ -153,7 +174,6 @@
     </div>
 </footer>
 <script>
-
     var phone = '${sessionScope.mUser.phone}';
     function openPage(url) {
         if (phone == "") {//没有绑定过手机号
@@ -198,14 +218,13 @@
                         if (banner[i].commodityImager != null) {
                             img = banner[i].commodityImager.split("|");
                         }
-                        strBanner += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + banner[i].id + '"> <img  class="lazy" src="' + img[1] + '"/></a></li>';
+                        strBanner += '<div class="swiper-slide"> <a href="${ctx}/m/commodityDetail?commodityId=' + banner[i].id + '"> <img  class="lazy" src="' + img[1] + '"/></a></div>';
                     }
                     $("#banner").append(strBanner);//顶部banner图
-                    $('#banner').parent().flexslider({
-                        slideshow: false,
-                        directionNav: false,
-                        controlNav: false
-                    });
+                    var mySwiper = new Swiper('.banner', {
+                        effect : 'fade',
+                        loop : true,
+                    })
                     var products = ret.products;//推荐精品
                     var productsStr = "";//推荐精品数据拼接
                     for (var i = 0; i < products.length; i++) {
@@ -213,18 +232,19 @@
                         if (products[i].commodityImager != null) {
                             img = products[i].commodityImager.split("|");
                         }
-                        productsStr += '<li> <a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + img[1] + '"/>';
-                        productsStr += '<span class="img-name">'+products[i].commodityName+'</span></a></li>';
+                        productsStr += '<div class="swiper-slide"><a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + img[1] + '"/>';
+                        productsStr += '<span class="img-name">' + products[i].commodityName + '</span></a></div>';
                     }
                     $('#products').append(productsStr);
-                    $('#products').parent().flexslider({
-                        itemWidth: 280,
-                        smoothHeight:true,
-                        slideshow: false,
-                        directionNav: false,
-                        controlNav: false
-                    });
-                    if(productsStr == ""){//如果没有精品图片
+                    var mySwiper = new Swiper('.products',{
+                        slidesPerView : 'auto',//'auto'
+                        onTransitionEnd: function(swiper){
+                            if(swiper.progress==1){
+                                swiper.activeIndex=swiper.slides.length-1
+                            }
+                        }
+                    })
+                    if (productsStr == "") {//如果没有精品图片
                         $('#products').parent().hide();
                     }
                 }
@@ -241,9 +261,8 @@
                     commodityListStr += '<div class="am-gallery-desc"><hr/><%--<ul class="nav-menu"><li><i class="my-icon like"></i></li>';
                     commodityListStr += '<li class="active"><99k</li>--%></ul><ul class="nav-menu"><li><%--<i class="my-icon like"></i>--%>￥</li>';
                     var price = data[i].commodityPice;
-                    if ((/(^[1-9]\d*$)/.test(price)))
-                    {
-                        price +=".00"
+                    if ((/(^[1-9]\d*$)/.test(price))) {
+                        price += ".00"
                     }
                     commodityListStr += '<li class="active">' + price + '</li><li>';
                     commodityListStr += '<a href="${ctx}/m/orderPage?newBuy=yes&commodityId=' + data[i].id + '&userId=' + userId + '">';
@@ -257,10 +276,10 @@
                 if (data.length < paramData.pageSize) {
                     isScroll = false;//不可以滑动了
                 }
-              /*  if (data.length < paramData.pageSize && paramData.pageNo > 1) {
-                    loadingShow("数据加载完啦", "2000");
-                    return;
-                }*/
+                /*  if (data.length < paramData.pageSize && paramData.pageNo > 1) {
+                 loadingShow("数据加载完啦", "2000");
+                 return;
+                 }*/
                 loadingClose();//关闭加载提示
             }
         })

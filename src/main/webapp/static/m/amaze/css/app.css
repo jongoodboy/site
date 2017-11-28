@@ -1,6 +1,7 @@
 html,body{
     background: #fff;
     font-family: Microsoft YaHei;
+    touch-action: none;
 }
 .am-header .am-header-nav {
     top: 16px;
@@ -48,7 +49,9 @@ img.lazy {
     letter-spacing:1px;
 
 }
-
+.am-gallery-bordered .am-gallery-item img{
+    height: 30%;
+}
 .but-search {
     position: absolute;
     top: 0px;
@@ -124,6 +127,7 @@ img.lazy {
 }
 .am-navbar-default .am-navbar-nav{
     background: #fff;
+    border-top: 1px solid #eee;
 }
 .am-navbar .am-navbar-nav i{
     display: block;
@@ -180,6 +184,9 @@ img.lazy {
     position: fixed;
     bottom: 0;
     z-index: 999;
+}
+.to-settle-accounts-shoppong-cat{
+    margin-bottom: 49px;
 }
 .to-settle-accounts .am-ucheck-icons {
     margin-top: 5px;
@@ -278,8 +285,7 @@ li.buy-sum-number {
     width: 100%;
 }
 .buy-number{
-    text-align: left;
-    padding-left: 10px;
+    text-align: center;
 }
 .buy-number input{
     width: 40px;

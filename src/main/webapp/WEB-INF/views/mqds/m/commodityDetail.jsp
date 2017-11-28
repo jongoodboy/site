@@ -9,6 +9,9 @@
     form {
         margin: 0;
     }
+    .am-navbar-default a{
+        line-height: 50px;
+    }
 </style>
 <body>
 <c:set value="${commodity}" var="itme"></c:set>
@@ -17,15 +20,16 @@
     <!--顶部bannaer-->
     <div data-tab-panel-0 class="am-tab-panel am-active">
         <div data-am-widget="slider" class="am-slider am-slider-manual am-slider-c4">
-            <ul class="am-slides">
-                <c:forEach var="img" items="${imgItme}">
-                    <li>
-                        <img class="lazy" src="${img}">
-                    </li>
-                </c:forEach>
-            </ul>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <c:forEach var="img" items="${imgItme}">
+                        <div class="swiper-slide">
+                            <img class="lazy" src="${img}">
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
         </div>
-
 
         <article data-am-widget="paragraph"
                  class="am-paragraph am-paragraph-default"
@@ -132,6 +136,9 @@
     </form>
 </div>
 <script>
+    var mySwiper = new Swiper('.swiper-container', {
+        autoplay: 2000,//可选选项，自动滑动
+    })
     $(".join-this-shopping-cat").on("click", function () {
         if ('${sessionScope.mUser.id}' != "") {
             $("#open-bottom-model").modal('open');
@@ -201,7 +208,7 @@
     //立即购买
     function buyNow() {
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
-            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
+           window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
         }

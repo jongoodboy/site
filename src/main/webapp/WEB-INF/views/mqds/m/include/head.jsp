@@ -26,6 +26,8 @@
 <script src="${ctxStatic}/jquery/jquery-1.8.3.min.js" type="text/javascript"></script>
 <script src="${ctxStatic}/m/amaze/js/amazeui.min.js" type="text/javascript"></script>
 <script src="${ctxStatic}/m/amaze/js/jquery.lazyload.min.js" type="text/javascript"></script>
+<script src="${ctxStatic}/m/js/swiper-3.4.2.jquery.min.js" type="text/javascript"></script>
+<link href="${ctxStatic}/m/css/swiper-3.4.2.min.css" rel="stylesheet"/>
 <link href="${ctxStatic}/m/amaze/css/amazeui.min.css" rel="stylesheet"/>
 <link href="${ctxStatic}/m/amaze/css/app.css?${version}" rel="stylesheet"/>
 <style>
