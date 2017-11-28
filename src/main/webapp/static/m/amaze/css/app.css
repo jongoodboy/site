@@ -158,6 +158,27 @@ img.lazy {
     background: url("../../img/wode2.png") center center no-repeat;
     background-size: 19px 19px;
 }
+.ul-order li i{
+    display: block;
+    width: 100%;
+    height: 20px;
+}
+i.all-order{
+    background: url("../../img/dingdan.png") center center no-repeat;
+    background-size: 19px 19px;
+}
+i.daifahuo{
+    background: url("../../img/daifahuo.png") center center no-repeat;
+    background-size: 19px 19px;
+}
+i.daishouhuo{
+    background: url("../../img/daishouhuo.png") center center no-repeat;
+    background-size: 19px 19px;
+}
+i.reund{
+    background: url("../../img/refund.png") center center no-repeat;
+    background-size: 19px 19px;
+}
 .sousuo{
     display: block;
     width: 17px;

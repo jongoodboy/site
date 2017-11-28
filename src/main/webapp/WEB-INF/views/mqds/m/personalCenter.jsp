@@ -80,24 +80,28 @@
             <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/><!--微信头像-->
         </li>
         <li class="buy-img-list">
-            <ul class="nav-menu">
+            <ul class="nav-menu ul-order">
                 <li>
                     <a href="${ctx}/m/orderList?index=1">
+                        <i class="all-order"></i>
                         <span>全部订单</span>
                     </a>
                 </li>
                 <li>
                     <a href="${ctx}/m/orderList?index=2">
+                        <i class="daifahuo"></i>
                         <span>待发货</span>
                     </a>
                 </li>
                 <li>
                     <a href="${ctx}/m/orderList?index=3">
+                        <i class="daishouhuo"></i>
                         <span>待收货</span>
                     </a>
                 </li>
                 <li>
                     <a href="${ctx}/m/refund">
+                        <i class="reund"></i>
                         <span>退款</span>
                     </a>
                 </li>
