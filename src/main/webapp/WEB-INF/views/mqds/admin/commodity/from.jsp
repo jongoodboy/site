@@ -79,12 +79,12 @@
             <form:input path="commodityPice" htmlEscape="false" maxlength="200" type="number"/>
         </div>
     </div>
-    <div class="control-group">
+   <%-- <div class="control-group">
         <label class="control-label">商品成本价:</label>
         <div class="controls">
             <form:input path="costPrice" htmlEscape="false" maxlength="200" type="number"/>
         </div>
-    </div>
+    </div>--%>
     <div class="control-group">
         <label class="control-label">运费:</label>
         <div class="controls">

@@ -85,7 +85,8 @@
 </div>
 <script>
     $(document).ready(function () {
-        var commodityPrice = 0;
+        var commodityPrice = 0;//单价
+        var commodityFreight = 0;//运费
         var html = '${param.html}';
         if (html != '' && html != null) {//显示购物车提交过来的购物列表
             var html = html.split(',');
@@ -112,7 +113,7 @@
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
-            if (subData.consignee == undefined || subData.consignee == null) {
+            if (subData.consignee == undefined || subData.consignee == null || subData.consignee == "") {
                 loadingShow("请先选择收货人");
                 return;
             }
@@ -145,7 +146,8 @@
                         $("#show-shopping").append(str).find("li:nth-child(3)").css("width", "75%").css("color", "#333");
                     }
                     commodityPrice = parseFloat(ret.data.commodityPice, 2).toFixed(2);//商品单价
-                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityPrice + ret.data.freight);//显示实付金额
+                    commodityFreight = ret.data.commodityPice +  ret.data.freight;//运费
+                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityFreight);//显示实付金额
                 }
             })
         }
@@ -158,7 +160,7 @@
                 buyNumber--;
             }
             $("#buyNumber").val(buyNumber);
-            $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
+            $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));
         })
         //添加商品数量
         $(".add-number").on("click", function () {
@@ -173,7 +175,7 @@
                 }
             }
             $("#buyNumber").val(buyNumber);
-            $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
+            $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));
 
         })
         //输入商品数量
@@ -188,6 +190,7 @@
                 buyNumber = 200
             }
             $(this).val(buyNumber);
+            $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));
         })
         //选择地址
         $(".selectAddress").on("click", function () {

@@ -1,7 +1,6 @@
 html,body{
     background: #fff;
     font-family: Microsoft YaHei;
-    touch-action: none;
 }
 .am-header .am-header-nav {
     top: 16px;
@@ -144,11 +143,11 @@ img.lazy {
 }
 .am-navbar .am-navbar-nav .active .shopping-cat{
     background: url("../../img/gouwu1.png") center center no-repeat;
-    background-size: 18px 20px;
+    background-size: 19px 20px;
 }
 .am-navbar .am-navbar-nav .shopping-cat{
     background: url("../../img/gouwu2.png") center center no-repeat;
-    background-size: 18px 20px;
+    background-size: 19px 20px;
 }
 
 .am-navbar .am-navbar-nav .active .personal-center{
