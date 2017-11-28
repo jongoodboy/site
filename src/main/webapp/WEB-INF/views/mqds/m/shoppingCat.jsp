@@ -48,16 +48,16 @@
         border: 0;
         text-align: center;
         color: #333;
+        margin-top: -10px;
     }
 
-    .buy-span {
-        background: red;
-        display: inline-block;
-        width: 20px;
-        text-align: center;
-        height: 20px;
-    }
 
+    .am-list-item-text{
+     padding: 4px 0;
+    }
+    .shopping-am-list-main{
+        padding: 4px 0;
+    }
     .am-gallery {
         margin-bottom: 50px;
     }
@@ -66,16 +66,22 @@
         height: 100%;
     }
 
-    .shopping-cat-null{
-        display: inline-block;
-        text-align: center;
-        width: 100%;
-        line-height: 50px;
-        font-size: 20px;
-    }
-    .buy-add-number{
+    .buy-add-number {
         position: absolute;
         right: 0;
+    }
+
+    .am-gallery-bordered .am-gallery-item {
+        padding: 0;
+        margin: 3px;
+    }
+    .am-gallery-title,.am-gallery-desc{
+        padding-left: 10px;
+        padding-right: 15px;
+    }
+    .shoppoing-title{
+        font-size: 16px;
+        color: #5d5959;
     }
 </style>
 <body>
@@ -85,13 +91,14 @@
         <c:if test="${listMap != '[]'}">
             <c:forEach var="map" items="${listMap}">
                 <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top">
-                    <div class="am-list-thumb am-u-sm-1">
-                        <label class="am-checkbox am-secondary">
-                            <input type="checkbox" checked="checked"
-                                   name="select" value="2" commodityId="${map.id }"
-                                   commodityNumber="${map.commodityNumber}"
-                                   money="${map.commodityPice + map.freight}" shoppingNumber="${map.shoppingNumber}" data-am-ucheck checked><!--商品单价用于计算-->
-                        </label>
+                    <div class="am-list-thumb am-u-sm-1 shopping-list">
+                            <span class="xuanzhong span-select shopping-list-list" onclick="selectShopping(this)" name="select"
+                                  commodityId="${map.id }"
+                                  commodityNumber="${map.commodityNumber}"
+                                  money="${map.commodityPice + map.freight}"
+                                  shoppingNumber="${map.shoppingNumber}">
+                            </span>
+                        <%----%><!--商品单价用于计算-->
                     </div>
                     <c:set var="img" value="${fn:split(map.commodityImager, '|')}"></c:set>
                     <div class="am-list-thumb am-u-sm-4">
@@ -99,20 +106,20 @@
                             <img src="${img[0]}"/>
                         </a>
                     </div>
-                    <div class="am-list-main am-u-sm-7">
+                    <div class="am-list-main am-u-sm-7 shopping-am-list-main ">
                         <div class="am-list-item-text">
                             <a href="${ctx}/m/commodityDetail?commodityId=${map.id }" style="color: #333">
-                                <span>${map.commodityName}</span><br/>
+                                <span class="shoppoing-title">${map.commodityName}</span><br/>
                             </a>
                                 <%--  <span>颜色:黑色&nbsp;尺码:40</span>--%>
                             <ul class="nav-menu">
                                 <li class="active">￥${map.commodityPice}</li>
-                                <li>运费:${map.freight == null ? 0 : map.freight}</li>
+                                <li style="font-size: 14px">运费:${map.freight == null ? 0 : map.freight}</li>
                                 <li class="buy-add-number">
-                                    <span class="buy-span buy-del remove-number">-</span>
+                                    <span class="buy-span buy-del remove-number"></span>
                                     <input value="${map.shoppingNumber}" class="buy-number" type="number"
                                            onkeyup="setNumber(this)">
-                                    <span class="buy-span buy-add add-number">+</span>
+                                    <span class="buy-span buy-add add-number"></span>
                                 </li>
                             </ul>
                         </div>
@@ -136,16 +143,16 @@
                         <h3 class="am-gallery-title">${itme.commodityName}</h3>
                     </a>
                     <div class="am-gallery-desc">
-                        <ul class="nav-menu">
-                            <li><i class="my-icon like"></i></li>
-                            <li class="active">99k</li>
-                        </ul>
+                            <%--   <ul class="nav-menu">
+                                   <li><i class="my-icon like"></i></li>
+                                   <li class="active">99k</li>
+                               </ul>--%>
                         <ul class="nav-menu">
                             <li><%--<i class="my-icon like"></i>--%>￥</li>
                             <li class="active">${itme.commodityPice}</li>
                         </ul>
                         <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }" class="">
-                            <spen class="buy">购买</spen>
+                            <spen class="buy">#购买</spen>
                         </a>
                     </div>
                 </div>
@@ -156,15 +163,16 @@
 <!-- 去结算-->
 <div class="to-settle-accounts to-settle-accounts-shoppong-cat">
     <ul class="nav-menu">
-        <li>
-            <label class="am-checkbox am-secondary">
-                <input type="checkbox" checked="checked" class="selectAll" value="3" data-am-ucheck checked>
-                <span style="line-height: 25px;font-size: 14px">全选 &nbsp;&nbsp;合计:￥<span class="buySumMoney"></span></span>
+        <li style="width: 70%">
+            <label class="am-checkbox am-secondary" style="margin-top: 0;font-size: 14px;padding: 0;">
+                <%--  <input type="checkbox" checked="checked" id="selectAll" class="selectAll">--%>
+                <span class="xuanzhong span-select" id="selectAll">全选</span><span class="show-sum-money">合计:￥<span
+                    class="buySumMoney"></span></span>
             </label>
 
         </li>
         <li class="right-menu">
-            <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>" >去结算(
+            <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>">去结算(
                 <spna class="buyNumber"></spna>
                 )
             </button>
@@ -196,24 +204,44 @@
     </div>
 </footer>
 <script>
-    var selectInput = $("input[name='select']");//购物车列表
-    var selectAll = $(".selectAll");//全选
+    var selectInput = $("span[name='select']");//购物车列表
+    var selectAll = $("#selectAll");//全选
     var isAll = true;//列表是否全部选中
+    //商品选中
+    function selectShopping(ev) {
+        if ($(ev).hasClass('xuanzhong') == false) {//如果没有选择
+            $(ev).addClass("xuanzhong")
+            $(ev).removeClass("kong");
+        } else {
+            $(ev).removeClass("xuanzhong");
+            $(ev).addClass("kong")
+        }
+        init();
+    }
     $(document).ready(function () {
         init();
-        //商品选中
-        selectInput.on("click", function () {
-            init();
-        })
         //全选
         selectAll.on("click", function () {
-            if ($(this).is(':checked') == false) {//如果没有全选
-                selectInput.uCheck('uncheck');
+            if ($(this).hasClass('xuanzhong') == false) {//如果没有全选
+                $(this).addClass("xuanzhong")
+                $(this).removeClass("kong");
+                for (var i = 0; i < selectInput.length; i++) {//如果其中一个商品没有选中。把全选按钮去除
+                    var selectTshi = $(selectInput[i]);
+                    selectTshi.addClass("xuanzhong")
+                    selectTshi.removeClass("kong");
+                }
             } else {
-                selectInput.attr('checked', true);//购物车列表全选
+                $(this).removeClass("xuanzhong");
+                $(this).addClass("kong")
+                for (var i = 0; i < selectInput.length; i++) {//如果其中一个商品没有选中。把全选按钮去除
+                    var selectTshi = $(selectInput[i]);
+                    selectTshi.addClass("kong");
+                    selectTshi.removeClass("xuanzhong");
+                }
             }
             init();
         })
+
         //去结算
         $(".am-btn-danger").on("click", function () {
             var str = "";//订单页面显示列表
@@ -222,7 +250,7 @@
             var commodityPrice = "";//商品单价
             for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
-                if (selectTshi.is(':checked')) {
+                if (selectTshi.hasClass('xuanzhong')) {
                     str += ',' + selectTshi.parent().parent().next().html();
                     buyNumber += ',' + selectTshi.parent().parent().parent().last().find("input[class='buy-number']").val();//每个商品购买的数量
                     buyCommodityId += ',' + selectTshi.attr("commodityId");
@@ -231,7 +259,7 @@
             }
             window.location.href = ctx + "/m/orderPage?html=" + str + "&money=" + $(".buySumMoney").html()
                     + "&number=" + $(".buyNumber").html() + "&commodityPrice=" + commodityPrice
-                    + "&buyNumber=" + buyNumber + "&buyCommodityId=" + buyCommodityId+"&userId=${sessionScope.mUser.id}";
+                    + "&buyNumber=" + buyNumber + "&buyCommodityId=" + buyCommodityId + "&userId=${sessionScope.mUser.id}";
         })
     })
     function init() {
@@ -242,12 +270,13 @@
         var buySumMoneySpen = $(".buySumMoney");//显示购买数量
         for (var i = 0; i < selectInput.length; i++) {//如果其中一个商品没有选中。把全选按钮去除
             var selectTshi = $(selectInput[i]);
-            if (selectTshi.is(':checked') == false) {
+            if (selectTshi.hasClass('kong')) {
                 isAll = false;
-                selectAll.uCheck('uncheck');
+                selectAll.addClass("xuanzhong");
+                selectAll.removeClass("kong");
                 continue;
             }
-            var number = parseInt(selectTshi.parent().parent().parent().last().find("input[class='buy-number']").val());//购买的数量统计 find("input[class='buy-number']").val()
+            var number = parseInt(selectTshi.parent().parent().last().find("input[class='buy-number']").val());//购买的数量统计 find("input[class='buy-number']").val()
             buyNumber += number;
             var money = parseFloat(selectTshi.attr("money"));//购买金额统计
             buySumMoney += (money * number);//单个商品总价
@@ -255,15 +284,17 @@
         buyNumberSpan.html(buyNumber);//显示购买的数量
         buySumMoneySpen.html(buySumMoney);//显示购买总金额
         if (isAll) {
-            selectAll.attr('checked', true);
+            selectAll.addClass("xuanzhong");
+            selectAll.removeClass("kong");
         } else {
-            selectAll.uCheck('uncheck');
+            selectAll.addClass("kong");
+            selectAll.removeClass("xuanzhong");
         }
     }
 
     //减少商品
     $(".remove-number").on("click", function () {
-        var commodityNumber = $(this).parent().parent().parent().parent().siblings().first().find("input").attr("commodityNumber");
+        var commodityNumber = $(this).parent().parent().parent().parent().siblings().first().find("span").attr("commodityNumber");
         var inputNumber = $(this).next(".buy-number");
         var inputNumberVal = inputNumber.val();
         if (inputNumberVal <= 1) {
@@ -276,24 +307,24 @@
     })
     //添加商品
     $(".add-number").on("click", function () {
-        var commodityNumber = $(this).parent().parent().parent().parent().siblings().first().find("input").attr("commodityNumber");
+        var commodityNumber = $(this).parent().parent().parent().parent().siblings().first().find("span").attr("commodityNumber");
         var inputNumber = $(this).prev(".buy-number");
         var inputNumberVal = inputNumber.val();
         if (parseInt(inputNumberVal) >= parseInt(commodityNumber)) {//如果加入购物车的数量大于库存
             inputNumberVal = commodityNumber;
         } else {
-            if (inputNumberVal >= 200) { //最高购买数不能大于你200
+            if (inputNumberVal >= 200) { //最高购买数不能大于200
                 inputNumberVal = 200;
             } else {
                 inputNumberVal++;
             }
         }
         inputNumber.val(inputNumberVal);
-        init();
+         init();
     })
     //输入商品数量
     function setNumber(ev) {
-        var commodityNumber = $(ev).parent().parent().parent().parent().siblings().first().find("input").attr("commodityNumber");
+        var commodityNumber = $(ev).parent().parent().parent().parent().siblings().first().find("span").attr("commodityNumber");
         var inputNumberVal = $(ev).val();
         if (!parseInt(inputNumberVal)) {
             inputNumberVal = 1;

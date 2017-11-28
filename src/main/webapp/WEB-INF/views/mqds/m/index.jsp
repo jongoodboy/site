@@ -182,7 +182,8 @@
     var phone = '${sessionScope.mUser.phone}';
     function openPage(url) {
         if (phone == "") {//没有绑定过手机号
-            window.location.href = "${ctx}/m/bindPhone?url=" + url;
+            //window.location.href = "${ctx}/m/bindPhone?url=" + url;
+            window.location.href = url;
         } else {//已经绑定
             window.location.href = url;
         }

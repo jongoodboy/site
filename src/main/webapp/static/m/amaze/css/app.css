@@ -165,7 +165,7 @@ img.lazy {
 }
 i.all-order{
     background: url("../../img/dingdan.png") center center no-repeat;
-    background-size: 19px 19px;
+    background-size: 16px 19px;
 }
 i.daifahuo{
     background: url("../../img/daifahuo.png") center center no-repeat;
@@ -173,11 +173,11 @@ i.daifahuo{
 }
 i.daishouhuo{
     background: url("../../img/daishouhuo.png") center center no-repeat;
-    background-size: 19px 19px;
+    background-size: 24px 19px;
 }
 i.reund{
     background: url("../../img/refund.png") center center no-repeat;
-    background-size: 19px 19px;
+    background-size: 24px 19px;
 }
 .sousuo{
     display: block;
@@ -192,10 +192,10 @@ i.reund{
 }
 .commodity-name{
     display: inline-block;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 16px;
     text-align: center;
     width: 100%;
+    margin-bottom: 12px;
 }
 .to-settle-accounts {
     width: 100%;
@@ -215,6 +215,7 @@ li.right-menu{
     float: right;
     margin-right: -6%;
     height: 50px;
+    width: 30%;
 }
 li.right-menu .am-btn-danger{
     height: 100%;
@@ -322,4 +323,68 @@ li.buy-sum-number {
     background: red;
     height: 30px;
     color: #fff;
+}
+.shopping-cat-null{
+    height: 45%;
+    padding-top: 45%;
+    display: inline-block;
+    letter-spacing: 1px;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    background: url("../../img/meiyoudingdan.png") no-repeat center center;
+    background-size: 12% 15%;
+}
+.span-select{
+    height: 100%;
+    width: 50px;
+    text-align: right;
+    line-height: 50px;
+    display: inline-block;
+}
+.show-sum-money{
+    display: inline-block;
+    line-height: 50px;
+    float: right;
+}
+.kong{
+    background: url("../../img/kong.png") no-repeat center left;
+    background-size:27% 27%;
+}
+.xuanzhong{
+    background: url("../../img/xuanzhong.png") no-repeat center left;
+    background-size:27% 27%;
+}
+.shopping-list-list{
+    background-size: 30% 17%;
+    margin-left: 25%;
+}
+.buy-span {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    height: 20px;
+    border-radius: 20px;
+    line-height: 16px;
+}
+.remove-number{
+    background: url("../../img/reduce.png") no-repeat center left;
+    background-size: 80% 80%;
+}
+.add-number{
+    background: url("../../img/plus.png") no-repeat center left;
+    background-size: 80% 80%;
+}
+.personal-list li{
+    position: relative;
+}
+.personal-list li i{
+    width: 10px;
+    height: 10px;
+    background: url("../../img/forward1.png") no-repeat center center;
+    background-size: 100%;
+    display: inline-block;
+    position: absolute;
+    top: 25px;
+    right: 0;
 }

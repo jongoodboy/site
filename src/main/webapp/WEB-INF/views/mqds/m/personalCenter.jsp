@@ -9,6 +9,8 @@
 <style>
     .buy-img-list {
         height: 50px;
+        border: 1px solid #eee !important;
+        min-height: 68px !important;
     }
 
     .buy-img-list .nav-menu > li {
@@ -22,12 +24,16 @@
         padding: 0;
         margin: 0;
         color: #333;
+        margin-bottom: 10px;
     }
 
     li.title-personal {
         font-size: 14px;
         color: #ccc;
         margin-bottom: 1px;
+        min-height: 100px;
+        margin-top: 14%;
+        padding: 0 20px!important;
     }
 
     .title-personal img {
@@ -35,29 +41,23 @@
         height: 60px;
         position: absolute;
         top: 5px;
-        right: 5px;
+        right: 20px;
     }
 
     .personal-list {
         list-style: none;
         padding: 0;
         margin: 0;
+            font-size: 14px;
+        padding: 0px 10px;
     }
 
     .personal-list li {
-        border-bottom: 1px solid #f9f9f9;
-        line-height: 50px;
+        border-bottom: 1px solid #eee;
+        line-height: 60px;
         position: relative;
     }
 
-    .personal-list li:after {
-        content: ">";
-        display: inline-block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        color: #EEEEEE;
-    }
 
     .am-list-border ul li a {
         color: #333;
@@ -67,6 +67,13 @@
         width: 100%;
         display: inline-block;
     }
+    .nav-menu li{
+        font-size: 13px;
+    }
+    .nav-menu li span{
+        display: inline-block;
+        margin-top: 4px;
+    }
 </style>
 
 <body>
@@ -74,7 +81,7 @@
     <s:set var="isVip" value="${sessionScope.mUser.isVip}"></s:set>
     <ul class="am-list am-list-static am-list-border">
         <li class="title-personal">
-            <h2>${sessionScope.jb.getString("nickname")}</h2><!--微信名 -->
+            <h2>您好,${sessionScope.jb.getString("nickname")}</h2><!--微信名 -->
             <%--<span>我的下线：996人</span>--%>
             <span>账户余额：${sessionScope.mUser.money} <a href="#">提现</a></span>
             <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/><!--微信头像-->
@@ -107,12 +114,13 @@
                 </li>
             </ul>
         </li>
-        <li>
+        <li style="padding-top: 0">
             <ul class="personal-list">
                 <li>
                     <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
                         <span>我的店铺</span>
                     </a>
+                    <i></i>
                 </li>
                 <!--如果不是会员分享出去的不是自己的分享码-->
                 <c:if test="${isVip == '0'}">
@@ -124,21 +132,25 @@
                     <a href="${ctx}/m/addressList?userId=${sessionScope.mUser.id}">
                         <span>收货地址管理</span>
                     </a>
+                    <i></i>
                 </li>
                 <li>
                     <a href="${ctx}/m/bindBankCard">
                         <span>绑定银行卡</span>
                     </a>
+                    <i></i>
                 </li>
-                <%--<li>
+                <li>
                     <a href="${ctx}/m/systemSettings">
                         <span>系统设置</span>
                     </a>
-                </li>--%>
+                    <i></i>
+                </li>
                 <li>
                     <a href="javascript:void (0)">
                         <span>关于</span>
                     </a>
+                    <i></i>
                 </li>
             </ul>
         </li>
