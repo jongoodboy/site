@@ -25,7 +25,6 @@
         background: #fff;
     }
 
-
     .am-gallery-bordered .am-gallery-desc {
         margin: 0 5%;
         margin-top: 10px;
@@ -78,12 +77,18 @@
         margin-top: 6px;
         letter-spacing: 1px;
     }
-    .products img{
+
+    .products img {
         height: 80%;
     }
-    .products .swiper-slide{
-        width:70% !important;
+
+    .products .swiper-slide {
+        width: 85% !important;
         margin-right: 3%;
+    }
+
+    .am-gallery-bordered .am-gallery-item img {
+        height: 220px;
     }
 </style>
 <body>
@@ -133,7 +138,7 @@
                 </div>
             </div>
         </div>
-        <div class="am-slider am-slider-default am-slider-carousel boutique" style="height: 40%;">
+        <div class="am-slider am-slider-default am-slider-carousel boutique" style="height: 290px;">
             <span class="title">推荐精品</span>
             <div class="swiper-container products">
                 <div class="swiper-wrapper" id="products">
@@ -222,8 +227,8 @@
                     }
                     $("#banner").append(strBanner);//顶部banner图
                     var mySwiper = new Swiper('.banner', {
-                        effect : 'fade',
-                        loop : true,
+                        effect: 'fade',
+                        loop: true,
                     })
                     var products = ret.products;//推荐精品
                     var productsStr = "";//推荐精品数据拼接
@@ -236,11 +241,11 @@
                         productsStr += '<span class="img-name">' + products[i].commodityName + '</span></a></div>';
                     }
                     $('#products').append(productsStr);
-                    var mySwiper = new Swiper('.products',{
-                        slidesPerView : 'auto',//'auto'
-                        onTransitionEnd: function(swiper){
-                            if(swiper.progress==1){
-                                swiper.activeIndex=swiper.slides.length-1
+                    var mySwiper = new Swiper('.products', {
+                        slidesPerView: 'auto',//'auto'
+                        onTransitionEnd: function (swiper) {
+                            if (swiper.progress == 1) {
+                                swiper.activeIndex = swiper.slides.length - 1
                             }
                         }
                     })

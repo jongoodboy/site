@@ -168,7 +168,6 @@ public class UploadUtils {
 	 * 处理上传内容
 	 * 
 	 * @param request
-	 * @param maxSize
 	 * @return
 	 */
 //	@SuppressWarnings("unchecked")
