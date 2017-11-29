@@ -83,6 +83,11 @@
         font-size: 16px;
         color: #5d5959;
     }
+    .am-btn-danger{
+        text-align: center;
+        padding: 0;
+        width: 100%;
+    }
 </style>
 <body>
 <div class="content">
@@ -313,8 +318,8 @@
         if (parseInt(inputNumberVal) >= parseInt(commodityNumber)) {//如果加入购物车的数量大于库存
             inputNumberVal = commodityNumber;
         } else {
-            if (inputNumberVal >= 200) { //最高购买数不能大于200
-                inputNumberVal = 200;
+            if (inputNumberVal >= 99) { //最高购买数不能大于200
+                inputNumberVal = 99;
             } else {
                 inputNumberVal++;
             }
@@ -332,8 +337,8 @@
         if (parseInt(inputNumberVal) > parseInt(commodityNumber)) {//如果购买的数量大于库存
             inputNumberVal = commodityNumber;
         }
-        if (inputNumberVal >= 200) {
-            inputNumberVal = 200
+        if (inputNumberVal >= 99) {
+            inputNumberVal = 99
         }
         $(ev).val(inputNumberVal);
         init();

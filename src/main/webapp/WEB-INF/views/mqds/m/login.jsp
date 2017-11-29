@@ -8,20 +8,8 @@
     body,html{
         overflow: hidden;
     }
-    .am-header-default{
-        background: #fff;
-    }
+
     .am-header-default .am-header-title a {
-        color: #333;
-        font-size: 16px;
-    }
-    .am-header-default .am-header-nav > a:after {
-        content: "X";
-        text-align: center;
-        position: absolute;
-        top: -20px;
-        left: 0;
-        display: inline-block;
         color: #333;
     }
 
@@ -35,7 +23,7 @@
     }
 
     .content {
-        padding: 10px;
+        padding-top: 18%;
     }
 
     .am-list-item-hd {
@@ -56,6 +44,15 @@
         line-height: 26px;
         letter-spacing: 10px;
     }
+
+    .am-icon-weixin {
+        display: block;
+        text-align: center;
+        font-size: 30px;
+        color: green;
+        margin-top: 20px;
+    }
+
     .version {
         display: block;
         width: 100%;
@@ -74,17 +71,7 @@
     }
 </style>
 <body>
-<header data-am-widget="header"
-        class="am-header am-header-default">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.back(-1)"></a>
-    </div>
-    <h1 class="am-header-title">
-        <a href="javascript:void(0)" class="">
-            绑定手机号
-        </a>
-    </h1>
-</header>
+<i class="logo-img"></i>
 <div class="content">
     <ul class="am-list">
         <li class="am-g am-list-item-dated">
@@ -95,7 +82,8 @@
             <i class="suo"></i>验证码<input class="am-list-item-hd" maxlength="6" id="code">
         </li>
     </ul>
-    <button type="button" class="am-btn am-btn-default am-radius" onclick="bindPhone()">绑定</button>
+    <button type="button" class="am-btn am-btn-default am-radius" onclick="login()">登录</button>
+    <span class="am-icon-weixin" onclick="isLogin()"></span>
     <span class="version">母亲云电商&copy;2017</span>
 </div>
 </body>
@@ -105,8 +93,8 @@
         url = "${ctx}/m";
     }
     var phoneCode = "";//手机验证码
-    //绑定
-    function bindPhone() {
+    //登录
+    function login() {
         var phone = $("#phone").val();
         var code = $("#code").val();
         if (phone == "") {
@@ -125,26 +113,26 @@
             loadingShow("验证码不正确");
             return;
         }
-        $.post("${ctx}/m/bind?phone=" + phone, function (data) {
-            if (data.code == "0") {
-                window.location.href = url;
-            } else {
-                loadingShow(ret.msg);
-            }
-        })
+        isLogin();
     }
     //获取验证码
     var index = 59;
     var code = $(".am-list-date");
     var codeBut = true;
+    var mUserphone  = '${sessionScope.mUser.phone}';//用户手机号
     code.on("click", function () {
         var phone = $("#phone").val();
         if (phone == "") {
             loadingShow("手机号不能为空");
             return;
         }
+
         if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))) {
             loadingShow("请输入正确的手机号");
+            return;
+        }
+        if (phone != mUserphone) {
+            loadingShow("手机号与首次绑定手机号不一致");
             return;
         }
         if (codeBut) {
@@ -177,7 +165,15 @@
         }
         setTimeout(countDown, "1000");
     }
-
-
+//后台登录
+function isLogin() {
+    $.post("${ctx}/m/login?userId=${sessionScope.mUser.id}", function (data) {
+        if (data.code == "0") {
+            window.location.href = url;
+        } else {
+            loadingShow(ret.msg);
+        }
+    })
+}
 </script>
 </html>

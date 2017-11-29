@@ -311,7 +311,7 @@ public class IndexController {
         Date d = new Date();
         String shareCode = (String) request.getSession().getAttribute("code");//分享人的分享码
         SimpleDateFormat foramt = new SimpleDateFormat("yyyMMddHHmmss");
-        String orderNumber = foramt.format(d) + new Date().getTime();//生成订单号
+        String orderNumber = new Date().getTime()+"";//生成订单号
         String[] commodityIdList = commodityId.split(",");//截取每一个商品id
         String[] buyNumberList = buyNumber.split(",");//截取每一个商品id对应购买的数量
         String[] commodityPriceList = commodityPrice.split(",");//截取每一个商品id对应购买的数量
@@ -458,8 +458,8 @@ public class IndexController {
 
         try {
             Map<String, Object> paramMap = new HashedMap();
-            paramMap.put("orderId",orderId);
-            paramMap.put("orderState","0");//订单对应的商品已完成交易
+            paramMap.put("orderId", orderId);
+            paramMap.put("orderState", "0");//订单对应的商品已完成交易
             paramMap.put("updateDate", new Date());
             orderService.confirmReceipt(paramMap);//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
             returnMap.put("code", "0");
@@ -471,6 +471,7 @@ public class IndexController {
         }
         return returnMap;
     }
+
     /**
      * 手机端个人中心
      *
@@ -635,6 +636,11 @@ public class IndexController {
         return "mqds/m/systemSettings";
     }
 
+    //登录页面
+    @RequestMapping("/login")
+    public String login() {
+        return "mqds/m/login";
+    }
 
     //绑定手机号页面
     @RequestMapping("/bindPhone")
@@ -705,11 +711,32 @@ public class IndexController {
      */
     @RequestMapping("/loginOut")
     @ResponseBody
-    public Map<String, Object> loginOut(HttpServletRequest request) {
+    public Map<String, Object> loginOut(String userId) {
         Map<String, Object> returnMap = new HashedMap();
-        request.getSession().removeAttribute("mUser");
+        Map<String,Object> paramMap = new HashedMap();
+        paramMap.put("userId",userId);
+        paramMap.put("login","yes");
+        mUserSerivce.loginOutOrLogin(paramMap);
         returnMap.put("code", "0");
         returnMap.put("msg", "注销成功");
+        return returnMap;
+    }
+
+    /**
+     * 手机端登录 手机获取验证码或微信登录
+     *
+     * @return
+     */
+    @RequestMapping("/login")
+    @ResponseBody
+    public Map<String, Object> login(String userId) {
+        Map<String, Object> returnMap = new HashedMap();
+        Map<String,Object> paramMap = new HashedMap();
+        paramMap.put("userId",userId);
+        paramMap.put("login","yes");
+        mUserSerivce.loginOutOrLogin(paramMap);
+        returnMap.put("code", "0");
+        returnMap.put("msg", "登录成功");
         return returnMap;
     }
 
@@ -727,14 +754,15 @@ public class IndexController {
 
     /**
      * 我的店铺
-     *@param userId 当前用户Id
+     *
+     * @param userId 当前用户Id
      * @return
      */
     @RequestMapping("/personalStores")
-    public String personalStores(Model model,String userId,HttpServletRequest request) {
+    public String personalStores(Model model, String userId, HttpServletRequest request) {
         String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
         if (openid == null) {
-            request.setAttribute("personalStores","personalStores");//标识我要创业
+            request.setAttribute("personalStores", "personalStores");//标识我要创业
             return "redirect:" + ConfigUtil.GET_CODE;//微信取code
         }
         Date dateProfit = new Date();
@@ -745,7 +773,7 @@ public class IndexController {
         Map<String, Object> paramMap = new HashedMap();
         paramMap.put("toDateProfit", toDateProfit);
         paramMap.put("toMonthFormat", toMonthProfit);
-        paramMap.put("userId",userId);
+        paramMap.put("userId", userId);
         List<Map<String, Object>> listMap = profitService.findProfit(paramMap);
         model.addAttribute("toDateProfit", listMap.get(0) == null ? "0.00" : listMap.get(0).get("money"));//今日收益
         model.addAttribute("team", listMap.get(1) == null ? "0.00" : listMap.get(1).get("money"));//团队收益
@@ -757,23 +785,25 @@ public class IndexController {
         model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));//第五周的收益
         return "mqds/m/personalStores";
     }
+
     /**
      * 我的店铺本月收益详情
-     *@param userId 当前用户Id
+     *
+     * @param userId 当前用户Id
      * @return
      */
     @RequestMapping("/monthProfitDetail")
     @ResponseBody
-    public Map<String,Object> monthProfitDetail(String userId) {
-        Map<String,Object> retMap = new HashedMap();
+    public Map<String, Object> monthProfitDetail(String userId) {
+        Map<String, Object> retMap = new HashedMap();
         try {
             retMap.put("data", profitService.monthProfitDetail());
-            retMap.put("code","0");
-            retMap.put("msg","查询成功");
+            retMap.put("code", "0");
+            retMap.put("msg", "查询成功");
         } catch (Exception e) {
             e.printStackTrace();
-            retMap.put("code","-1");
-            retMap.put("msg","查询失败");
+            retMap.put("code", "-1");
+            retMap.put("msg", "查询失败");
         }
         return retMap;
     }

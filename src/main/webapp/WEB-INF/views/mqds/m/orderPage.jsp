@@ -86,7 +86,6 @@
 <script>
     $(document).ready(function () {
         var commodityPrice = 0;//单价
-        var commodityFreight = 0;//运费
         var html = '${param.html}';
         if (html != '' && html != null) {//显示购物车提交过来的购物列表
             var html = html.split(',');
@@ -145,9 +144,8 @@
                         str += "<span style='color: red'>￥" + ret.data.commodityPice + "</span>&nbsp;运费:￥" + ret.data.freight + "</li>"
                         $("#show-shopping").append(str).find("li:nth-child(3)").css("width", "75%").css("color", "#333");
                     }
-                    commodityPrice = parseFloat(ret.data.commodityPice, 2).toFixed(2);//商品单价
-                    commodityFreight = ret.data.commodityPice +  ret.data.freight;//运费
-                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityFreight);//显示实付金额
+                    commodityPrice = parseFloat(ret.data.commodityPice + ret.data.freight, 2).toFixed(2);//商品单价
+                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityPrice);//显示实付金额
                 }
             })
         }
@@ -160,7 +158,7 @@
                 buyNumber--;
             }
             $("#buyNumber").val(buyNumber);
-            $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));
+            $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
         })
         //添加商品数量
         $(".add-number").on("click", function () {
@@ -168,14 +166,14 @@
             if (parseInt(buyNumber) >= parseInt(commodityNumber)) {//如果加入购物车的数量大于库存
                 buyNumber = commodityNumber;
             } else {
-                if (buyNumber >= 200) { //最高购买数不能大于你200
-                    buyNumber = 200;
+                if (buyNumber >= 99) { //最高购买数不能大于你200
+                    buyNumber = 99;
                 } else {
                     buyNumber++;
                 }
             }
             $("#buyNumber").val(buyNumber);
-            $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));
+            $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
 
         })
         //输入商品数量
@@ -186,8 +184,8 @@
             }
             if (buyNumber >= commodityNumber) {//如果加入购物车的数量大于库存
                 buyNumber = commodityNumber;
-            } else if (buyNumber >= 200) {
-                buyNumber = 200
+            } else if (buyNumber >= 99) {
+                buyNumber = 99
             }
             $(this).val(buyNumber);
             $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));

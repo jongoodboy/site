@@ -12,7 +12,8 @@
       code as "code",
       create_date as "createDate",
       update_date as "updateDate",
-      del_flag as "delFlag"
+      del_flag as "delFlag",
+      login as "login"
     </sql>
     <!--保存用户信息-->
     <insert id="insert" parameterType="Muser">
@@ -77,15 +78,15 @@
         </if>
         WHERE
         id = (
-           SELECT
-            o.user_id
-            FROM
-            mq_order o
-            RIGHT JOIN  mq_commodity c
-            ON o.commodity_id = c.id
-            WHERE o.order_number = #{orderNumber}
-            and c.commodity_state = #{commodityState}
-            LIMIT 1
+        SELECT
+        o.user_id
+        FROM
+        mq_order o
+        RIGHT JOIN mq_commodity c
+        ON o.commodity_id = c.id
+        WHERE o.order_number = #{orderNumber}
+        and c.commodity_state = #{commodityState}
+        LIMIT 1
         )
     </update>
     <!--验证手机号是否已经被绑定过-->
@@ -115,5 +116,13 @@
             money = #{item.money}+money
             WHERE id = #{item.id}
         </foreach>
+    </update>
+
+    <!--注销登录或二次登录-->
+    <update id="loginOutOrLogin" parameterType="java.util.Map">
+           UPDATE mq_user
+            SET
+            login = #{login}
+            WHERE id = #{suerId}
     </update>
 </mapper>

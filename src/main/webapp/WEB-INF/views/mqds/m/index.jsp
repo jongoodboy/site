@@ -111,18 +111,20 @@
 <%--</div>--%>
 <%--</header>--%>
 
-<c:if test="${sessionScope.mUser.isVip == '0'}"> <!--如果会员-->
+<c:if test="${param.personalCenter != null}"> <!--如果会员-->
     <div class="am-panel am-panel-default">
         <div class="am-panel-bd">
-            <img class="am-img-thumbnail am-circle" src="http://s.amazeui.org/media/i/demos/bing-1.jpg"/>
-            您的店铺
+            <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/>
+                ${sessionScope.jb.getString("nickname")}的店铺
         </div>
     </div>
 </c:if>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
-    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
-    <button class="but-search"><span class="sousuo"></span></button>
+    <c:if test="${param.personalCenter == null}"><!-- 不是从个人中心点击我的店铺-->
+        <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
+        <button class="but-search"><span class="sousuo"></span></button>
+    </c:if>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
         <li onclick="tapMenu(this,2)">热门</li>
@@ -180,7 +182,11 @@
 </footer>
 <script>
     var phone = '${sessionScope.mUser.phone}';
+    var login = '${sessionScope.mUser.login}';
     function openPage(url) {
+        if (login == "no") {//如果手动注销过
+            window.location.href = "${ctx}/m/login";
+        }
         if (phone == "") {//没有绑定过手机号
             //window.location.href = "${ctx}/m/bindPhone?url=" + url;
             window.location.href = url;

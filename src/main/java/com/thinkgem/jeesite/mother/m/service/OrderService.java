@@ -72,6 +72,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("comState", o.getOrderState());//每一个商品的订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
                             commodityMap.put("comId", com.getId());//商品ID
                             commodityMap.put("orderId", o.getId());//订单ID
+                            commodityMap.put("comFreight", com.getFreight());//商品运费
                             commodityMap.put("comNumber", o.getCommodityNumber());//订单对应的购买商品的数量
                             commodityMap.put("comCompany", dic.getDictLabel(com.getCommodityCompany().toString(), "commodity_company", ""));//商品单位(1.个2.条3.件4.根 -->)
                             commodityMap.put("comPrice", o.getCommodityPrice());//生成订单时商品的价格

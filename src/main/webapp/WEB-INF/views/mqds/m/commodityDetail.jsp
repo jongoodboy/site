@@ -9,8 +9,73 @@
     form {
         margin: 0;
     }
-    .am-navbar-default a{
-        line-height: 50px;
+
+    .commodity-name-title {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #3a3a3a;
+        line-height: 35px;
+        display: inline-block;
+        margin-top: 10px;
+    }
+    .commodity-name{
+        letter-spacing: 1px;
+    }
+    .am-gallery-bordered .am-gallery-item {
+        padding: 0;
+        margin: 3px;
+    }
+
+    .am-gallery-title, .am-gallery-desc {
+        padding-left: 10px;
+        padding-right: 15px;
+    }
+    .buy-new {
+        background: #eb616c;
+        position: relative;
+    }
+
+    .buy-new span {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        font-size: 14px;
+        color: #fff;
+    }
+    article .nav-menu li{
+        font-size: 20px;
+    }
+    article .nav-menu li.active{
+        font-weight: bold;
+    }
+    article .nav-menu{
+        margin-top: 20px;
+        width: 100%;
+    }
+    article{
+        padding:0 10px;
+    }
+    li.freight{
+        float: right;
+        color: #8a8a8a;
+    }
+    article div p{
+        width: 100%;
+    }
+    .comdiyi{
+        display: inline-block;
+        margin-top: 25px;
+    }
+    .for-yuo{
+        display: inline-block;
+        margin:20px 0 25px 0;
+    }
+    .buy-number{
+        text-align: right;
+        padding-right: 15px;
     }
 </style>
 <body>
@@ -34,21 +99,20 @@
         <article data-am-widget="paragraph"
                  class="am-paragraph am-paragraph-default"
                  data-am-paragraph="{ tableScrollable: true, pureview: true }">
-            <spen class="commodity-name">${itme.commodityName}</spen>
+            <spen class="commodity-name-title">${itme.commodityName}</spen>
             <ul class="nav-menu">
-                <li><%--<i class="my-icon like"></i>--%>￥</li>
-                <li class="active">${itme.commodityPice}
+                <li class="active">￥${itme.commodityPice}
                     / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
-                <li style="float: right">运费:${itme.freight == null ? 0 : itme.freight}元</li>
+                <li class="freight">运费:${itme.freight == null ? 0 : itme.freight}元</li>
             </ul>
             <div>
-                <spen class="commodity-name">商品描述</spen>
+                <spen class="commodity-name comdiyi">商品描述</spen>
                 <!--商品描述-->
                 ${itme.commodityMaker}
             </div>
             <!-- 评论-->
             <!--推荐商品-->
-            <spen class="commodity-name">为您推荐</spen>
+            <spen class="commodity-name for-yuo">为您推荐</spen>
 
         </article>
         <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
@@ -62,17 +126,17 @@
                             <h3 class="am-gallery-title">${itme.commodityName}</h3>
                         </a>
                         <div class="am-gallery-desc">
-                            <ul class="nav-menu">
-                                <li><i class="my-icon like"></i></li>
-                                <li class="active">99k</li>
-                            </ul>
+                                <%--<ul class="nav-menu">
+                                    <li><i class="my-icon like"></i></li>
+                                    <li class="active">99k</li>
+                                </ul>--%>
                             <ul class="nav-menu">
                                 <li><%--<i class="my-icon like"></i>--%>￥</li>
                                 <li class="active">${itme.commodityPice}</li>
                             </ul>
                             <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}"
                                class="">
-                                <spen class="buy">购买</spen>
+                                <spen class="buy">#购买</spen>
                             </a>
                         </div>
                     </div>
@@ -85,25 +149,25 @@
     <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
          id="">
         <ul class="am-navbar-nav am-cf am-avg-sm-4">
-            <%-- <li>
-                 <a href="${ctx}/m" class="">
-                     <span>首页</span>
-                 </a>
-             </li>--%>
-            <li>
-                <a href="javascript:void (0)" class="">
-                    <span>关注</span>
+            <li class="active home">
+                <a href="${ctx}/m" class="">
+                    <i class="icon-home"></i>
+                    <span>首页</span>
                 </a>
             </li>
-            <li>
+            <%--  <li>
+                  <a href="javascript:void (0)" class="">
+                      <span>关注</span>
+                  </a>
+              </li>--%>
+            <li class="join-this-shopping-cat">
                 <a href="javascript:void (0);" class="">
+                    <i class="vehicle"></i>
                     <span class="join-this-shopping-cat">加入购物车</span>
                 </a>
             </li>
-            <li class="active">
-                <a href="javascript:buyNow()" class="">
-                    <span>立即购买</span>
-                </a>
+            <li class="buy-new" onclick="buyNow()">
+                <span>立即购买</span>
             </li>
         </ul>
     </div>
@@ -118,7 +182,10 @@
                     <img class="lazy"
                          src="${imgItme[0]}">
                 </li>
-                <li>
+                <li style="width: 60%">
+                    <span style="display: inline-block;  width: 100%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                    ${commodity.commodityName}
+                    </span>
                     <span class="price">￥:${commodity.commodityPice}</span><br>
                     <span>库存:${commodity.commodityNumber}</span><br>
                     <%--<span>商品编号:5555522</span><br>--%>
@@ -126,6 +193,7 @@
                 <span class="close-model">x</span>
             </ul>
             <div class="buy-number">
+                <p>购买数量</p>
                 <span class="remove-number">-</span><input value="1" class="number-input" onkeyup="setNumber()"
                                                            type="number" name="commodityNumber"><span
                     class="add-number">+</span><!--加入购物车商品数量-->
@@ -140,6 +208,8 @@
         autoplay: 2000,//可选选项，自动滑动
     })
     $(".join-this-shopping-cat").on("click", function () {
+        $("#open-bottom-model").modal('open');
+        return;
         if ('${sessionScope.mUser.id}' != "") {
             $("#open-bottom-model").modal('open');
         } else {//没有登录，去登录
@@ -167,8 +237,8 @@
         if (inputNumberVal >= commodityNumber) {//如果加入购物车的数量大于库存
             inputNumberVal = commodityNumber;
         } else {
-            if (inputNumberVal >= 200) { //最高购买数不能大于你200
-                inputNumberVal = 200;
+            if (inputNumberVal >= 99) { //最高购买数不能大于你200
+                inputNumberVal = 99;
             } else {
                 inputNumberVal++;
             }
@@ -184,8 +254,8 @@
         }
         if (inputNumberVal >= commodityNumber) {//如果加入购物车的数量大于库存
             inputNumberVal = commodityNumber;
-        } else if (inputNumberVal >= 200) {
-            inputNumberVal = 200
+        } else if (inputNumberVal >= 99) {
+            inputNumberVal = 99
         }
         inputNumber.val(inputNumberVal);
     }
@@ -208,7 +278,7 @@
     //立即购买
     function buyNow() {
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
-           window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
         }

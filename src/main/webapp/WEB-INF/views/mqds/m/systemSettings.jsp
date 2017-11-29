@@ -34,13 +34,12 @@
     </ul>
     <div class="but-out-system">
         <button type="button" class="am-btn am-btn-default">注销登录</button>
-        <button type="button" class="am-btn am-btn-danger">退出系统</button>
     </div>
 </div>
 </body>
 <script>
     $(".am-btn-default").on("click",function () {
-        $.post("${ctx}/m/loginOut",function (data) {
+        $.post("${ctx}/m/loginOut?userId=${sessionScope.mUser.id}",function (data) {
            window.location.href = "${ctx}/m"
         })
     })

@@ -107,7 +107,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="${ctx}/m/refund">
+                    <a href="${ctx}/m/orderList?index=1">
                         <i class="reund"></i>
                         <span>退款</span>
                     </a>
@@ -117,7 +117,10 @@
         <li style="padding-top: 0">
             <ul class="personal-list">
                 <li>
-                    <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
+                  <%--  <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
+                        <span>我的店铺</span>
+                    </a>--%>
+                    <a href="${ctx}/m/?personalCenter=myStores">
                         <span>我的店铺</span>
                     </a>
                     <i></i>
@@ -146,12 +149,12 @@
                     </a>
                     <i></i>
                 </li>
-                <li>
+                <%--<li>
                     <a href="javascript:void (0)">
                         <span>关于</span>
                     </a>
                     <i></i>
-                </li>
+                </li>--%>
             </ul>
         </li>
     </ul>

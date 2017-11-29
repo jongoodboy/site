@@ -17,4 +17,5 @@ public interface MuserDao extends CrudDao<Muser> {
     Muser verification(String phone);
     Map<String,Object> findCode(String code);
     int updateMoney(List<Map<String,Object>> list);
+    int loginOutOrLogin(Map<String,Object> map);
 }

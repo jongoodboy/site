@@ -167,6 +167,18 @@ i.all-order{
     background: url("../../img/dingdan.png") center center no-repeat;
     background-size: 16px 19px;
 }
+i.unpaid{
+    background: url("../../img/unpaid.png") center center no-repeat;
+    background-size: 20px 19px;
+}
+i.complete{
+    background: url("../../img/complete.png") center center no-repeat;
+    background-size: 22px 21px;
+}
+i.vehicle{
+    background: url("../../img/vehicle.png") center center no-repeat;
+    background-size: 23px 19px;
+}
 i.daifahuo{
     background: url("../../img/daifahuo.png") center center no-repeat;
     background-size: 19px 19px;
@@ -387,4 +399,31 @@ li.buy-sum-number {
     position: absolute;
     top: 25px;
     right: 0;
+}
+.logo-img{
+    height: 100px;
+    width: 100px;
+    display: block;
+    background: url(../../img/logo.png) no-repeat center bottom;
+    background-size: 100% 100%;
+    margin: auto;
+    margin-top: 20%;
+}
+i.phone{
+    width: 16px;
+    height: 21px;
+    display: inline-block;
+    background: url("../../img/phone.png") no-repeat center bottom ;
+    background-size: 100% 100%;
+    margin-bottom: -5px;
+    margin-right: 10px;
+}
+i.suo{
+    width: 16px;
+    height: 21px;
+    display: inline-block;
+    background: url("../../img/suo.png") no-repeat center bottom ;
+    background-size: 100% 100%;
+    margin-bottom: -5px;
+    margin-right: 10px;
 }
