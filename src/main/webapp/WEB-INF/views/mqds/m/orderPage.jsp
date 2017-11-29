@@ -165,7 +165,7 @@
             var buyCommodityId = buyCommodityId.split(',');
             var buyNumber = buyNumber.split(',');
             var freight = freight.split(',');
-            var commodityNames = commodityNames.split('|');
+            var commodityNames = commodityNames.split('~');
             var str = "";
             for (var i = 1; i < imags.length; i++) {//最多显示三个商品的图片
                 str += "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId=" + buyCommodityId[i] + "'>";

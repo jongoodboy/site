@@ -123,6 +123,6 @@
            UPDATE mq_user
             SET
             login = #{login}
-            WHERE id = #{suerId}
+            WHERE id = #{userId}
     </update>
 </mapper>

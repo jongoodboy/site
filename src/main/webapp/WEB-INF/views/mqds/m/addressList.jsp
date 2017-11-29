@@ -108,21 +108,19 @@
     <ul class="am-list am-list-static am-list-border">
         <c:forEach var="itme" items="${list}">
             <li  <c:if test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
-
-                <span <c:if test="${isOrderPage!= null and addressId == itme.id}">style="color: red" </c:if>>
+                <span>
                         收货人:${itme.consignee}
                 </span>
                 <span class="phone-address"> ${itme.consigneePhone}</span>
                 <span>${itme.province}${itme.city}${itme.county}${itme.address}</span>
                 <hr data-am-widget="divider" style="" class="am-divider am-divider-default"/>
-                <c:if test="${param.isOrderPage == null}"><!--不是生成订单页面点击过来-->
+               <!--不是生成订单页面点击过来-->
                 <label class="am-radio" addressId="${itme.id}">
                     <i class="<c:if test="${itme.isDefault == '0'}">you</c:if><c:if test="${itme.isDefault != '0'}">mei</c:if>"></i>
                         <%--%-- <input type="radio" name="isDefault" value="${itme.id}" data-am-ucheck
                                 <c:if test="${itme.isDefault == '0'}">checked</c:if>>&ndash;%&gt;--%>
                     设为默认地址
                 </label>
-                </c:if>
                 <div class="operation">
                     <a class="update-address" id="${itme.id}">编辑</a>
                     <a class="del-address" id="${itme.id}">删除</a>
@@ -203,7 +201,11 @@
             onConfirm: function (options) {
                 $.post("${ctx}/m/delAddress?adddressId=" + $(this.relatedTarget).attr("id"), function (data) {
                     if (data.code == "0") {
-                        window.location.href = window.location.href;//刷新当前页面
+                        if ('${isOrderPage}' != null && '${isOrderPage}' != undefined && '${isOrderPage}' != "") {
+                            self.location = document.referrer;//返回并刷新上一页面
+                        } else {
+                            window.location.href = window.location.href;//刷新
+                        }
                     }
                 })
             },

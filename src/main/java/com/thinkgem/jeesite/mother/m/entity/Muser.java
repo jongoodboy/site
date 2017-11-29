@@ -16,6 +16,15 @@ public class Muser extends DataEntity<Muser> {
     private String parent;//我的上线
     private BigDecimal money;//账户余额
     private String code;//个人分享码
+    private String login;//是否是登录状态
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     public String getPhone() {
         return phone;

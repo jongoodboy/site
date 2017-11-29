@@ -150,7 +150,6 @@
         if (codeBut) {
             codeBut = false;
             $.post("${ctx}/m/verification?phone=" + phone, function (ret) {//验证手机是否已经被绑定过
-                codeBut = true;
                 if (ret.code == "1") {//号码没有绑定过。
                     countDown();
                     $.post("${ctx}/getPhoneCode?phone=" + phone, function (ret) {

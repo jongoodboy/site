@@ -5,7 +5,7 @@
     <%@include file="include/head.jsp" %>
 </head>
 <style>
-    body,html{
+    body, html {
         overflow: hidden;
     }
 
@@ -63,10 +63,12 @@
         font-size: 13px;
         letter-spacing: 1px;
     }
-    .am-list{
-        margin:10%;
+
+    .am-list {
+        margin: 10%;
     }
-    .am-btn.am-radius{
+
+    .am-btn.am-radius {
         border-radius: 5px;
     }
 </style>
@@ -93,6 +95,7 @@
         url = "${ctx}/m";
     }
     var phoneCode = "";//手机验证码
+    var mUserLogin = '${sessionScope.mUser.login}';
     //登录
     function login() {
         var phone = $("#phone").val();
@@ -113,13 +116,13 @@
             loadingShow("验证码不正确");
             return;
         }
-        isLogin();
+        isLogin(phone);
     }
     //获取验证码
     var index = 59;
     var code = $(".am-list-date");
     var codeBut = true;
-    var mUserphone  = '${sessionScope.mUser.phone}';//用户手机号
+    var mUserphone = '${sessionScope.mUser.phone}';//用户手机号
     code.on("click", function () {
         var phone = $("#phone").val();
         if (phone == "") {
@@ -131,14 +134,13 @@
             loadingShow("请输入正确的手机号");
             return;
         }
-        if (phone != mUserphone) {
+       /* if (phone != mUserphone) {
             loadingShow("手机号与首次绑定手机号不一致");
             return;
-        }
+        }*/
         if (codeBut) {
             codeBut = false;
             $.post("${ctx}/m/verification?phone=" + phone, function (ret) {//验证手机是否已经被绑定过
-                codeBut = true;
                 if (ret.code == "1") {//号码没有绑定过。
                     countDown();
                     $.post("${ctx}/getPhoneCode?phone=" + phone, function (ret) {
@@ -165,15 +167,27 @@
         }
         setTimeout(countDown, "1000");
     }
-//后台登录
-function isLogin() {
-    $.post("${ctx}/m/login?userId=${sessionScope.mUser.id}", function (data) {
-        if (data.code == "0") {
-            window.location.href = url;
-        } else {
-            loadingShow(ret.msg);
+    //后台登录
+    function isLogin(phone) {
+        if (mUserLogin == "no") {//手机登录
+            $.post("${ctx}/m/login?userId=${sessionScope.mUser.id}", function (data) {
+                if (data.code == "0") {
+                    window.location.href = url;
+                } else {
+                    loadingShow(ret.msg);
+                }
+            })
+        } else if(phoneCode == ""){//绑定手机号
+            window.location.href = "${ctx}/m/bindPhone"
+        }else if(mUserLogin == ""){
+            $.post("${ctx}/m/bind?phone=" + phone, function (data) {
+                if (data.code == "0") {
+                    window.location.href = url;
+                } else {
+                    loadingShow(ret.msg);
+                }
+            })
         }
-    })
-}
+    }
 </script>
 </html>

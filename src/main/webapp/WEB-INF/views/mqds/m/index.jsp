@@ -122,8 +122,8 @@
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
     <c:if test="${param.personalCenter == null}"><!-- 不是从个人中心点击我的店铺-->
-        <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
-        <button class="but-search"><span class="sousuo"></span></button>
+    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
+    <button class="but-search"><span class="sousuo"></span></button>
     </c:if>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
@@ -184,8 +184,9 @@
     var phone = '${sessionScope.mUser.phone}';
     var login = '${sessionScope.mUser.login}';
     function openPage(url) {
-        if (login == "no") {//如果手动注销过
+        if (login == "no" || login == "") {//如果手动注销过
             window.location.href = "${ctx}/m/loginPage";
+            return;
         }
         if (phone == "") {//没有绑定过手机号
             window.location.href = "${ctx}/m/bindPhone?url=" + url;

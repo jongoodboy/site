@@ -183,9 +183,9 @@
 
         </li>
         <li class="right-menu">
-            <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>">去结算(
+            <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>">去结算<%--(
                 <spna class="buyNumber"></spna>
-                )
+                )--%>
             </button>
         </li>
     </ul>
@@ -255,16 +255,16 @@
 
         //去结算
         $(".am-btn-danger").on("click", function () {
-            var imags = "";//商品图片
+          var imags = "";//商品图片
             var buyNumber = "";//购买的数量
             var buyCommodityId = "";//购买的商品id
             var commodityPrice = "";//商品单价
             var freight = "";//商品运费
             var commodityNames = "";//商品名称
-            for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
+              for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
                 if (selectTshi.hasClass('xuanzhong')) {
-                    commodityNames += '|' + selectTshi.parent().parent().last().find(".shoppoing-title").html()
+                    commodityNames += "~" + selectTshi.parent().parent().last().find(".shoppoing-title").html();
                     imags += "," + selectTshi.parent().next().find("img").attr("src");
                     buyNumber += ',' + selectTshi.parent().parent().last().find("input[class='buy-number']").val();//每个商品购买的数量
                     buyCommodityId += ',' + selectTshi.attr("commodityId");

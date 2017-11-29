@@ -715,10 +715,16 @@ public class IndexController {
         Map<String, Object> returnMap = new HashedMap();
         Map<String,Object> paramMap = new HashedMap();
         paramMap.put("userId",userId);
-        paramMap.put("login","yes");
-        mUserSerivce.loginOutOrLogin(paramMap);
-        returnMap.put("code", "0");
-        returnMap.put("msg", "注销成功");
+        paramMap.put("login","no");
+        try {
+            mUserSerivce.loginOutOrLogin(paramMap);
+            returnMap.put("code", "0");
+            returnMap.put("msg", "注销成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnMap.put("code", "-1");
+            returnMap.put("msg", "注销失败");
+        }
         return returnMap;
     }
 
