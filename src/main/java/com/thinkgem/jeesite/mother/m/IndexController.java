@@ -637,7 +637,7 @@ public class IndexController {
     }
 
     //登录页面
-    @RequestMapping("/login")
+    @RequestMapping("/loginPage")
     public String login() {
         return "mqds/m/login";
     }

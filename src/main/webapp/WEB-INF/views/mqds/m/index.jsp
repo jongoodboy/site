@@ -185,11 +185,10 @@
     var login = '${sessionScope.mUser.login}';
     function openPage(url) {
         if (login == "no") {//如果手动注销过
-            window.location.href = "${ctx}/m/login";
+            window.location.href = "${ctx}/m/loginPage";
         }
         if (phone == "") {//没有绑定过手机号
-            //window.location.href = "${ctx}/m/bindPhone?url=" + url;
-            window.location.href = url;
+            window.location.href = "${ctx}/m/bindPhone?url=" + url;
         } else {//已经绑定
             window.location.href = url;
         }

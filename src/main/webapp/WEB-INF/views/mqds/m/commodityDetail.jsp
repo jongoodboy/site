@@ -19,9 +19,11 @@
         display: inline-block;
         margin-top: 10px;
     }
-    .commodity-name{
+
+    .commodity-name {
         letter-spacing: 1px;
     }
+
     .am-gallery-bordered .am-gallery-item {
         padding: 0;
         margin: 3px;
@@ -31,6 +33,7 @@
         padding-left: 10px;
         padding-right: 15px;
     }
+
     .buy-new {
         background: #eb616c;
         position: relative;
@@ -45,37 +48,56 @@
         font-size: 14px;
         color: #fff;
     }
-    article .nav-menu li{
+
+    article .nav-menu li {
         font-size: 20px;
     }
-    article .nav-menu li.active{
+
+    article .nav-menu li.active {
         font-weight: bold;
     }
-    article .nav-menu{
+
+    article .nav-menu {
         margin-top: 20px;
         width: 100%;
     }
-    article{
-        padding:0 10px;
+
+    article {
+        padding: 0 10px;
     }
-    li.freight{
+
+    li.freight {
         float: right;
         color: #8a8a8a;
     }
-    article div p{
+
+    article div p {
         width: 100%;
     }
-    .comdiyi{
+
+    .comdiyi {
         display: inline-block;
         margin-top: 25px;
     }
-    .for-yuo{
+
+    .for-yuo {
         display: inline-block;
-        margin:20px 0 25px 0;
+        margin: 20px 0 25px 0;
     }
-    .buy-number{
+
+    .buy-number {
         text-align: right;
         padding-right: 15px;
+    }
+
+    .number-input {
+        margin-top: -20px;
+        margin-left: -7px;
+    }
+
+    .buy-span {
+        width: 25px;
+        height: 25px;
     }
 </style>
 <body>
@@ -184,7 +206,7 @@
                 </li>
                 <li style="width: 60%">
                     <span style="display: inline-block;  width: 100%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                    ${commodity.commodityName}
+                        ${commodity.commodityName}
                     </span>
                     <span class="price">￥:${commodity.commodityPice}</span><br>
                     <span>库存:${commodity.commodityNumber}</span><br>
@@ -194,9 +216,11 @@
             </ul>
             <div class="buy-number">
                 <p>购买数量</p>
-                <span class="remove-number">-</span><input value="1" class="number-input" onkeyup="setNumber()"
-                                                           type="number" name="commodityNumber"><span
-                    class="add-number">+</span><!--加入购物车商品数量-->
+
+                <span class="buy-span buy-del remove-number"></span>
+                <input value="1" class="number-input" onkeyup="setNumber()"
+                       type="number" name="commodityNumber">
+                <span class="buy-span buy-add add-number"></span><!--加入购物车商品数量-->
                 <input name="commodityId" value="${commodity.id}" hidden><!--商品id-->
             </div>
             <button type="button" class="am-btn am-btn-danger">确定</button>

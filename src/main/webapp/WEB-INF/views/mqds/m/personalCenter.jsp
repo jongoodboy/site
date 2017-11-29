@@ -137,12 +137,12 @@
                     </a>
                     <i></i>
                 </li>
-                <li>
+               <%-- <li>
                     <a href="${ctx}/m/bindBankCard">
                         <span>绑定银行卡</span>
                     </a>
                     <i></i>
-                </li>
+                </li>--%>
                 <li>
                     <a href="${ctx}/m/systemSettings">
                         <span>系统设置</span>

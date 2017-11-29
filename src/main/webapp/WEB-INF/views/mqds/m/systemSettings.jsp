@@ -6,16 +6,28 @@
     <%@include file="include/head.jsp" %>
 </head>
 <style>
+    body{
+        overflow: hidden;
+    }
+    .am-list > li {
+        border: 0;
+        margin-bottom: 5px;
+        height: 60px;
+        border-bottom: 1px solid #eee;
+        margin: 0;
+        line-height: 34px;
+    }
     .but-out-system {
-        width: 60%;
-        margin: auto;
-        position: absolute;
-        left: 20%;
-        bottom: 10%;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        height: 49px;
     }
     .am-btn{
         width: 100%;
-        margin: 5px auto;
+        height: 100%;
+        font-size: 16px;
+        letter-spacing: 1px;
     }
 </style>
 <body>

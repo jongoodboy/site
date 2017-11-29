@@ -51,13 +51,14 @@
         margin-top: -10px;
     }
 
-
-    .am-list-item-text{
-     padding: 4px 0;
-    }
-    .shopping-am-list-main{
+    .am-list-item-text {
         padding: 4px 0;
     }
+
+    .shopping-am-list-main {
+        padding: 4px 0;
+    }
+
     .am-gallery {
         margin-bottom: 50px;
     }
@@ -75,15 +76,18 @@
         padding: 0;
         margin: 3px;
     }
-    .am-gallery-title,.am-gallery-desc{
+
+    .am-gallery-title, .am-gallery-desc {
         padding-left: 10px;
         padding-right: 15px;
     }
-    .shoppoing-title{
+
+    .shoppoing-title {
         font-size: 16px;
         color: #5d5959;
     }
-    .am-btn-danger{
+
+    .am-btn-danger {
         text-align: center;
         padding: 0;
         width: 100%;
@@ -97,11 +101,13 @@
             <c:forEach var="map" items="${listMap}">
                 <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top">
                     <div class="am-list-thumb am-u-sm-1 shopping-list">
-                            <span class="xuanzhong span-select shopping-list-list" onclick="selectShopping(this)" name="select"
+                            <span class="xuanzhong span-select shopping-list-list" onclick="selectShopping(this)"
+                                  name="select"
                                   commodityId="${map.id }"
                                   commodityNumber="${map.commodityNumber}"
                                   money="${map.commodityPice + map.freight}"
-                                  shoppingNumber="${map.shoppingNumber}">
+                                  shoppingNumber="${map.shoppingNumber}" freight="${map.freight}"
+                                  commodityPice="${map.commodityPice}">
                             </span>
                         <%----%><!--商品单价用于计算-->
                     </div>
@@ -249,22 +255,27 @@
 
         //去结算
         $(".am-btn-danger").on("click", function () {
-            var str = "";//订单页面显示列表
+            var imags = "";//商品图片
             var buyNumber = "";//购买的数量
             var buyCommodityId = "";//购买的商品id
             var commodityPrice = "";//商品单价
+            var freight = "";//商品运费
+            var commodityNames = "";//商品名称
             for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
                 if (selectTshi.hasClass('xuanzhong')) {
-                    str += ',' + selectTshi.parent().parent().next().html();
-                    buyNumber += ',' + selectTshi.parent().parent().parent().last().find("input[class='buy-number']").val();//每个商品购买的数量
+                    commodityNames += '|' + selectTshi.parent().parent().last().find(".shoppoing-title").html()
+                    imags += "," + selectTshi.parent().next().find("img").attr("src");
+                    buyNumber += ',' + selectTshi.parent().parent().last().find("input[class='buy-number']").val();//每个商品购买的数量
                     buyCommodityId += ',' + selectTshi.attr("commodityId");
-                    commodityPrice += ',' + selectTshi.attr("money");
+                    commodityPrice += ',' + selectTshi.attr("commodityPice");
+                    freight += ',' + selectTshi.attr("freight");
                 }
             }
-            window.location.href = ctx + "/m/orderPage?html=" + str + "&money=" + $(".buySumMoney").html()
+            window.location.href = ctx + "/m/orderPage?money=" + $(".buySumMoney").html()
                     + "&number=" + $(".buyNumber").html() + "&commodityPrice=" + commodityPrice
-                    + "&buyNumber=" + buyNumber + "&buyCommodityId=" + buyCommodityId + "&userId=${sessionScope.mUser.id}";
+                    + "&buyNumber=" + buyNumber + "&buyCommodityId=" + buyCommodityId + "&userId=${sessionScope.mUser.id}"
+                    + "&imags=" + imags + "&freight=" + freight + "&commodityNames=" + commodityNames;
         })
     })
     function init() {
@@ -287,7 +298,7 @@
             buySumMoney += (money * number);//单个商品总价
         }
         buyNumberSpan.html(buyNumber);//显示购买的数量
-        buySumMoneySpen.html(buySumMoney);//显示购买总金额
+        buySumMoneySpen.html(parseFloat(buySumMoney, 2).toFixed(2));//显示购买总金额
         if (isAll) {
             selectAll.addClass("xuanzhong");
             selectAll.removeClass("kong");
@@ -325,7 +336,7 @@
             }
         }
         inputNumber.val(inputNumberVal);
-         init();
+        init();
     })
     //输入商品数量
     function setNumber(ev) {

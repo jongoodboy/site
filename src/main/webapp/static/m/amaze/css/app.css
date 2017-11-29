@@ -1,7 +1,8 @@
-html,body{
+html, body {
     background: #fff;
     font-family: Microsoft YaHei;
 }
+
 .am-header .am-header-nav {
     top: 16px;
 }
@@ -9,19 +10,23 @@ html,body{
 .am-slider-manual {
     height: 40% !important;
 }
-.boutique{
+
+.boutique {
     padding: 3% 0 5% 5%;
     border-bottom: 10px solid #eee;
     margin-bottom: 0px !important;
 }
-.boutique span.title{
+
+.boutique span.title {
     font-size: 15px;
     display: inline-block;
     margin-bottom: 5px;
 }
-#loading .am-modal-dialog .am-modal-hd{
+
+#loading .am-modal-dialog .am-modal-hd {
     padding: 10px;
 }
+
 img.lazy {
     height: 100%;
     width: 100%;
@@ -45,12 +50,14 @@ img.lazy {
     margin-bottom: 8px;
     line-height: 24px;
     font-size: 13px;
-    letter-spacing:1px;
+    letter-spacing: 1px;
 
 }
-.am-gallery-bordered .am-gallery-item img{
+
+.am-gallery-bordered .am-gallery-item img {
     height: 30%;
 }
+
 .but-search {
     position: absolute;
     top: 0px;
@@ -60,155 +67,188 @@ img.lazy {
     color: #ccc;
     background: none;
 }
+
 .but-search [class*=am-icon-] {
     display: inline-block;
     font-style: normal;
     font-size: 20px;
 }
 
-.nav-menu{
+.nav-menu {
     list-style: none;
-    padding:0;
+    padding: 0;
     color: #ddd;
 }
-.nav-menu li{
+
+.nav-menu li {
     float: left;
     margin-right: 5px;
     margin-bottom: 10px;
     font-size: 15px;
 }
-.header .nav-menu li:nth-child(2){
+
+.header .nav-menu li:nth-child(2) {
     margin-left: 16px;
 }
-.nav-menu li.active{
+
+.nav-menu li.active {
     color: #e65c5c;
 }
-.content{
+
+.content {
     clear: both;
 }
-.am-gallery,.am-gallery-bordered>li{
+
+.am-gallery, .am-gallery-bordered > li {
     padding: 0;
 }
-.am-gallery-bordered .am-gallery-item{
+
+.am-gallery-bordered .am-gallery-item {
     box-shadow: none;
     padding: 1px;
 }
-.my-icon{
+
+.my-icon {
     display: inline-block;
     font-style: normal;
     width: 20px;
-    height:20px;
+    height: 20px;
 
 }
-.no-like{
+
+.no-like {
     background: url("../img/no-like.png") center no-repeat;
     background-size: 100% 100%;
 }
-.like{
+
+.like {
     background: url("../img/like.png") center no-repeat;
     background-size: 100% 100%;
 }
-.am-gallery-desc .nav-menu{
+
+.am-gallery-desc .nav-menu {
     width: 100%;
     color: #5d5959;
 }
-.am-gallery-desc{
+
+.am-gallery-desc {
     position: relative;
 }
-.am-gallery-desc .buy{
+
+.am-gallery-desc .buy {
     display: inline-block;
     position: absolute;
     right: 2%;
     color: #e65c5c;
 }
-.am-navbar .am-navbar-nav{
+
+.am-navbar .am-navbar-nav {
     padding: 0;
 }
-.am-navbar-default .am-navbar-nav{
+
+.am-navbar-default .am-navbar-nav {
     background: #fff;
     border-top: 1px solid #eee;
 }
-.am-navbar .am-navbar-nav i{
+
+.am-navbar .am-navbar-nav i {
     display: block;
     width: 100%;
     height: 29px;
 }
-.am-navbar .am-navbar-nav .active .icon-home{
+
+.am-navbar .am-navbar-nav .active .icon-home {
     background: url("../../img/shouye1.png") center center no-repeat;
     background-size: 18px 18px;
 }
-.am-navbar .am-navbar-nav .icon-home{
+
+.am-navbar .am-navbar-nav .icon-home {
     background: url("../../img/shouye2.png") center center no-repeat;
     background-size: 18px 18px;
 }
-.am-navbar .am-navbar-nav .active .shopping-cat{
+
+.am-navbar .am-navbar-nav .active .shopping-cat {
     background: url("../../img/gouwu1.png") center center no-repeat;
     background-size: 19px 20px;
 }
-.am-navbar .am-navbar-nav .shopping-cat{
+
+.am-navbar .am-navbar-nav .shopping-cat {
     background: url("../../img/gouwu2.png") center center no-repeat;
     background-size: 19px 20px;
 }
 
-.am-navbar .am-navbar-nav .active .personal-center{
+.am-navbar .am-navbar-nav .active .personal-center {
     background: url("../../img/wode1.png") center center no-repeat;
     background-size: 19px 19px;
 }
-.am-navbar .am-navbar-nav .personal-center{
+
+.am-navbar .am-navbar-nav .personal-center {
     background: url("../../img/wode2.png") center center no-repeat;
     background-size: 19px 19px;
 }
-.ul-order li i{
+
+.ul-order li i {
     display: block;
     width: 100%;
     height: 20px;
 }
-i.all-order{
+
+i.all-order {
     background: url("../../img/dingdan.png") center center no-repeat;
     background-size: 16px 19px;
 }
-i.unpaid{
+
+i.unpaid {
     background: url("../../img/unpaid.png") center center no-repeat;
     background-size: 20px 19px;
 }
-i.complete{
+
+i.complete {
     background: url("../../img/complete.png") center center no-repeat;
     background-size: 22px 21px;
 }
-i.vehicle{
+
+i.vehicle {
     background: url("../../img/vehicle.png") center center no-repeat;
     background-size: 23px 19px;
 }
-i.daifahuo{
+
+i.daifahuo {
     background: url("../../img/daifahuo.png") center center no-repeat;
     background-size: 19px 19px;
 }
-i.daishouhuo{
+
+i.daishouhuo {
     background: url("../../img/daishouhuo.png") center center no-repeat;
     background-size: 24px 19px;
 }
-i.reund{
+
+i.reund {
     background: url("../../img/refund.png") center center no-repeat;
     background-size: 24px 19px;
 }
-.sousuo{
+
+.sousuo {
     display: block;
     width: 17px;
     height: 20px;
     background: url(../../img/sousuo.png) center center no-repeat;
     background-size: 100%;
 }
-.am-navbar-default a{
+
+.am-navbar-default a {
     color: #5d5959;
     font-size: 12px;
 }
-.commodity-name{
+
+.commodity-name {
     display: inline-block;
     font-size: 16px;
     text-align: center;
     width: 100%;
     margin-bottom: 12px;
 }
+
 .to-settle-accounts {
     width: 100%;
     height: 50px;
@@ -217,28 +257,34 @@ i.reund{
     bottom: 0;
     z-index: 999;
 }
-.to-settle-accounts-shoppong-cat{
+
+.to-settle-accounts-shoppong-cat {
     margin-bottom: 49px;
 }
+
 .to-settle-accounts .am-ucheck-icons {
     margin-top: 5px;
 }
-li.right-menu{
+
+li.right-menu {
     float: right;
     margin-right: -6%;
     height: 50px;
     width: 30%;
 }
-li.right-menu .am-btn-danger{
+
+li.right-menu .am-btn-danger {
     height: 100%;
 }
-.bottom-model{
+
+.bottom-model {
     height: 400px;
     width: 100%;
     background: #fff;
     position: relative;
 }
-.bottom-model>.am-btn-danger{
+
+.bottom-model > .am-btn-danger {
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -247,22 +293,26 @@ li.right-menu .am-btn-danger{
     font-size: 20px;
     font-weight: bold;
 }
-.bottom-model>.model-title{
+
+.bottom-model > .model-title {
     list-style: none;
     padding: 5px;
     height: 100px;
     border-bottom: 1px solid #eee;
 }
-.bottom-model>.model-title li{
+
+.bottom-model > .model-title li {
     float: left;
     margin-right: 5px;
     text-align: left;
     font-size: 16px;
 }
-.bottom-model>.model-title>li>img{
+
+.bottom-model > .model-title > li > img {
     width: 100px;
 }
-.bottom-model .close-model{
+
+.bottom-model .close-model {
     font-size: 26px;
     color: #dedede;
     display: inline-block;
@@ -271,16 +321,17 @@ li.right-menu .am-btn-danger{
     top: -10px;
     z-index: 999;
 }
-.am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-ucheck-radio:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons,.am-ucheck-checkbox:checked+.am-ucheck-icons,
-.am-ucheck-radio:checked+.am-ucheck-icons,.am-checkbox-inline.am-secondary .am-ucheck-checkbox:checked+.am-ucheck-icons, .am-checkbox-inline.am-secondary .am-ucheck-radio:checked+.am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-checkbox:checked+.am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-radio:checked+.am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-checkbox:checked+.am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-radio:checked+.am-ucheck-icons, .am-radio.am-secondary .am-ucheck-checkbox:checked+.am-ucheck-icons, .am-radio.am-secondary .am-ucheck-radio:checked+.am-ucheck-icons
-,.am-checkbox-inline.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-checkbox-inline.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-radio.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons, .am-radio.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled)+.am-ucheck-icons
-,.am-ucheck-icons{
+
+.am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-ucheck-radio:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-ucheck-checkbox:checked + .am-ucheck-icons,
+.am-ucheck-radio:checked + .am-ucheck-icons, .am-checkbox-inline.am-secondary .am-ucheck-checkbox:checked + .am-ucheck-icons, .am-checkbox-inline.am-secondary .am-ucheck-radio:checked + .am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-checkbox:checked + .am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-radio:checked + .am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-checkbox:checked + .am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-radio:checked + .am-ucheck-icons, .am-radio.am-secondary .am-ucheck-checkbox:checked + .am-ucheck-icons, .am-radio.am-secondary .am-ucheck-radio:checked + .am-ucheck-icons, .am-checkbox-inline.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-checkbox-inline.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-checkbox.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-radio-inline.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-radio.am-secondary .am-ucheck-checkbox:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-radio.am-secondary .am-ucheck-radio:hover:not(.am-nohover):not(:disabled) + .am-ucheck-icons, .am-ucheck-icons {
     color: red;
 }
-.bottom-model .price{
+
+.bottom-model .price {
     color: red;
     font-size: 18px;
 }
+
 .payMoney {
     line-height: 50px;
     color: red;
@@ -310,33 +361,30 @@ li.buy-sum-number {
     line-height: 50px;
     color: #5d5959;
 }
-.buy-pay-stlye{
+
+.buy-pay-stlye {
     height: 50px;
 }
-.buy-pay-stlye>.nav-menu{
-    color: #5d5959!important;
+
+.buy-pay-stlye > .nav-menu {
+    color: #5d5959 !important;
     width: 100%;
 }
-.buy-number{
+
+.buy-number {
     text-align: center;
 }
-.buy-number input{
+
+.buy-number input {
     width: 40px;
     text-align: center;
-    height:30px;
+    height: 30px;
     padding: 0;
     border: 0;
     border-radius: inherit;
 }
-.buy-number span{
-    display: inline-block;
-    width: 30px;
-    text-align: center;
-    background: red;
-    height: 30px;
-    color: #fff;
-}
-.shopping-cat-null{
+
+.shopping-cat-null {
     height: 45%;
     padding-top: 45%;
     display: inline-block;
@@ -347,30 +395,36 @@ li.buy-sum-number {
     background: url("../../img/meiyoudingdan.png") no-repeat center center;
     background-size: 12% 15%;
 }
-.span-select{
+
+.span-select {
     height: 100%;
     width: 50px;
     text-align: right;
     line-height: 50px;
     display: inline-block;
 }
-.show-sum-money{
+
+.show-sum-money {
     display: inline-block;
     line-height: 50px;
     float: right;
 }
-.kong{
+
+.kong {
     background: url("../../img/kong.png") no-repeat center left;
-    background-size:27% 27%;
+    background-size: 27% 27%;
 }
-.xuanzhong{
+
+.xuanzhong {
     background: url("../../img/xuanzhong.png") no-repeat center left;
-    background-size:27% 27%;
+    background-size: 27% 27%;
 }
-.shopping-list-list{
+
+.shopping-list-list {
     background-size: 30% 17%;
     margin-left: 25%;
 }
+
 .buy-span {
     display: inline-block;
     width: 20px;
@@ -379,18 +433,22 @@ li.buy-sum-number {
     border-radius: 20px;
     line-height: 16px;
 }
-.remove-number{
+
+.remove-number {
     background: url("../../img/reduce.png") no-repeat center left;
     background-size: 80% 80%;
 }
-.add-number{
+
+.add-number {
     background: url("../../img/plus.png") no-repeat center left;
     background-size: 80% 80%;
 }
-.personal-list li{
+
+.personal-list li {
     position: relative;
 }
-.personal-list li i{
+
+.personal-list li i {
     width: 10px;
     height: 10px;
     background: url("../../img/forward1.png") no-repeat center center;
@@ -400,7 +458,8 @@ li.buy-sum-number {
     top: 25px;
     right: 0;
 }
-.logo-img{
+
+.logo-img {
     height: 100px;
     width: 100px;
     display: block;
@@ -409,21 +468,56 @@ li.buy-sum-number {
     margin: auto;
     margin-top: 20%;
 }
-i.phone{
+
+i.phone {
     width: 16px;
     height: 21px;
     display: inline-block;
-    background: url("../../img/phone.png") no-repeat center bottom ;
+    background: url("../../img/phone.png") no-repeat center bottom;
     background-size: 100% 100%;
     margin-bottom: -5px;
     margin-right: 10px;
 }
-i.suo{
+
+i.suo {
     width: 16px;
     height: 21px;
     display: inline-block;
-    background: url("../../img/suo.png") no-repeat center bottom ;
+    background: url("../../img/suo.png") no-repeat center bottom;
     background-size: 100% 100%;
     margin-bottom: -5px;
     margin-right: 10px;
+}
+
+.address-detail-location {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.address-detail-location i {
+    display: inline-block;
+    width: 60px;
+    height: 57px;
+    background: url("../../img/location.png") no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    left: -5px;
+    top:10px;
+}
+.am-radio i{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+.am-radio i.you{
+    background: url("../../img/you.png") no-repeat;
+    background-size: 100% 100%;
+}
+.am-radio i.mei{
+    background: url("../../img/mei.png") no-repeat;
+    background-size: 100% 100%;
 }

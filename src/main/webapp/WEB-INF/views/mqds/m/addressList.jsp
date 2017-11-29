@@ -13,19 +13,14 @@
         position: fixed;
         bottom: 0;
         width: 100%;
-        padding: 10px 0;
-        background: #f9f9f9;
+        height: 49px;
     }
 
     .add-address-div .am-btn-danger {
-        width: 80%;
+        width: 100%;
         margin: auto;
         display: block;
-    }
-
-    .am-list h5 {
-        margin: 0;
-        color: #333;
+        height: 100%;
     }
 
     .am-divider-default {
@@ -40,34 +35,57 @@
 
     .am-list-static.am-list-border > li {
         padding-bottom: 0;
+        border-bottom: 10px solid #eee;
+        line-height: 35px;
+        padding-top: 8px;
+    }
+
+    .am-list-static.am-list-border > li span {
+        display: inline-block;
+        width: 100%;
+        padding: 0 30px;
     }
 
     .operation {
         position: absolute;
-        right: 10px;
-        bottom: 0;
+        right: 20px;
+        bottom: 3px;
     }
 
     .operation a {
         margin-left: 10px;
+        color: #333;
+        font-size: 14px;
     }
 
     .bottom-model > .model-title li {
         line-height: 50px;
         border-bottom: 1px solid #eee;
+        font-size: 14px;
+        letter-spacing: 1px;
     }
 
     .bottom-model > .model-title li input {
         height: 50px;
+        line-height: 50px;
         width: 77%;
         border: none;
     }
-
+    .bottom-model{
+        padding: 0 12px;
+    }
     #loading .am-modal-dialog {
         position: absolute;
         width: 60%;
         top: 5%;
         right: 20%;
+    }
+
+    .phone-address {
+        position: absolute;
+        top: 10px;
+        text-align: right;
+        right: -10px;
     }
 
     #loading {
@@ -77,6 +95,11 @@
     form {
         margin: 0;
     }
+    .bottom-model > .am-btn-danger{
+        font-weight: normal;
+        font-size: 16px;
+        padding: 0;
+    }
 </style>
 <body>
 <div class="content">
@@ -84,18 +107,20 @@
     <c:set value="${param.addressId}" var="addressId"></c:set>  <!--如果是生成订单页面点过来的-->
     <ul class="am-list am-list-static am-list-border">
         <c:forEach var="itme" items="${list}">
-            <li  <c:if
-                    test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
-                <h5 <c:if test="${isOrderPage!= null and addressId == itme.id}">style="color: red" </c:if>>
-                        ${itme.consignee} ${itme.consigneePhone}
-                </h5>
+            <li  <c:if test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
+
+                <span <c:if test="${isOrderPage!= null and addressId == itme.id}">style="color: red" </c:if>>
+                        收货人:${itme.consignee}
+                </span>
+                <span class="phone-address"> ${itme.consigneePhone}</span>
                 <span>${itme.province}${itme.city}${itme.county}${itme.address}</span>
                 <hr data-am-widget="divider" style="" class="am-divider am-divider-default"/>
                 <c:if test="${param.isOrderPage == null}"><!--不是生成订单页面点击过来-->
-                <label class="am-radio">
-                    <input type="radio" name="isDefault" value="${itme.id}" data-am-ucheck
-                           <c:if test="${itme.isDefault == '0'}">checked</c:if>>
-                    默认地址
+                <label class="am-radio" addressId="${itme.id}">
+                    <i class="<c:if test="${itme.isDefault == '0'}">you</c:if><c:if test="${itme.isDefault != '0'}">mei</c:if>"></i>
+                        <%--%-- <input type="radio" name="isDefault" value="${itme.id}" data-am-ucheck
+                                <c:if test="${itme.isDefault == '0'}">checked</c:if>>&ndash;%&gt;--%>
+                    设为默认地址
                 </label>
                 </c:if>
                 <div class="operation">
@@ -117,7 +142,7 @@
         <div class="bottom-model">
             <ul class="am-list model-title">
                 <input name="id" hidden><!--id 修改时用到-->
-                <span class="close-model">x</span>
+             <%--   <span class="close-model">x</span>--%>
                 <li class="am-g am-list-item-dated">
                     <span>收货人:</span><input name="consignee">
                 </li>
@@ -133,7 +158,7 @@
                     <span>详细地址:</span><input name="receipAddress">
                 </li>
             </ul>
-            <button type="button" class="am-btn am-btn-danger" onclick="saveAddress()">确定</button>
+            <button type="button" class="am-btn am-btn-danger" onclick="saveAddress()">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
             <button type="reset" id="reset" hidden></button>
         </div>
     </form>
@@ -255,8 +280,8 @@
     }
     //更改默认地址
     $(function () {
-        $(":radio").click(function () {
-            $.post("${ctx}/m/checkedDefault?adddressId=" + $(this).val() + "&userId=${param.userId}", function (data) {
+        $(".am-radio").click(function () {
+            $.post("${ctx}/m/checkedDefault?adddressId=" + $(this).attr("addressId") + "&userId=${param.userId}", function (data) {
                 if (data.code == "0") {
                     window.location.href = window.location.href;//刷新
                 }

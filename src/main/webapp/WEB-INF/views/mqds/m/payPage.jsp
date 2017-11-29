@@ -7,19 +7,27 @@
 </head>
 <style>
     .to-settle-accounts {
-        height: 50px;
-        width: 60%;
+        height: 49px;
         margin: auto;
-        line-height: 50px;
-        bottom: 20%;
-        right: 20%;
-    }
+        line-height: 49px;
 
+    }
+    .am-btn-danger{
+        font-weight: normal !important;
+        font-size: 16px !important;
+        letter-spacing: 1px;
+    }
     .am-list > li {
         border: 0;
         margin-bottom: 5px;
+        height: 60px;
+        border-bottom: 1px solid #eee;
+        margin: 0;
+        line-height: 34px;
     }
-
+    span{
+        font-size: 14px;
+    }
     .buy-pay-stlye {
         height: 50px;
     }
