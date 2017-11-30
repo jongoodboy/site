@@ -521,3 +521,6 @@ i.suo {
     background: url("../../img/mei.png") no-repeat;
     background-size: 100% 100%;
 }
+#loading .am-modal-dialog .am-modal-hd{
+    font-size: 14px;
+}
