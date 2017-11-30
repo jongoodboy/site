@@ -89,10 +89,10 @@ public class WxUserUlit {
                     request.getSession().setAttribute("mUser", muser);//存起来
 
                 } else {
-                    return "/mqds/m/loginPage";//登录页面
+                    return "/mqds/m/login";//登录页面
                 }
             } else {
-                return "/mqds/m/loginPage";//登录页面
+                return "/mqds/m/login";//登录页面
             }
 
         } catch (Exception e) {

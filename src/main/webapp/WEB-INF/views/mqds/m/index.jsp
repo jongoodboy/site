@@ -158,11 +158,6 @@
     <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default"
          id="">
         <ul class="am-navbar-nav am-cf am-avg-sm-4">
-            <li>
-                <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
-                    <span>我的店铺</span>
-                </a>
-            </li>
             <li class="active home">
                 <a href="${ctx}/m" class="">
                     <i class="icon-home"></i>
@@ -191,9 +186,6 @@
         if (login == "no" || login == "") {//如果手动注销过
             window.location.href = "${ctx}/m/loginPage";
             return;
-        }
-        if (phone == "") {//没有绑定过手机号
-            window.location.href = "${ctx}/m/bindPhone?url=" + url;
         } else {//已经绑定
             window.location.href = url;
         }
