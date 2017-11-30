@@ -87,14 +87,7 @@ public class WxUserUlit {
                 if (muser.getPhone() != null) {//如果已经绑定了手机号
                     //返回首页
                     request.getSession().setAttribute("mUser", muser);//存起来
-                    String personalStores = (String) request.getAttribute("personalStores");//标识我要创业
-                    if (personalStores != null && personalStores != "") {
-                        if (muser.getIsVip().equals("1")) {//如果不是会员
-                            return "redirect:http://www.muqinonline.com/site/front/m/personalStoresVIP";
-                        } else {
-                            return "redirect:http://www.muqinonline.com/site/front/m/personalStores";
-                        }
-                    }
+
                 } else {
                     return "/mqds/m/loginPage";//登录页面
                 }
@@ -105,7 +98,6 @@ public class WxUserUlit {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return "/mqds/m/index";//首页
     }
 }

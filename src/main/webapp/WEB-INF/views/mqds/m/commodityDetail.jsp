@@ -229,15 +229,14 @@
 </div>
 <script>
     var mySwiper = new Swiper('.swiper-container', {
-        autoplay: 2000,//可选选项，自动滑动
+        autoplay: 3000,//可选选项，自动滑动
+        autoplayDisableOnInteraction : false
     })
     $(".join-this-shopping-cat").on("click", function () {
-        $("#open-bottom-model").modal('open');
-        return;
         if ('${sessionScope.mUser.id}' != "") {
             $("#open-bottom-model").modal('open');
         } else {//没有登录，去登录
-            window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
+            window.location.href = "${ctx}/m/loginPage";
         }
     })
     $(".close-model").on("click", function () {
@@ -304,7 +303,7 @@
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
             window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
         } else {//没有登录，去登录
-            window.location.href = "${ctx}/m/bindPhone?url=" + window.location.href;
+            window.location.href = "${ctx}/m/loginPage";
         }
 
     }

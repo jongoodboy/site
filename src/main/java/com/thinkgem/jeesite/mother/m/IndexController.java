@@ -58,7 +58,7 @@ public class IndexController {
     public void getMuser(HttpServletRequest request) {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
         Map<String, Object> paramMap = new HashedMap();
-        paramMap.put("openId", "o3xmYv5KlVNW_X0MRQNTMLkLwgVA");
+        paramMap.put("openId", openId);
         Muser m = mUserSerivce.findUser(paramMap);
         if (m != null && m.getPhone() != null) {
             request.getSession().setAttribute("mUser", m);//存起来
@@ -761,39 +761,38 @@ public class IndexController {
     /**
      * 我的店铺
      *
-     * @param userId 当前用户Id
      * @return
      */
     @RequestMapping("/personalStores")
-    public String personalStores(Model model, String userId, HttpServletRequest request) {
-        //String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
-       Muser m = (Muser) request.getSession().getAttribute("mUser");//存起来
+    public String personalStores(Model model, HttpServletRequest request) {
+        Muser m = (Muser) request.getSession().getAttribute("mUser");
         if (m == null) {
-            request.setAttribute("personalStores", "personalStores");//标识我要创业
-            return "redirect:" + ConfigUtil.GET_CODE;//微信取code
+            return "mqds/m/login";
+        } else {
+            if (m == null || m.getIsVip().equals("1")) {
+                return "mqds/m/personalStoresVIP";
+            } else {
+                Date dateProfit = new Date();
+                SimpleDateFormat toDateFormat = new SimpleDateFormat("yyyy-MM-dd");//今日收益
+                String toDateProfit = toDateFormat.format(dateProfit);
+                SimpleDateFormat toMonthFormat = new SimpleDateFormat("yyyy-MM");//当月收益
+                String toMonthProfit = toMonthFormat.format(dateProfit);
+                Map<String, Object> paramMap = new HashedMap();
+                paramMap.put("toDateProfit", toDateProfit);
+                paramMap.put("toMonthFormat", toMonthProfit);
+                paramMap.put("userId", m.getId());//当前用户Id
+                List<Map<String, Object>> listMap = profitService.findProfit(paramMap);
+                model.addAttribute("toDateProfit", listMap.get(0) == null ? "0.00" : listMap.get(0).get("money"));//今日收益
+                model.addAttribute("team", listMap.get(1) == null ? "0.00" : listMap.get(1).get("money"));//团队收益
+                model.addAttribute("shop", listMap.get(2) == null ? "0.00" : listMap.get(2).get("money"));//开店收益
+                model.addAttribute("week1", listMap.get(3) == null ? "0.00" : listMap.get(3).get("money"));//第一周的收益
+                model.addAttribute("week2", listMap.get(4) == null ? "0.00" : listMap.get(4).get("money"));//第二周的收益
+                model.addAttribute("week3", listMap.get(5) == null ? "0.00" : listMap.get(5).get("money"));//第三周的收益
+                model.addAttribute("week4", listMap.get(6) == null ? "0.00" : listMap.get(6).get("money"));//第四周的收益
+                model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));//第五周的收益
+                return "mqds/m/personalStores";
+            }
         }
-        if(m.getIsVip().equals("1")){
-           return personalStoresVIP(model);
-        }
-        Date dateProfit = new Date();
-        SimpleDateFormat toDateFormat = new SimpleDateFormat("yyyy-MM-dd");//今日收益
-        String toDateProfit = toDateFormat.format(dateProfit);
-        SimpleDateFormat toMonthFormat = new SimpleDateFormat("yyyy-MM");//当月收益
-        String toMonthProfit = toMonthFormat.format(dateProfit);
-        Map<String, Object> paramMap = new HashedMap();
-        paramMap.put("toDateProfit", toDateProfit);
-        paramMap.put("toMonthFormat", toMonthProfit);
-        paramMap.put("userId", userId);
-        List<Map<String, Object>> listMap = profitService.findProfit(paramMap);
-        model.addAttribute("toDateProfit", listMap.get(0) == null ? "0.00" : listMap.get(0).get("money"));//今日收益
-        model.addAttribute("team", listMap.get(1) == null ? "0.00" : listMap.get(1).get("money"));//团队收益
-        model.addAttribute("shop", listMap.get(2) == null ? "0.00" : listMap.get(2).get("money"));//开店收益
-        model.addAttribute("week1", listMap.get(3) == null ? "0.00" : listMap.get(3).get("money"));//第一周的收益
-        model.addAttribute("week2", listMap.get(4) == null ? "0.00" : listMap.get(4).get("money"));//第二周的收益
-        model.addAttribute("week3", listMap.get(5) == null ? "0.00" : listMap.get(5).get("money"));//第三周的收益
-        model.addAttribute("week4", listMap.get(6) == null ? "0.00" : listMap.get(6).get("money"));//第四周的收益
-        model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));//第五周的收益
-        return "mqds/m/personalStores";
     }
 
     /**
@@ -808,7 +807,7 @@ public class IndexController {
         paramMap.put("pageSize", 4);//顶部banner
         paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
         List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
-        model.addAttribute("listBanner",listBanner);
+        model.addAttribute("listBanner", listBanner);
         return "mqds/m/personalStoresVIP";
     }
 

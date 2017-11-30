@@ -17,7 +17,6 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         display: block;
-        letter-spacing: 1px;
     }
 
     #commodityLsit > li {
@@ -159,6 +158,11 @@
     <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default"
          id="">
         <ul class="am-navbar-nav am-cf am-avg-sm-4">
+            <li>
+                <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
+                    <span>我的店铺</span>
+                </a>
+            </li>
             <li class="active home">
                 <a href="${ctx}/m" class="">
                     <i class="icon-home"></i>
@@ -236,15 +240,24 @@
                     var mySwiper = new Swiper('.banner', {
                         effect: 'fade',
                         loop: true,
+                        autoplay: 3000,//可选选项，自动滑动
+                        autoplayDisableOnInteraction: false
                     })
                     var products = ret.products;//推荐精品
                     var productsStr = "";//推荐精品数据拼接
                     for (var i = 0; i < products.length; i++) {
                         var img = "";
+                        var imgSrc = "";
                         if (products[i].commodityImager != null) {
                             img = products[i].commodityImager.split("|");
+                            for (var k = 0; k < img.length; k++) {
+                                if (img[k] != null && img[k] != "") {
+                                    imgSrc = img[k];
+                                    break;
+                                }
+                            }
                         }
-                        productsStr += '<div class="swiper-slide"><a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + img[1] + '"/>';
+                        productsStr += '<div class="swiper-slide"><a href="${ctx}/m/commodityDetail?commodityId=' + products[i].id + '"> <img  class="lazy" src="' + imgSrc + '"/>';
                         productsStr += '<span class="img-name">' + products[i].commodityName + '</span></a></div>';
                     }
                     $('#products').append(productsStr);
@@ -268,7 +281,7 @@
                         img = data[i].commodityImager.split("|");
                     }
                     commodityListStr += '<li><div class="am-gallery-item">';
-                    commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" data-original="' + img[1] + '"/>';
+                    commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
                     commodityListStr += '<h3>' + data[i].commodityName + '</h3></a>';
                     commodityListStr += '<div class="am-gallery-desc"><hr/><%--<ul class="nav-menu"><li><i class="my-icon like"></i></li>';
                     commodityListStr += '<li class="active"><99k</li>--%></ul><ul class="nav-menu"><li><%--<i class="my-icon like"></i>--%>￥</li>';
@@ -282,7 +295,6 @@
                 }
                 if (commodityListStr != "") {
                     $("#commodityLsit").append(commodityListStr);//商品列表
-                    $("img.lazy").lazyload();//图片懒加载
                     isLoading = true;//如果还有数据可以再给滑动加载
                 }
                 if (data.length < paramData.pageSize) {
@@ -293,6 +305,7 @@
                  return;
                  }*/
                 loadingClose();//关闭加载提示
+                //$("img.lazy").lazyload();//图片懒加载  src换成data-original
             }
         })
     }
