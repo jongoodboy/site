@@ -58,7 +58,7 @@ public class IndexController {
     public void getMuser(HttpServletRequest request) {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
         Map<String, Object> paramMap = new HashedMap();
-        paramMap.put("openId", openId);
+        paramMap.put("openId", "o3xmYv5KlVNW_X0MRQNTMLkLwgVA");
         Muser m = mUserSerivce.findUser(paramMap);
         if (m != null && m.getPhone() != null) {
             request.getSession().setAttribute("mUser", m);//存起来
@@ -311,7 +311,7 @@ public class IndexController {
         Date d = new Date();
         String shareCode = (String) request.getSession().getAttribute("code");//分享人的分享码
         SimpleDateFormat foramt = new SimpleDateFormat("yyyMMddHHmmss");
-        String orderNumber = new Date().getTime()+"";//生成订单号
+        String orderNumber = new Date().getTime() + "";//生成订单号
         String[] commodityIdList = commodityId.split(",");//截取每一个商品id
         String[] buyNumberList = buyNumber.split(",");//截取每一个商品id对应购买的数量
         String[] commodityPriceList = commodityPrice.split(",");//截取每一个商品id对应购买的数量
@@ -713,9 +713,9 @@ public class IndexController {
     @ResponseBody
     public Map<String, Object> loginOut(String userId) {
         Map<String, Object> returnMap = new HashedMap();
-        Map<String,Object> paramMap = new HashedMap();
-        paramMap.put("userId",userId);
-        paramMap.put("login","no");
+        Map<String, Object> paramMap = new HashedMap();
+        paramMap.put("userId", userId);
+        paramMap.put("login", "no");
         try {
             mUserSerivce.loginOutOrLogin(paramMap);
             returnMap.put("code", "0");
@@ -737,9 +737,9 @@ public class IndexController {
     @ResponseBody
     public Map<String, Object> login(String userId) {
         Map<String, Object> returnMap = new HashedMap();
-        Map<String,Object> paramMap = new HashedMap();
-        paramMap.put("userId",userId);
-        paramMap.put("login","yes");
+        Map<String, Object> paramMap = new HashedMap();
+        paramMap.put("userId", userId);
+        paramMap.put("login", "yes");
         mUserSerivce.loginOutOrLogin(paramMap);
         returnMap.put("code", "0");
         returnMap.put("msg", "登录成功");
@@ -766,10 +766,14 @@ public class IndexController {
      */
     @RequestMapping("/personalStores")
     public String personalStores(Model model, String userId, HttpServletRequest request) {
-        String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
-        if (openid == null) {
+        //String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
+       Muser m = (Muser) request.getSession().getAttribute("mUser");//存起来
+        if (m == null) {
             request.setAttribute("personalStores", "personalStores");//标识我要创业
             return "redirect:" + ConfigUtil.GET_CODE;//微信取code
+        }
+        if(m.getIsVip().equals("1")){
+           return personalStoresVIP(model);
         }
         Date dateProfit = new Date();
         SimpleDateFormat toDateFormat = new SimpleDateFormat("yyyy-MM-dd");//今日收益
@@ -790,6 +794,22 @@ public class IndexController {
         model.addAttribute("week4", listMap.get(6) == null ? "0.00" : listMap.get(6).get("money"));//第四周的收益
         model.addAttribute("week5", listMap.get(7) == null ? "0.00" : listMap.get(7).get("money"));//第五周的收益
         return "mqds/m/personalStores";
+    }
+
+    /**
+     * 我的店铺 如果不是会员指一个会员商品
+     *
+     * @return
+     */
+    @RequestMapping("/personalStoresVIP")
+    public String personalStoresVIP(Model model) {
+        Map<String, Object> paramMap = new HashedMap();
+        paramMap.put("pageNo", 0);
+        paramMap.put("pageSize", 4);//顶部banner
+        paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+        List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
+        model.addAttribute("listBanner",listBanner);
+        return "mqds/m/personalStoresVIP";
     }
 
     /**

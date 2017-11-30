@@ -32,7 +32,7 @@ public class WxUserUlit {
     private MuserService mUserSerivce;
 
     @RequestMapping("/getCode")
-    public String accessToken(String code, HttpServletRequest request, Model model) {
+    public String accessToken(String code, HttpServletRequest request) {
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
         String src = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
         if (openId == null) {
@@ -61,7 +61,7 @@ public class WxUserUlit {
                 System.out.println("=============================");
                 System.out.println("Contents of get request ends");
                 System.out.println("=============================");
-                String getAccessTokenSrc = " https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openId+"&lang=zh_CN ";
+                String getAccessTokenSrc = " https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openId + "&lang=zh_CN ";
                 URL getaccessToken = new URL(getAccessTokenSrc);
                 HttpsURLConnection httpsConn1 = (HttpsURLConnection) getaccessToken.openConnection();//获取微信个人头像的昵称
                 BufferedReader reader1 = new BufferedReader(new InputStreamReader(httpsConn1.getInputStream(), "utf-8"));//设置编码,否则中文乱码
@@ -87,19 +87,25 @@ public class WxUserUlit {
                 if (muser.getPhone() != null) {//如果已经绑定了手机号
                     //返回首页
                     request.getSession().setAttribute("mUser", muser);//存起来
+                    String personalStores = (String) request.getAttribute("personalStores");//标识我要创业
+                    if (personalStores != null && personalStores != "") {
+                        if (muser.getIsVip().equals("1")) {//如果不是会员
+                            return "redirect:http://www.muqinonline.com/site/front/m/personalStoresVIP";
+                        } else {
+                            return "redirect:http://www.muqinonline.com/site/front/m/personalStores";
+                        }
+                    }
                 } else {
-                    return "/mqds/m/bindPhone";//手机绑定页面
+                    return "/mqds/m/loginPage";//登录页面
                 }
             } else {
-                return "/mqds/m/bindPhone";//手机绑定页面
+                return "/mqds/m/loginPage";//登录页面
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-       String personalStores = (String) request.getAttribute("personalStores");//标识我要创业
-        if(personalStores != null && personalStores != ""){
-          return "redirect:http://www.muqinonline.com/site/front/m/personalStores";
-        }
+
         return "/mqds/m/index";//首页
     }
 }
