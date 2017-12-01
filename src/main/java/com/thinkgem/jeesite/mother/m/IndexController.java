@@ -84,8 +84,6 @@ public class IndexController {
     public String appIndex(HttpServletRequest request, String code) {
         if (code != null) {//把个人分享的code存起来方便订单支付之后把钱分成
             request.getSession().setAttribute("code", code);
-        } else {
-            request.getSession().removeAttribute("code");
         }
         return "/mqds/m/index";//首页
     }
@@ -348,6 +346,7 @@ public class IndexController {
                 order.setConsignee(consignee);
                 order.setConsigneePhone(consigneePhone);
                 order.setOrderNumber(orderNumber);
+                order.setShareCode(shareCode);
                 order.setCreateDate(d);
                 list.add(order);//用于生成订单
             } else {
