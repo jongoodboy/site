@@ -524,3 +524,10 @@ i.suo {
 #loading .am-modal-dialog .am-modal-hd{
     font-size: 14px;
 }
+.am-modal-dialog{
+    width: auto;
+    font-size: 15px !important;
+    color: #000;
+    background: rgba(255,255,255, 0.9);
+    border-radius: 3px !important;
+}

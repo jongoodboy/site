@@ -76,9 +76,9 @@
 
     #loading .am-modal-dialog {
         position: absolute;
-        width: 60%;
-        top: 5%;
-        right: 20%;
+        width: auto;
+        top: 20%;
+        right: 30%;
     }
 
     .phone-address {

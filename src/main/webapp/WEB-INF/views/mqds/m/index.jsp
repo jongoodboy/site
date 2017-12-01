@@ -98,12 +98,7 @@
         margin-bottom: 20px;
     }
     .am-modal-dialog{
-        width: auto;
-        border-radius: 3px !important;
         padding: 50px;
-        font-size: 15px !important;
-        background: rgba(255,255,255, 0.9);
-        color: #000;
     }
 
 </style>
