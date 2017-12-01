@@ -59,7 +59,7 @@ public class IndexController {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
         if (openId == null) {
             if(personalStores != null){
-                request.getSession().setAttribute("url",personalStores);//我要创业
+                request.getSession().setAttribute("personalStores",personalStores);//我要创业
             }
             response.sendRedirect(ConfigUtil.GET_CODE);//微信取code
         }

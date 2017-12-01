@@ -48,11 +48,13 @@
 .orderoOperation .go-pay {
     display: inline-block;
     padding: 3px;
-    border: 1px solid #eb616c;
     text-align: center;
     margin-right: 10px;
-    color: #eb616c;
-    margin-bottom: 5px;
+    background: #eb616c;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 14px;
+    padding-top: 0;
 }
 
 .order-title {
@@ -171,4 +173,22 @@
     height: 20px;
     width: 24px;
     display: inline-block;
+}
+.am-modal-dialog{
+    width: 80%;
+}
+.am-modal-hd{
+    text-align: left;
+    font-size: 14px;
+}
+.am-modal-hd+.am-modal-bd{
+    padding: 0;
+}
+.am-modal-prompt-input{
+    width: 100%;
+    margin: 0;
+}
+.am-modal-prompt-input{
+    min-height: 30% !important;
+    border: 0 !important;
 }
