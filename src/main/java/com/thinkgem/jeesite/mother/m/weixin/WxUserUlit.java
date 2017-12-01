@@ -98,6 +98,10 @@ public class WxUserUlit {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String personalStores = (String) request.getSession().getAttribute("personalStores");//我要创业
+        if (personalStores != null && personalStores != "") {
+            return "redirect:http://www.muqinonline.com/site/front/m/personalStores";
+        }
         return "/mqds/m/index";//首页
     }
 }

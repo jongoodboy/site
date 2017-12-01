@@ -55,8 +55,14 @@ public class IndexController {
 
     //每次请求都会先进这里
     @ModelAttribute
-    public void getMuser(HttpServletRequest request) {
+    public void getMuser(HttpServletRequest request,HttpServletResponse response,String personalStores) throws IOException {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
+        if (openId == null) {
+            if(personalStores != null){
+                request.getSession().setAttribute("url",personalStores);//我要创业
+            }
+            response.sendRedirect(ConfigUtil.GET_CODE);//微信取code
+        }
         Map<String, Object> paramMap = new HashedMap();
         paramMap.put("openId", openId);
         Muser m = mUserSerivce.findUser(paramMap);
@@ -80,10 +86,6 @@ public class IndexController {
             request.getSession().setAttribute("code", code);
         } else {
             request.getSession().removeAttribute("code");
-        }
-        String openid = (String) request.getSession().getAttribute("openid");//微信用户openId
-        if (openid == null) {
-            return "redirect:" + ConfigUtil.GET_CODE;//微信取code
         }
         return "/mqds/m/index";//首页
     }
@@ -766,10 +768,17 @@ public class IndexController {
     @RequestMapping("/personalStores")
     public String personalStores(Model model, HttpServletRequest request) {
         Muser m = (Muser) request.getSession().getAttribute("mUser");
-        if (m == null) {
+        if (m == null || m.getLogin().equals("no")) {
+            model.addAttribute("url", "personalStores");
             return "mqds/m/login";
         } else {
             if (m == null || m.getIsVip().equals("1")) {
+                Map<String, Object> listBannerparamMap = new HashedMap();
+                listBannerparamMap.put("pageNo", 0);
+                listBannerparamMap.put("pageSize", 4);//顶部banner
+                listBannerparamMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+                List<Commodity> listBanner = commodityService.findAdvertising(listBannerparamMap);
+                model.addAttribute("listBanner", listBanner);
                 return "mqds/m/personalStoresVIP";
             } else {
                 Date dateProfit = new Date();
@@ -796,7 +805,7 @@ public class IndexController {
     }
 
     /**
-     * 我的店铺 如果不是会员指一个会员商品
+     * 我要创业 如果不是会员指一个会员商品
      *
      * @return
      */

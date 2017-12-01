@@ -92,7 +92,7 @@
 <script>
     var url = '';//${param.url}
     if (url == '') {
-        url = "${ctx}/m";
+        url = "${ctx}/m/${url}";
     }
     var phoneCode = "";//手机验证码
     var mUserLogin = '${sessionScope.mUser.login}';
@@ -141,15 +141,16 @@
         if (codeBut) {
             codeBut = false;
             $.post("${ctx}/m/verification?phone=" + phone, function (ret) {//验证手机是否已经被绑定过
-                if (ret.code == "1") {//号码没有绑定过。
-                    countDown();
-                    $.post("${ctx}/getPhoneCode?phone=" + phone, function (ret) {
-                        var data = JSON.parse(ret.data);
-                        phoneCode = data.obj;//短信验证码
-                    })
+               /* if (ret.code == "1") {//号码没有绑定过。
+
                 } else {
                     loadingShow(ret.msg);
-                }
+                }*/
+                countDown();
+                $.post("${ctx}/getPhoneCode?phone=" + phone, function (ret) {
+                    var data = JSON.parse(ret.data);
+                    phoneCode = data.obj;//短信验证码
+                })
             })
 
 
