@@ -101,6 +101,9 @@
         font-size: 16px;
         padding: 0;
     }
+    .area_ctrl{
+        min-height: 40%!important;
+    }
 </style>
 <body>
 <div class="content">

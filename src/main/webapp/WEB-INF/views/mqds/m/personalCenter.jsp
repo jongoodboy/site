@@ -120,9 +120,16 @@
                   <%--  <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
                         <span>我的店铺</span>
                     </a>--%>
-                    <a href="${ctx}/m/?personalCenter=myStores">
-                        <span>我的店铺</span>
-                    </a>
+                      <c:if test="${isVip == '0'}">
+                          <a href="${ctx}/m/?personalCenter=myStores">
+                              <span>我的店铺</span>
+                          </a>
+                      </c:if>
+                      <c:if test="${isVip == '1'}">
+                          <a href="${ctx}/m/personalStoresVIP">
+                              <span>我的店铺</span>
+                          </a>
+                      </c:if>
                     <i></i>
                 </li>
                 <!--如果不是会员分享出去的不是自己的分享码-->

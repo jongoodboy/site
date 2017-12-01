@@ -49,10 +49,6 @@
         position: relative;
     }
 
-    .am-panel {
-        margin: 1px;
-    }
-
     .am-panel .am-panel-bd {
         font-size: 30px;
     }
@@ -89,15 +85,18 @@
     .am-gallery-bordered .am-gallery-item img {
         height: 220px;
     }
-    .nav-menu{
+
+    .nav-menu {
         color: #a7a4a4;
     }
-    .am-modal-loading .am-icon-spin{
+
+    .am-modal-loading .am-icon-spin {
         font-size: 16px;
         display: block;
         margin-bottom: 20px;
     }
-    .am-modal-dialog{
+
+    .am-modal-dialog {
         padding: 50px;
     }
 
@@ -122,11 +121,13 @@
 <%--</div>--%>
 <%--</header>--%>
 
-<c:if test="${param.personalCenter != null}"> <!--如果会员-->
-    <div class="am-panel am-panel-default">
-        <div class="am-panel-bd">
+<c:if test="${param.personalCenter != null}"><!--如果会员-->
+    <div class="am-panel am-panel-default" style="background: url(${ctxStatic}/m/img/myStores.jpg)
+            no-repeat center center;background-size: 100% 100%;min-height: 130px;padding-top: 18px">
+        <div class="am-panel-bd" style="padding: 0;">
             <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/>
-                ${sessionScope.jb.getString("nickname")}的店铺
+                <span style="display: inline-block;width: auto;overflow: hidden; border: 0;
+                text-overflow: ellipsis;white-space: nowrap;width: 70%">${sessionScope.jb.getString("nickname")}的店铺</span>
         </div>
     </div>
 </c:if>

@@ -105,24 +105,28 @@
 </div>
 <div class="am-list-news-bd">
     <span>订单中心</span>
-    <ul class="am-navbar-nav am-cf am-avg-sm-4">
+    <ul class="am-navbar-nav am-cf am-avg-sm-4 ul-order">
         <li class="all">
             <a href="${ctx}/m/orderList?index=1" class="">
+                <i class="all-order"></i>
                 <span>全部订单</span>
             </a>
         </li>
         <li>
             <a href="${ctx}/m/orderList?index=2" class="">
+                <i class="daifahuo"></i>
                 <span>待发货</span>
             </a>
         </li>
         <li class="shipment">
             <a href="${ctx}/m/orderList?index=3" class="">
+                <i class="daishouhuo"></i>
                 <span>待收货</span>
             </a>
         </li>
         <li class="receipt">
             <a href="${ctx}/m/orderList?index=0" class="">
+                <i class="complete"></i>
                 <span>已完成</span>
             </a>
         </li>
