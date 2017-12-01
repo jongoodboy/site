@@ -223,7 +223,7 @@
                 <span class="buy-span buy-add add-number"></span><!--加入购物车商品数量-->
                 <input name="commodityId" value="${commodity.id}" hidden><!--商品id-->
             </div>
-            <button type="button" class="am-btn am-btn-danger">确定</button>
+            <button type="button" class="am-btn am-btn-danger">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
         </div>
     </form>
 </div>

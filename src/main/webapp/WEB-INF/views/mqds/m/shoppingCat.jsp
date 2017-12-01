@@ -172,7 +172,7 @@
     </ul>
 </div>
 <!-- 去结算-->
-<div class="to-settle-accounts to-settle-accounts-shoppong-cat">
+<div class="to-settle-accounts to-settle-accounts-shoppong-cat" style="border-top: 1px solid #eee">
     <ul class="nav-menu">
         <li style="width: 70%">
             <label class="am-checkbox am-secondary" style="margin-top: 0;font-size: 14px;padding: 0;">

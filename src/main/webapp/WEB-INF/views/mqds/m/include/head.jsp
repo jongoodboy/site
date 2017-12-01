@@ -1,9 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.thinkgem.jeesite.mother.m.weixin.utlis.Sign" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    String json = Sign.signJson("www.muqinonline.com");
-%>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="">
 <meta name="keywords" content="">
