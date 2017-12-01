@@ -14,6 +14,9 @@
         height: 50px;
         line-height: 50px;
         padding: 0;
+        border-radius: 3px;
+        letter-spacing: 1px;
+        font-size: 14px;
     }
 </style>
 <c:set value="${listBanner}" var="banner"></c:set>

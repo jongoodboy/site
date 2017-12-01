@@ -58,7 +58,7 @@
 </div>
 </body>
 <script>
-    var userId ='${sessionScope.mUser.id}'; //'';
+    var userId = '${sessionScope.mUser.id}'; //'';
     switch ('${param.index}') {
         case '1'://全部
             addClass(".all");
@@ -133,7 +133,7 @@
                         var shoppingListIndex = ret.data[i].shppingList.length;
                         str += '<ul class="one-shopping">';
                         for (var j = 0; j < ret.data[i].shppingList.length; j++) {
-                            sumMoney = ret.data[i].sumOrderMoney + ret.data[i].shppingList[j].comFreight;
+                            sumMoney += ret.data[i].sumOrderMoney + ret.data[i].shppingList[j].comFreight * ret.data[i].shppingList[j].comNumber;
                             var commodityStateSpan = "暂无物流信息";
                             var commodityState = ret.data[i].shppingList[j].comState;//每个商品的发货状态
                             var operation = "";//操作提示
@@ -161,8 +161,8 @@
                             }
 
                             var img = ret.data[i].shppingList[j].comImage.split("|");
-                            str += '<li><img class="lazy" src="' + img[1] + '" onclick="commodityDetail(\''+ret.data[i].shppingList[j].comId+'\')"/>';
-                            str += '<div><span class="commodityName" onclick="commodityDetail(\''+ret.data[i].shppingList[j].comId+'\')">' + ret.data[i].shppingList[j].comName + '</span>';
+                            str += '<li><img class="lazy" src="' + img[1] + '" onclick="commodityDetail(\'' + ret.data[i].shppingList[j].comId + '\')"/>';
+                            str += '<div><span class="commodityName" onclick="commodityDetail(\'' + ret.data[i].shppingList[j].comId + '\')">' + ret.data[i].shppingList[j].comName + '</span>';
                             str += '<span class="buy-number-order-list">数量:' + ret.data[i].shppingList[j].comNumber + '' + ret.data[i].shppingList[j].comCompany + '</span>';
                             if (operation != "") {
                                 var refundMoney = (ret.data[i].shppingList[j].comPrice + ret.data[i].shppingList[j].comFreight) * ret.data[i].shppingList[j].comNumber;//支付总金额

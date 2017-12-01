@@ -151,9 +151,8 @@
                 </li>
                 <li class="am-g am-list-item-dated">
                     <span>所在区域:</span>
-                 <%--   <input id="demo1" name="location" readonly/>--%>
-                    <input id="demo2" type="text" readonly placeholder="地区信息" />
-                    <input type="hidden" placeholder="地区信息" id=‘city‘>
+                    <input id="demo2" type="text" name="location" readonly onfocus="this.blur();" placeholder="地区信息" />
+                    <input type="hidden"  id="city">
                 </li>
                 <li class="am-g am-list-item-dated">
                     <span>详细地址:</span><input name="receipAddress">
@@ -179,6 +178,7 @@
     </div>
 </div>
 <script>
+    //修改地址
     $(".update-address").on("click", function () {
         $("#reset").click();
         $.post("${ctx}/m/addressDetail?adddressId=" + $(this).attr("id"), function (ret) {
@@ -193,9 +193,7 @@
         })
     })
     $(".am-btn-danger").on("click", function () {
-        $("#reset").click();
         $("#open-bottom-model").modal('open');
-
     })
     //三级联动
     var area1 = new LArea();
@@ -213,6 +211,7 @@
     $(".close-model").on("click", function () {
         $("#open-bottom-model").modal('close');
     })
+    //删除地址
     $(".del-address").on("click", function () {
         $('#confirm').modal({
             relatedTarget: this,
@@ -277,6 +276,7 @@
         }
         $.post("${ctx}/m/saveAddress", DATA, function (data) {
             if (data.code == "0") {
+                $("#reset").click();
                 $("#open-bottom-model").modal('close');
                 if ('${isOrderPage}' != null && '${isOrderPage}' != undefined && '${isOrderPage}' != "") {
                     self.location = document.referrer;//返回并刷新上一页面
