@@ -122,14 +122,14 @@
 <%--</header>--%>
 
 <c:if test="${param.personalCenter != null}"><!--如果会员-->
-    <div class="am-panel am-panel-default" style="background: url(${ctxStatic}/m/img/myStores.jpg)
-            no-repeat center center;background-size: 100% 100%;min-height: 130px;padding-top: 18px">
-        <div class="am-panel-bd" style="padding: 0;">
-            <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/>
-                <span style="display: inline-block;width: auto;overflow: hidden; border: 0;
+<div class="am-panel am-panel-default" style="background: url(${ctxStatic}/m/img/myStores.jpg)
+        no-repeat center center;background-size: 100% 100%;min-height: 130px;padding-top: 18px">
+    <div class="am-panel-bd" style="padding: 0;">
+        <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/>
+        <span style="display: inline-block;width: auto;overflow: hidden; border: 0;
                 text-overflow: ellipsis;white-space: nowrap;width: 70%">${sessionScope.jb.getString("nickname")}的店铺</span>
-        </div>
     </div>
+</div>
 </c:if>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
@@ -295,7 +295,7 @@
                         price += ".00"
                     }
                     commodityListStr += '<li class="active">' + price + '</li><li>';
-                    commodityListStr += '<a href="${ctx}/m/orderPage?newBuy=yes&commodityId=' + data[i].id + '&userId=' + userId + '">';
+                    commodityListStr += '<a href="javascript:buyNow(\''+data[i].id +'\')">';
                     commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';
                 }
                 if (commodityListStr != "") {
@@ -349,6 +349,15 @@
         init();
 
     })
+    //立即购买
+    function buyNow(commodityId) {
+        if (userId != "") {//立即购买页面
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId='+commodityId+'&userId='+userId;
+        } else {//没有登录，去登录
+            window.location.href = "${ctx}/m/loginPage";
+        }
+
+    }
 </script>
 </body>
 </html>
