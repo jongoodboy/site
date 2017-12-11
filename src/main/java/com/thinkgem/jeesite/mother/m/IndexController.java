@@ -55,11 +55,21 @@ public class IndexController {
 
     //每次请求都会先进这里
     @ModelAttribute
-    public void getMuser(HttpServletRequest request,HttpServletResponse response,String personalStores) throws IOException {
+    public void getMuser(HttpServletRequest request, HttpServletResponse response, String personalStores) throws IOException {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
         if (openId == null) {
-            if(personalStores != null){
-                request.getSession().setAttribute("personalStores",personalStores);//我要创业
+            String strBackUrl = "http://" + request.getServerName() //服务器地址
+                    + ":"
+                    + request.getServerPort()           //端口号
+                    + request.getContextPath()      //项目名称
+                    + request.getServletPath();     //请求页面或其他地址
+            String QueryString = request.getQueryString();//参数
+            if (QueryString != null) {
+                strBackUrl += "?" + QueryString;
+            }
+            request.getSession().setAttribute("strBackUrl", strBackUrl);//为了从哪个页面来。授权之后返回哪页面去。
+            if (personalStores != null) {
+                request.getSession().setAttribute("personalStores", personalStores);//我要创业
             }
             response.sendRedirect(ConfigUtil.GET_CODE);//微信取code
         }
@@ -818,15 +828,18 @@ public class IndexController {
         model.addAttribute("listBanner", listBanner);
         return "mqds/m/personalStoresVIP";
     }
+
     /**
      * 我的店铺
      *
      * @return
      */
     @RequestMapping("/userShop")
-    public String userShop(HttpServletRequest request, String code) {
+    public String userShop(HttpServletRequest request, String code, String shopName, String shopImgUrl) {
         if (code != null) {//把个人分享的code存起来方便订单支付之后把钱分成
             request.getSession().setAttribute("code", code);
+            request.getSession().setAttribute("shopName", shopName);
+            request.getSession().setAttribute("shopImgUrl", shopImgUrl);
         }
         return "mqds/m/userShop";
     }

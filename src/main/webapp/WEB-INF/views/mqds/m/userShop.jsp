@@ -6,14 +6,30 @@
     <link href="${ctxStatic}/m/css/indexAndShop.css" rel="stylesheet">
     <!--我的店铺-->
 </head>
+<style>
+    .shop-name {
+        display: inline-block;
+        width: auto;
+        overflow: hidden;
+        border: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 70%;
+    }
+</style>
 <body>
 <%--<c:if test="${param.personalCenter != null}">--%><!--如果会员-->
 <div class="am-panel am-panel-default" style="background: url(${ctxStatic}/m/img/myStores.jpg)
         no-repeat center center;background-size: 100% 100%;min-height: 130px;padding-top: 18px">
     <div class="am-panel-bd" style="padding: 0;">
+        <c:if test="${param.myself == null}"><!--分享者的店铺-->
+        <img class="am-img-thumbnail am-circle" src="${sessionScope.shopImgUrl}"/>
+        <span class="shop-name">${shopName}的店铺</span>
+        </c:if>
+        <c:if test="${param.myself == 'yes'}"><!--自己的店铺-->
         <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/>
-        <span style="display: inline-block;width: auto;overflow: hidden; border: 0;
-                text-overflow: ellipsis;white-space: nowrap;width: 70%">${sessionScope.jb.getString("nickname")}的店铺</span>
+        <span class="shop-name">${sessionScope.jb.getString("nickname")}的店铺1</span>
+        </c:if>
     </div>
 </div>
 <%--</c:if>--%>
@@ -81,9 +97,10 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     $(document).ready(function () {
-        var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
-        var commodityName = '${sessionScope.jb.getString("nickname")}'+'的店铺';//分享的标题
+        var shopName = '${sessionScope.jb.getString("nickname")}' + '的店铺';//分享的标题
         var imgUrl = '${sessionScope.jb.getString("headimgurl")}';//分享出去的图片
+        var url = window.location.href + "?code=${sessionScope.mUser.code}&shopName=" + shopName + "&shopImgUrl=" + imgUrl;//分享的路径
+        url = encodeURI(url);
         var desc = '加入母亲电商,赚取丰厚回报!';//分享描述
         //url必须是获取的当前的页面路径
         $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
@@ -107,7 +124,7 @@
         wx.ready(function () {
             //分享给朋友
             wx.onMenuShareAppMessage({
-                title: commodityName, // 分享标题
+                title: shopName, // 分享标题
                 desc: desc, // 分享描述
                 link: url, // 分享链接
                 imgUrl: imgUrl, // 分享图标
@@ -122,7 +139,7 @@
             });
             //分享到朋友圈
             wx.onMenuShareTimeline({
-                title: commodityName, // 分享标题
+                title: shopName, // 分享标题
                 link: url, // 分享链接
                 imgUrl: imgUrl, // 分享图标
                 success: function () {
@@ -132,7 +149,7 @@
             });
             //分享到QQ
             wx.onMenuShareQQ({
-                title: commodityName, // 分享标题
+                title: shopName, // 分享标题
                 desc: desc, // 分享描述
                 link: url, // 分享链接
                 imgUrl: imgUrl, // 分享图标
@@ -145,7 +162,7 @@
             });
             //分享到QQ空间
             wx.onMenuShareQZone({
-                title: commodityName, // 分享标题
+                title: shopName, // 分享标题
                 desc: desc, // 分享描述
                 link: url, // 分享链接
                 imgUrl: imgUrl, // 分享图标
@@ -260,7 +277,7 @@
                         price += ".00"
                     }
                     commodityListStr += '<li class="active">' + price + '</li><li>';
-                    commodityListStr += '<a href="javascript:buyNow(\''+data[i].id +'\')">';
+                    commodityListStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
                     commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';
                 }
                 if (commodityListStr != "") {
@@ -317,7 +334,7 @@
     //立即购买
     function buyNow(commodityId) {
         if (userId != "") {//立即购买页面
-            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId='+commodityId+'&userId='+userId;
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=' + commodityId + '&userId=' + userId;
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/loginPage";
         }

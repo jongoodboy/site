@@ -122,7 +122,7 @@
                           <span>我的店铺</span>
                       </a>--%>
                     <c:if test="${isVip == '0'}"><!-- 会员-->
-                        <a href="${ctx}/m/userShop">
+                        <a href="${ctx}/m/userShop?myself=yes">
                             <span>我的店铺</span>
                         </a>
                     </c:if>

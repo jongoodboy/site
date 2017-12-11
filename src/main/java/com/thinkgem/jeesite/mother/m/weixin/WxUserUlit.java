@@ -33,6 +33,7 @@ public class WxUserUlit {
 
     @RequestMapping("/getCode")
     public String accessToken(String code, HttpServletRequest request) {
+        String strBackUrl = "redirect:" + request.getSession().getAttribute("strBackUrl");//授权之后跳转对应的页面
         String openId = (String) request.getSession().getAttribute("openid");//用户OpenId
         String src = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
         if (openId == null) {
@@ -97,12 +98,11 @@ public class WxUserUlit {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:http://www.muqinonline.com/site/front/m";//首页 如果出错也返回首页验证授权
         }
         String personalStores = (String) request.getSession().getAttribute("personalStores");//我要创业
         if (personalStores != null && personalStores != "") {
-            return "redirect:http://www.muqinonline.com/site/front/m/personalStores";
+            return strBackUrl;
         }
-        return "/mqds/m/index";//首页
+        return strBackUrl;//首页
     }
 }
