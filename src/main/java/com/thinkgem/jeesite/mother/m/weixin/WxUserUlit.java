@@ -97,6 +97,7 @@ public class WxUserUlit {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return "redirect:http://www.muqinonline.com/site/front/m";//首页 如果出错也返回首页验证授权
         }
         String personalStores = (String) request.getSession().getAttribute("personalStores");//我要创业
         if (personalStores != null && personalStores != "") {

@@ -127,7 +127,7 @@
                     / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
                 <li class="freight">运费:${itme.freight == null ? 0 : itme.freight}元</li>
             </ul>
-            <div>
+            <div class="commodityMaker">
                 <spen class="commodity-name comdiyi">商品描述</spen>
                 <!--商品描述-->
                 ${itme.commodityMaker}
@@ -227,10 +227,89 @@
         </div>
     </form>
 </div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
+    $(document).ready(function () {
+        var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
+        var commodityName = $(".commodity-name-title").html();//分享的标题
+        var imgUrl = "http://www.muqinonline.com"+$(".swiper-slide").find("img").first().attr("src");
+        var desc = $(".commodityMaker").find("p").find("span").html();//分享描述
+        //url必须是获取的当前的页面路径
+        $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
+            //微信分享
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: ret.appId, // 必填，公众号的唯一标识
+                timestamp: ret.timestamp, // 必填，生成签名的时间戳
+                nonceStr: ret.nonceStr, // 必填，生成签名的随机串
+                signature: ret.signature,// 必填，签名，见附录1
+                jsApiList: [
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage'
+                ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.error(function (res) {
+                console.log(res);
+            });
+
+        })
+        wx.ready(function () {
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: commodityName, // 分享标题
+                desc: desc, // 分享描述
+                link: url, // 分享链接
+                imgUrl: imgUrl, // 分享图标
+                // type: 'link', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    /*	alert('测试：成功发送给朋友');*/
+                },
+                cancel: function () {
+                    /*	alert('测试：取消了发送给朋友');*/
+                }
+            });
+            //分享到朋友圈
+            wx.onMenuShareTimeline({
+                title: commodityName, // 分享标题
+                link: url, // 分享链接
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+            //分享到QQ
+            wx.onMenuShareQQ({
+                title: commodityName, // 分享标题
+                desc: desc, // 分享描述
+                link: url, // 分享链接
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            //分享到QQ空间
+            wx.onMenuShareQZone({
+                title: commodityName, // 分享标题
+                desc: desc, // 分享描述
+                link: url, // 分享链接
+                imgUrl: imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+    })
     var mySwiper = new Swiper('.swiper-container', {
         autoplay: 3000,//可选选项，自动滑动
-        autoplayDisableOnInteraction : false
+        autoplayDisableOnInteraction: false
     })
     $(".join-this-shopping-cat").on("click", function () {
         if ('${sessionScope.mUser.id}' != "") {
