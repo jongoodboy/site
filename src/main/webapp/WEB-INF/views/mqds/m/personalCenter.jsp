@@ -33,7 +33,7 @@
         margin-bottom: 1px;
         min-height: 100px;
         margin-top: 14%;
-        padding: 0 20px!important;
+        padding: 0 20px !important;
     }
 
     .title-personal img {
@@ -48,7 +48,7 @@
         list-style: none;
         padding: 0;
         margin: 0;
-            font-size: 14px;
+        font-size: 14px;
         padding: 0px 10px;
     }
 
@@ -58,7 +58,6 @@
         position: relative;
     }
 
-
     .am-list-border ul li a {
         color: #333;
     }
@@ -67,10 +66,12 @@
         width: 100%;
         display: inline-block;
     }
-    .nav-menu li{
+
+    .nav-menu li {
         font-size: 13px;
     }
-    .nav-menu li span{
+
+    .nav-menu li span {
         display: inline-block;
         margin-top: 4px;
     }
@@ -117,39 +118,33 @@
         <li style="padding-top: 0">
             <ul class="personal-list">
                 <li>
-                  <%--  <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
-                        <span>我的店铺</span>
-                    </a>--%>
-                      <c:if test="${isVip == '0'}">
-                          <a href="${ctx}/m/?personalCenter=myStores">
-                              <span>我的店铺</span>
-                          </a>
-                      </c:if>
-                      <c:if test="${isVip == '1'}">
-                          <a href="${ctx}/m/personalStoresVIP">
-                              <span>我的店铺</span>
-                          </a>
-                      </c:if>
+                    <%--  <a href="${ctx}/m/personalStores?userId=${sessionScope.mUser.id}">
+                          <span>我的店铺</span>
+                      </a>--%>
+                    <c:if test="${isVip == '0'}"><!-- 会员-->
+                        <a href="${ctx}/m/userShop">
+                            <span>我的店铺</span>
+                        </a>
+                    </c:if>
+                    <c:if test="${isVip == '1'}"><!--不是会员-->
+                        <a href="${ctx}/m/?personalCenter=myStores">
+                            <span>我的店铺</span>
+                        </a>
+                    </c:if>
                     <i></i>
                 </li>
-                <!--如果不是会员分享出去的不是自己的分享码-->
-                <c:if test="${isVip == '0'}">
-                    <li>
-                        <span>分享我的店铺</span>
-                    </li>
-                </c:if>
                 <li>
                     <a href="${ctx}/m/addressList?userId=${sessionScope.mUser.id}">
                         <span>收货地址管理</span>
                     </a>
                     <i></i>
                 </li>
-               <%-- <li>
-                    <a href="${ctx}/m/bindBankCard">
-                        <span>绑定银行卡</span>
-                    </a>
-                    <i></i>
-                </li>--%>
+                <%-- <li>
+                     <a href="${ctx}/m/bindBankCard">
+                         <span>绑定银行卡</span>
+                     </a>
+                     <i></i>
+                 </li>--%>
                 <li>
                     <a href="${ctx}/m/systemSettings">
                         <span>系统设置</span>

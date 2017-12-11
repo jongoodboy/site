@@ -1,0 +1,93 @@
+.boutique .am-slides li {
+    height: 20%;
+    margin-right: 0.7% !important;
+}
+
+.img-name {
+    color: #5d5959;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+#commodityLsit > li {
+    border-bottom: 10px solid #eee;
+    background: #fff;
+}
+
+.am-gallery-bordered .am-gallery-desc {
+    margin: 0 5%;
+    margin-top: 10px;
+}
+
+.am-gallery-bordered .am-gallery-desc hr {
+    border-top: 1px dashed #cfd2cf;
+}
+
+.boutique .am-slides .am-slider-desc {
+    height: 30px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.am-slider-default {
+    margin-bottom: 5px;
+}
+
+.header {
+    position: relative;
+}
+
+.am-panel .am-panel-bd {
+    font-size: 30px;
+}
+
+.am-img-thumbnail {
+    width: 100px;
+    height: 100px;
+}
+
+.am-gallery-item a > h3 {
+    margin: 0 5%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #5d5959;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 25px;
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+
+.products img {
+    height: 80%;
+}
+
+.products .swiper-slide {
+    width: 85% !important;
+    margin-right: 3%;
+}
+
+.am-gallery-bordered .am-gallery-item img {
+    height: 220px;
+}
+
+.nav-menu {
+    color: #a7a4a4;
+}
+
+.am-modal-loading .am-icon-spin {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.am-modal-dialog {
+    padding: 50px;
+}

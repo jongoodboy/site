@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="include/taglib.jsp" %>
 <html>
-<!--我的店铺-->
+<!--我要创业/我的店铺收益-->
 <head>
     <%@include file="include/head.jsp" %>
     <script src="${ctxStatic}/m/js/echarts.common.min.js" type="text/javascript"></script>

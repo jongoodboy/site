@@ -760,7 +760,7 @@ public class IndexController {
     }
 
     /**
-     * 我的店铺
+     * 我的店铺收益/我要创业
      *
      * @return
      */
@@ -817,6 +817,18 @@ public class IndexController {
         List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
         model.addAttribute("listBanner", listBanner);
         return "mqds/m/personalStoresVIP";
+    }
+    /**
+     * 我的店铺
+     *
+     * @return
+     */
+    @RequestMapping("/userShop")
+    public String userShop(HttpServletRequest request, String code) {
+        if (code != null) {//把个人分享的code存起来方便订单支付之后把钱分成
+            request.getSession().setAttribute("code", code);
+        }
+        return "mqds/m/userShop";
     }
 
     /**
