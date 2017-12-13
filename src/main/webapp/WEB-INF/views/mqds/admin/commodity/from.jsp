@@ -6,7 +6,6 @@
     <meta name="decorator" content="default"/>
     <script type="text/javascript">
         $(document).ready(function() {
-            imagesPreview();//执行显示图片
             $("#inputForm").validate({
                 submitHandler: function(form){
                     loading('正在提交，请稍等...');
@@ -37,7 +36,7 @@
     <div class="control-group">
         <label class="control-label">商品名称:</label>
         <div class="controls">
-            <form:input path="commodityName" htmlEscape="false" maxlength="200" class="input-xxlarge measure-input"/>
+            <form:input path="commodityName" htmlEscape="false" maxlength="200" class="input-xxlarge required measure-input"/>
         </div>
     </div>
 
@@ -74,9 +73,26 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">是否包邮:</label>
+        <div class="controls">
+            <form:select path="defaultExpress" class="input-mini">
+                <form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false" />
+            </form:select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">默认快递:</label>
+        <div class="controls">
+            <form:select path="defaultExpress" class="input-mini">
+                <form:options items="${expressList}" itemLabel="expressName" itemValue="id" htmlEscape="false" />
+            </form:select>
+                <%-- <form:input path="" htmlEscape="false" class="required" maxlength="5" type="number"/>--%>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">商品单价:</label>
         <div class="controls">
-            <form:input path="commodityPice" htmlEscape="false" maxlength="200" type="number"/>
+            <form:input path="commodityPice" cssClass="required" htmlEscape="false" maxlength="200" type="number"/>元
         </div>
     </div>
    <%-- <div class="control-group">
@@ -85,30 +101,38 @@
             <form:input path="costPrice" htmlEscape="false" maxlength="200" type="number"/>
         </div>
     </div>--%>
-    <div class="control-group">
+    <%--<div class="control-group">
         <label class="control-label">运费:</label>
         <div class="controls">
-            <form:input path="freight" htmlEscape="false" maxlength="200" type="number"/>
+            <form:input path="freight" htmlEscape="false" maxlength="200" type="number"/>元
+        </div>
+    </div>--%>
+    <div class="control-group">
+        <label class="control-label">重量:</label>
+        <div class="controls">
+            <form:input path="weight" htmlEscape="false" class="required" maxlength="5" type="number"/>KG
         </div>
     </div>
+
+
     <div class="control-group">
         <label class="control-label">商品图片:</label>
         <div class="controls">
             <sys:ckfinder input="images" type="images" uploadPath="/cms/article" selectMultiple="true"/>
-            <input type="hidden" id="images" name="commodityImager"  value="${commodity.commodityImager}" />
+            <input type="hidden" id="images" name="commodityImager" class="required"  value="${commodity.commodityImager}" />
         </div>
     </div>
 
     <div class="control-group">
         <label class="control-label">商品库存量:</label>
         <div class="controls">
-            <form:input path="commodityNumber" htmlEscape="false" maxlength="3" type="number"/>
+            <form:input path="commodityNumber" htmlEscape="false" maxlength="3" class="required" type="number"/>
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">商品描述</label>
         <div class="controls">
-          <form:textarea id="content" htmlEscape="true" path="commodityMaker" rows="4" maxlength="200"/>
+          <form:textarea id="content" htmlEscape="true" path="commodityMaker" cclass="required" rows="4" maxlength="200"/>
            <%--  <textarea id="commodityMaker" name="commodityMaker" cols="20" rows="2" class="ckeditor">${commodity.commodityMaker}</textarea>--%>
             <sys:ckeditor replace="commodityMaker" uploadPath="/cms/article" />
         </div>

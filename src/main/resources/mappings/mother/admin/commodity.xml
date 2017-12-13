@@ -17,7 +17,10 @@
         create_by as "createBy",
         create_name as "createName",
         create_date as "createDate",
-        del_flag as "delFlag"
+        del_flag as "delFlag",
+        weight as "weight",
+        free_shipping as "freeShipping",
+        default_express as "defaultExpress"
     </sql>
     <!--后台商品列表 -->
     <select id="findList" resultType="Commodity" parameterType="Commodity">
@@ -86,7 +89,10 @@
         create_by,
         create_name,
         create_date,
-        del_flag
+        del_flag,
+        weight,
+        free_shipping,
+        default_express
       )VALUES
       (
       #{id},
@@ -104,7 +110,10 @@
       #{createBy.id},
       #{createBy.name},
       #{createDate},
-      #{delFlag}
+      #{delFlag},
+      #{weight},
+      #{freeShipping},
+      #{defaultExpress}
       )
     </insert>
     <!--修改商品-->
@@ -125,7 +134,10 @@
         update_by = #{createBy.id},
         update_name = #{createBy.name},
         update_date =  #{createDate},
-        del_flag =  #{delFlag}
+        del_flag =  #{delFlag},
+        weight = #{weight},
+        free_shipping = #{freeShipping},
+        default_express = #{defaultExpress}
         WHERE
         id = #{id}
     </update>

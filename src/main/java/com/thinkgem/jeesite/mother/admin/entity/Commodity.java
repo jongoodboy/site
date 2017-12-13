@@ -22,6 +22,33 @@ public class Commodity extends DataEntity<Commodity> {
     private Integer commodityRelease;//商品发布状态(0在售,1已下架)
     private BigDecimal costPrice;//商品成本价
     private BigDecimal freight;//运费
+    private BigDecimal weight;//重量
+    private Integer freeShipping;//是否包邮 1包 0不包
+    private String defaultExpress;//默认快递
+
+    public String getDefaultExpress() {
+        return defaultExpress;
+    }
+
+    public void setDefaultExpress(String defaultExpress) {
+        this.defaultExpress = defaultExpress;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    public Integer getFreeShipping() {
+        return freeShipping;
+    }
+
+    public void setFreeShipping(Integer freeShipping) {
+        this.freeShipping = freeShipping;
+    }
 
     public Integer getCommodityRelease() {
         return commodityRelease;

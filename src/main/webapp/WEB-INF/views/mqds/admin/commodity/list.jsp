@@ -32,7 +32,7 @@
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="${ctx}/cms/category/">商品列表</a></li>
+    <li class="active"><a href="#">商品列表</a></li>
     <li><a href="${ctx}/commodity/from">添加商品</a></li>
 </ul>
 <sys:message content="${message}"/>

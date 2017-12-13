@@ -105,9 +105,18 @@
                                   name="select"
                                   commodityId="${map.id }"
                                   commodityNumber="${map.commodityNumber}"
-                                  money="${map.commodityPice + map.freight}"
-                                  shoppingNumber="${map.shoppingNumber}" freight="${map.freight}"
-                                  commodityPice="${map.commodityPice}">
+                                  money="${map.commodityPice}"
+                                  shoppingNumber="${map.shoppingNumber}"
+                                  freight="${map.freight}"
+                                  weight="${map.weight}"
+                                  commodityPice="${map.commodityPice}"
+                                  expressName="${map.expressName}"
+                                  expressProvinceFirst="${map.expressProvinceFirst}"
+                                  expressProvinceIncreasing="${map.expressProvinceIncreasing}"
+                                  expressOutsideFirst="${map.expressOutsideFirst}"
+                                  expressOutsideIncreasing="${map.expressOutsideIncreasing}" ,
+                                  freeShipping="${map.freeShipping}"
+                            >
                             </span>
                         <%----%><!--商品单价用于计算-->
                     </div>
@@ -125,7 +134,10 @@
                                 <%--  <span>颜色:黑色&nbsp;尺码:40</span>--%>
                             <ul class="nav-menu">
                                 <li class="active">￥${map.commodityPice}</li>
-                                <li style="font-size: 14px">运费:${map.freight == null ? 0 : map.freight}</li>
+                                <li style="font-size: 14px">运费:<c:if test="${map.freeShipping == 0}"><span
+                                        class="freight-show">${map.freight == null ? 0 : map.freight}</span></c:if>
+                                    <c:if test="${map.freeShipping == 1}">包邮</c:if>
+                                </li>
                                 <li class="buy-add-number">
                                     <span class="buy-span buy-del remove-number"></span>
                                     <input value="${map.shoppingNumber}" class="buy-number" type="number"
@@ -255,15 +267,25 @@
 
         //去结算
         $(".am-btn-danger").on("click", function () {
-          var imags = "";//商品图片
+            var imags = "";//商品图片
             var buyNumber = "";//购买的数量
             var buyCommodityId = "";//购买的商品id
             var commodityPrice = "";//商品单价
             var freight = "";//商品运费
             var commodityNames = "";//商品名称
-              for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
+            //快递名称,省内首重,省内递增,省外首重,省外递增
+            var expressName = "", expressProvinceFirst = "", expressProvinceIncreasing = "",
+                    expressOutsideFirst = "", expressOutsideIncreasing = "", weight = "", freeShipping = "";
+            for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
                 if (selectTshi.hasClass('xuanzhong')) {
+                    expressName += "," + selectTshi.attr("expressName");
+                    expressProvinceFirst += "," + selectTshi.attr("expressProvinceFirst");
+                    expressProvinceIncreasing += "," + selectTshi.attr("expressProvinceIncreasing");
+                    expressOutsideFirst += "," + selectTshi.attr("expressOutsideFirst");
+                    expressOutsideIncreasing += "," + selectTshi.attr("expressOutsideIncreasing");
+                    weight += "," + selectTshi.attr("weight");
+                    freeShipping += "," + selectTshi.attr("freeShipping");
                     commodityNames += "~" + selectTshi.parent().parent().last().find(".shoppoing-title").html();
                     imags += "," + selectTshi.parent().next().find("img").attr("src");
                     buyNumber += ',' + selectTshi.parent().parent().last().find("input[class='buy-number']").val();//每个商品购买的数量
@@ -272,10 +294,15 @@
                     freight += ',' + selectTshi.attr("freight");
                 }
             }
-            window.location.href = ctx + "/m/orderPage?money=" + $(".buySumMoney").html()
+            var paramUrl = "money=" + $(".buySumMoney").html()
                     + "&number=" + $(".buyNumber").html() + "&commodityPrice=" + commodityPrice
                     + "&buyNumber=" + buyNumber + "&buyCommodityId=" + buyCommodityId + "&userId=${sessionScope.mUser.id}"
-                    + "&imags=" + imags + "&freight=" + freight + "&commodityNames=" + commodityNames;
+                    + "&imags=" + imags + "&freight=" + freight + "&commodityNames=" + commodityNames
+                    + "&expressName=" + expressName + "&expressProvinceFirst=" + expressProvinceFirst
+                    + "&expressProvinceIncreasing=" + expressProvinceIncreasing + "&expressOutsideFirst=" + expressOutsideFirst
+                    + "&expressOutsideIncreasing=" + expressOutsideIncreasing + "&weight=" + weight+"&freeShipping="+freeShipping;
+
+            window.location.href = ctx + "/m/orderPage?" + paramUrl;
         })
     })
     function init() {
@@ -295,7 +322,22 @@
             var number = parseInt(selectTshi.parent().parent().last().find("input[class='buy-number']").val());//购买的数量统计 find("input[class='buy-number']").val()
             buyNumber += number;
             var money = parseFloat(selectTshi.attr("money"));//购买金额统计
-            buySumMoney += (money * number);//单个商品总价
+            var freeShipping = selectTshi.attr("freeShipping");//是否包邮 1包 0不包
+            var freight = 0.00;//总运费
+            if (freeShipping == 0) {
+                var weight = selectTshi.attr("weight");//商品单个重量
+                var expressFirst = selectTshi.attr("expressProvinceFirst");//省内首重
+                var expressIncreasing = selectTshi.attr("expressProvinceIncreasing");//省内递增
+                var addWeight = parseInt(number) * weight;//商品总重量
+                if (addWeight <= 1) {//如果小于等于首重
+                    freight = expressFirst
+                } else {
+                    var weightProvinceIncreasing = parseInt(addWeight);
+                    freight = (parseFloat(parseInt(expressFirst) + (expressIncreasing * parseInt(weightProvinceIncreasing))).toFixed(2))
+                }
+                $(selectTshi.parent().parent().last().find(".freight-show")).html(freight);
+            }
+            buySumMoney += (money * number) + parseInt(freight);//单个商品总价
         }
         buyNumberSpan.html(buyNumber);//显示购买的数量
         buySumMoneySpen.html(parseFloat(buySumMoney, 2).toFixed(2));//显示购买总金额

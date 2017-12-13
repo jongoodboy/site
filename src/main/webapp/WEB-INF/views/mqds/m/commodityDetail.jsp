@@ -125,7 +125,7 @@
             <ul class="nav-menu">
                 <li class="active">￥${itme.commodityPice}
                     / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
-                <li class="freight">运费:${itme.freight == null ? 0 : itme.freight}元</li>
+                <li class="freight">运费: <span id="express"></span>元</li><!--按照快递首重来算-->
             </ul>
             <div class="commodityMaker">
                 <spen class="commodity-name comdiyi">商品描述</spen>
@@ -232,7 +232,7 @@
     $(document).ready(function () {
         var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
         var commodityName = $(".commodity-name-title").html();//分享的标题
-        var imgUrl = "http://www.muqinonline.com"+$(".swiper-slide").find("img").first().attr("src");
+        var imgUrl = "http://www.muqinonline.com" + $(".swiper-slide").find("img").first().attr("src");
         var desc = $(".commodityMaker").find("p").find("span").html();//分享描述
         //url必须是获取的当前的页面路径
         $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
@@ -306,11 +306,31 @@
                 }
             });
         });
+        var weight = '${commodity.weight}';//商品重量
+        var expressProvinceFirst = '${express.expressProvinceFirst}';//省内首重
+        var freeShipping = '${commodity.freeShipping}';//是否包邮 1包 0不包
+        var express = $("#express");//显示运费
+        if(freeShipping == 0){
+            if (weight <= 1) {//如果小于等于首重
+                express.html(expressProvinceFirst)
+            } else {
+                var expressProvinceIncreasing = '${express.expressProvinceIncreasing}';//省内递增
+                var weightProvinceIncreasing = parseInt(weight)
+                if ((weightProvinceIncreasing - 1) == 0) {//超过1GK以内
+                    express.html(parseFloat(parseInt(expressProvinceFirst) + parseInt(expressProvinceIncreasing)).toFixed(2))
+                } else {
+                    express.html(parseFloat(parseInt(expressProvinceFirst) + (expressProvinceIncreasing * weightProvinceIncreasing)).toFixed(2))
+                }
+            }
+        }else{
+            express.parent().html("运费:包邮");
+        }
     })
     var mySwiper = new Swiper('.swiper-container', {
         autoplay: 3000,//可选选项，自动滑动
         autoplayDisableOnInteraction: false
     })
+    //弹出添加到购物车
     $(".join-this-shopping-cat").on("click", function () {
         if ('${sessionScope.mUser.id}' != "") {
             $("#open-bottom-model").modal('open');
@@ -318,6 +338,7 @@
             window.location.href = "${ctx}/m/loginPage";
         }
     })
+    //关闭添加到购物车
     $(".close-model").on("click", function () {
         $("#open-bottom-model").modal('close');
     })

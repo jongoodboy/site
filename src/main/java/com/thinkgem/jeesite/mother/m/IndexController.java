@@ -3,7 +3,9 @@ package com.thinkgem.jeesite.mother.m;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
+import com.thinkgem.jeesite.mother.admin.entity.Express;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
+import com.thinkgem.jeesite.mother.admin.service.ExpressService;
 import com.thinkgem.jeesite.mother.m.entity.*;
 import com.thinkgem.jeesite.mother.m.service.*;
 import com.thinkgem.jeesite.mother.m.weixin.*;
@@ -20,6 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +55,9 @@ public class IndexController {
     //收益
     @Resource
     private ProfitService profitService;
+    //快递
+    @Resource
+    private ExpressService expressService;
 
     //每次请求都会先进这里
     @ModelAttribute
@@ -152,7 +158,9 @@ public class IndexController {
     public String commodityDetail(String commodityId, Model model) {
         //商品详情页面
         Commodity commodity = commodityService.get(commodityId);
+        Express express = expressService.get(commodity.getDefaultExpress());//快递
         model.addAttribute("commodity", commodity);
+        model.addAttribute("express", express);
         //商品推荐
         Commodity commodity1 = new Commodity();
         Page<Commodity> page = new Page<Commodity>(1, 6);//分页查询
@@ -174,9 +182,11 @@ public class IndexController {
         //商品详情页面
         try {
             Commodity commodity = commodityService.get(commodityId);
+            Express express = expressService.get(commodity.getDefaultExpress());//快递
             returnMap.put("data", commodity);
             returnMap.put("msg", "查询数据成功");
             returnMap.put("code", "0");
+            returnMap.put("express", express);
         } catch (Exception e) {
             e.printStackTrace();
             returnMap.put("msg", "查询数据失败");
@@ -215,8 +225,20 @@ public class IndexController {
     @RequestMapping("/shoppingCat")
     public String shoppingCat(Model model, String userId) {
         List<Map<String, Object>> listMap = shoppingCatService.findShoppingCatByUserId(userId);//个人购物车列表
+        for (int i = 0; i < listMap.size(); i++) {
+            BigDecimal expressProvinceFirst = (BigDecimal) listMap.get(i).get("expressProvinceFirst");//默认省内首重
+            BigDecimal expressProvinceIncreasing = (BigDecimal) listMap.get(i).get("expressProvinceIncreasing");//默认省内递增
+            BigDecimal weight = (BigDecimal) listMap.get(i).get("weight");//商品重量
+            Integer shoppingNumber = (Integer) listMap.get(i).get("shoppingNumber");//购买的个数
+            double d = weight.doubleValue() * shoppingNumber;//总重量
+            if (d <= 1.0) {//1gk以内
+                listMap.get(i).put("freight", expressProvinceFirst);
+            } else if (d > 1) {//大于1gk
+                int y = (int) d;
+                 listMap.get(i).put("freight", expressProvinceFirst.add(BigDecimal.valueOf(y * expressProvinceIncreasing.intValue())));//首重加上超出的部份每超出1gk+递增
+            }
+        }
         model.addAttribute("listMap", listMap);
-
         //商品推荐
         Commodity commodity = new Commodity();
         Page<Commodity> page = new Page<Commodity>(1, 6);//分页查询
@@ -235,7 +257,9 @@ public class IndexController {
     public String orderPage(Model model, String userId) {
         try {
             ReceiptAddress address = addressService.findAddressByUserId(userId);//个人默认收货地址
+            //List<Express> list = expressService.findList(new Express());//快递列表
             model.addAttribute("address", address);
+            //model.addAttribute("expressList",list);
         } catch (Exception e) {
             e.printStackTrace();
         }

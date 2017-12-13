@@ -4,7 +4,9 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
+import com.thinkgem.jeesite.mother.admin.entity.Express;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
+import com.thinkgem.jeesite.mother.admin.service.ExpressService;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +30,8 @@ import java.util.Map;
 public class CommodityController  extends BaseController {
     @Resource
     private CommodityService commodityService;
+    @Resource
+    private ExpressService expressService;
     //所有调用这个controller都会先调用这个方法
     @ModelAttribute
     private Commodity get(@RequestParam(required = false) String id){
@@ -50,7 +55,9 @@ public class CommodityController  extends BaseController {
     //添加商品页面
     @RequestMapping("from")
     public String from(Commodity commodity,Model model){
+        List<Express> list = expressService.findList(new Express());//快递列表
         model.addAttribute("commodity",commodity);
+        model.addAttribute("expressList",list);
         return "mqds/admin/commodity/from";
     }
 

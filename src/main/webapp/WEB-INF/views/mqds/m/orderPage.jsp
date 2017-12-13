@@ -13,6 +13,7 @@
             width: 100%;
             height: 100%;
         }
+
         .buy-img-list {
             height: 125px;
         }
@@ -72,19 +73,20 @@
             font-size: 14px;
         }
 
-        .commodity-name{
+        .commodity-name {
             font-size: 16px;
             color: #5d5959;
             text-align: left;
-            word-break:break-all;
-            display:-webkit-box;
-            -webkit-line-clamp:2;
-            -webkit-box-orient:vertical;
-            overflow:hidden;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
             font-weight: bold;
             letter-spacing: 1px;
         }
-        .commodity-money{
+
+        .commodity-money {
             display: inline-block;
             color: red;
             text-align: right;
@@ -93,12 +95,18 @@
             right: 20px;
             bottom: 10px;
         }
-        .no-location{
+
+        .no-location {
             text-align: center;
             padding-top: 5%;
         }
-        .no-location i{
+
+        .no-location i {
             left: 20%;
+        }
+
+        .am-table-bordered {
+            font-size: 12px;
         }
     </style>
 </head>
@@ -150,36 +158,193 @@
         </ul>
     </div>
 </div>
+<!--底部弹出快递选择-->
+<%--<div class="am-modal-actions" id="open-bottom-model">
+    <div class="bottom-model">
+        <table class="am-table am-table-bordered">
+            <tr>
+                <th>快递名称</th>
+                <th>省内首重(kg/元)</th>
+                <th>省内递增(kg/元)</th>
+                <th>省外首重(kg/元)</th>
+                <th>省外递增(kg/元)</th>
+            </tr>
+            <tbody>
+                <c:forEach var="itme" items="${expressList}">
+                    <tr>
+                        <td>${itme.expressName}</td>
+                        <td>${itme.expressProvinceFirst}</td>
+                        <td>${itme.expressProvinceIncreasing}</td>
+                        <td>${itme.expressOutsideFirst}</td>
+                        <td>${itme.expressOutsideIncreasing}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>--%>
 <script>
     $(document).ready(function () {
-        var commodityPrice = 0;//单价
-        var imags = '${param.imags}';//购物车点击过来图片
-        var carPrice = '${param.commodityPrice}';//商品单价
-        var buyCommodityId = '${param.buyCommodityId}';//商品Id
-        var buyNumber = '${param.buyNumber}'//商品购买数量
-        var freight = '${param.freight}';//商品运费
-        var commodityNames = '${param.commodityNames}';//商品名称
-        if (imags != '' && imags != null) {//显示购物车提交过来的购物列表
-            var imags = imags.split(',');
-            var carPrice = carPrice.split(',');
-            var buyCommodityId = buyCommodityId.split(',');
-            var buyNumber = buyNumber.split(',');
-            var freight = freight.split(',');
-            var commodityNames = commodityNames.split('~');
-            var str = "";
-            for (var i = 1; i < imags.length; i++) {//最多显示三个商品的图片
-                str += "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId=" + buyCommodityId[i] + "'>";
-                str += "<img src=" + imags[i] + "></a></li>"
-                str += "<li style='width: 55%'><p class='commodity-name'>" + commodityNames[i] + "</p>";
-                str += "<span class='commodity-money'>￥" + carPrice[i] + "</span></li></ul></li>";
-                str += '<li class="pading-10">运费:<span class="freight-money">' + freight[i] + '元</span></li>'
-                str += '<li class="pading-10">购买数量:<span class="freight-money">' +buyNumber[i] + '</span></li>'
+        if ('${param.nowBuy}' != "") {//如果立即购买
+            var commodityNumber = 0;//立即购买-》商品库存
+            $(".buy-sum-number").hide();
+            $.post("${ctx}/m/commodityById?commodityId=${param.commodityId}", function (ret) {
+                if (ret.code == "0") {
+                    commodityNumber = ret.data.commodityNumber;
+                    subData.commodityId = ret.data.id;
+                    subData.commodityPrice = ret.data.commodityPice;
+                    var img = ret.data.commodityImager;
+                    var weight = ret.data.weight;//商品重量
+                    var expressProvinceFirst, expressProvinceIncreasing;//首重-递增
+                    if ('${address.province}' == "贵州省") {//省内
+                        expressProvinceFirst = ret.express.expressProvinceFirst;//省内首重
+                        expressProvinceIncreasing = ret.express.expressProvinceIncreasing;//省内递增
+                    } else {
+                        expressProvinceFirst = ret.express.expressOutsideFirst;//省外首重
+                        expressProvinceIncreasing = ret.express.expressOutsideIncreasing;//省外递增
+                    }
+                    var express, expressStr;
+                    if (ret.data.freeShipping == "1") {//是否包邮1包0不包
+                        express = 0.00;
+                        expressStr = "包邮";
+                    } else {
+                        express = expressAddPrice(weight, expressProvinceFirst, expressProvinceIncreasing);//计算运费
+                        expressStr = express + "元";
+                    }
+                    if (img != null && img != "" && img != undefined) {//拼接显示商品信息
+                        var imgSrc = img.split("|")
+                        var str = "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId='" + ret.data.id + ">";
+                        str += "<img src=" + imgSrc[1] + "></a></li>"
+                        str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + ret.data.commodityName + ret.data.commodityName + ret.data.commodityName + ret.data.commodityName + "</p>";
+                        str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
+                        str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '快递</span></li>'//快递
+                        str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
+                        str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
+                        str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
+                        str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul> </li>';
+                        $(".am-list-border").append(str);
+                    }
+                    commodityPrice = parseFloat(ret.data.commodityPice).toFixed(2);//商品单价
+                    $("#payMoney").html(parseFloat(parseInt($("#buyNumber").val()) * (parseFloat(commodityPrice) + parseInt(express))).toFixed(2));//显示实付金额
+                    //减少商品数量
+                    $(".remove-number").on("click", function () {
+                        var buyNumber = $("#buyNumber").val();
+                        var reduceWeight = (parseInt(buyNumber) + 1) * weight;
+                        if (buyNumber <= 1) {
+                            buyNumber = 1;
+                        } else {
+                            buyNumber--;
+                        }
+                        $("#buyNumber").val(buyNumber);
+                        var thisWeight = parseInt(expressAddPrice(reduceWeight, expressProvinceFirst, expressProvinceIncreasing));
+                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
+                    })
+                    //添加商品数量
+                    $(".add-number").on("click", function () {
+                        var buyNumber = $("#buyNumber").val();
+                        var addWeight = (parseInt(buyNumber) + 1) * weight;
+                        if (parseInt(buyNumber) >= parseInt(commodityNumber)) {//如果加入购物车的数量大于库存
+                            buyNumber = commodityNumber;
+                        } else {
+                            if (buyNumber >= 99) { //最高购买数不能大于你200
+                                buyNumber = 99;
+                            } else {
+                                buyNumber++;
+                            }
+                        }
+                        $("#buyNumber").val(buyNumber);
+                        var thisWeight = 0;
+                        if (expressStr != "包邮") {
+                            thisWeight = parseInt(expressAddPrice(addWeight, expressProvinceFirst, expressProvinceIncreasing));
+                            $(".this-express").html(parseFloat(thisWeight).toFixed(2));
+                        }
+                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
+
+                    })
+                    //输入商品数量
+                    $("#buyNumber").on("keyup", function () {
+                        var buyNumber = $(this).val();
+                        if (!parseInt(buyNumber)) {
+                            buyNumber = 1;
+                        }
+                        if (buyNumber >= commodityNumber) {//如果加入购物车的数量大于库存
+                            buyNumber = commodityNumber;
+                        } else if (buyNumber >= 99) {
+                            buyNumber = 99
+                        }
+                        $(this).val(buyNumber);
+                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
+                    })
+                    //选择快递
+                    $(".select-express").on("click", function () {
+                        $("#open-bottom-model").modal('open');
+                    })
+                }
+            })
+        } else {//购物车
+            var commodityPrice = 0;//单价
+            var imags = '${param.imags}';//购物车点击过来图片
+            var carPrice = '${param.commodityPrice}';//商品单价
+            var buyCommodityId = '${param.buyCommodityId}';//商品Id
+            var buyNumber = '${param.buyNumber}'//商品购买数量
+            var freight = '${param.freight}';//商品运费
+            var commodityNames = '${param.commodityNames}';//商品名称
+            var expressName = '${param.expressName}';//快递名称
+            var expressProvinceFirst = '${param.expressProvinceFirst}';//省内首重
+            var expressProvinceIncreasing = '${param.expressProvinceIncreasing}';//省内递增
+            var expressOutsideFirst = '${param.expressOutsideFirst}';//省外首重
+            var expressOutsideIncreasing = '${param.expressOutsideIncreasing}';//省外递增
+            var weight = '${param.weight}';//商品重量
+            var payMoney = '${param.money}';
+            var freeShipping = '${param.freeShipping}';//是否包邮 1包0不包
+            if (imags != '' && imags != null) {//显示购物车提交过来的购物列表
+                var imags = imags.split(',');
+                var carPrice = carPrice.split(',');
+                var buyCommodityId = buyCommodityId.split(',');
+                var buyNumber = buyNumber.split(',');
+                var freight = freight.split(',');
+                var commodityNames = commodityNames.split('~');
+                var expressName = expressName.split(',');//快递名称
+                var weight = weight.split(',');
+                var expressProvinceFirst = expressProvinceFirst.split(',');//省内首重
+                var expressProvinceIncreasing = expressProvinceIncreasing.split(',');//省内递增
+                var expressOutsideFirst = expressOutsideFirst.split(',');//省外首重
+                var expressOutsideIncreasing = expressOutsideIncreasing.split(',');//省外递增
+                var freeShipping = freeShipping.split(",");//是否包邮
+                var str = "";
+                for (var i = 1; i < imags.length; i++) {//最多显示三个商品的图片
+                    var expressFirst, expressIncreasing, thisWeight, express = 0.00, expressStr;
+                    thisWeight = weight[i] * buyNumber[i];
+                    if (i == 1) {//第一次把原计算的金额清空
+                        payMoney = 0;
+                    }
+                    if ('${address.province}' == "贵州省") {//省内
+                        expressFirst = expressProvinceFirst[i];//省内首重
+                        expressIncreasing = expressProvinceIncreasing[i];//省内递增
+                    } else {
+                        expressFirst = expressOutsideFirst[i];//省外首重
+                        expressIncreasing = expressOutsideIncreasing[i];//省外递增
+                    }
+                    if (freeShipping[i] == "0") {
+                        express = expressAddPrice(thisWeight, expressFirst, expressIncreasing);//计算运费
+                        expressStr = express + "元";
+                    } else {
+                        expressStr = "包邮";
+                    }
+                    payMoney = buyNumber[i] * carPrice[i] + parseInt(express) + payMoney;
+                    str += "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId=" + buyCommodityId[i] + "'>";
+                    str += "<img src=" + imags[i] + "></a></li>"
+                    str += "<li style='width: 55%'><p class='commodity-name'>" + commodityNames[i] + "</p>";
+                    str += "<span class='commodity-money'>￥" + carPrice[i] + "</span></li></ul></li>";
+                    str += '<li class="pading-10">快递:<span class="freight-money select-express">' + expressName[i] + '快递</span></li>'//快递
+                    str += '<li class="pading-10">运费:<span class="freight-money">' + expressStr + '</span></li>'
+                    str += '<li class="pading-10">购买数量:<span class="freight-money">' + buyNumber[i] + '</span></li>'
+                }
             }
+            $(".am-list-border").append(str);
+            $("#payMoney").html(payMoney);//实付金额
+            $("#sumNumber").html('${param.number}')//共件数
         }
-        $(".am-list-border").append(str);
-        $("#payMoney").html('${param.money}');//实付金额
-        $("#sumNumber").html('${param.number}')//共件数
-        var commodityNumber = 0;//立即购买-》商品库存
         var subData = {
             commodityId: '${param.buyCommodityId}',//商品id 多个用","分割
             buyNumber: '${param.buyNumber}',//每个商品购买的数量多个用","分割
@@ -207,78 +372,26 @@
                 }
             });
         })
-        if ('${param.nowBuy}' != "") {//如果立即购买
-            $(".buy-sum-number").hide();
-            $.post("${ctx}/m/commodityById?commodityId=${param.commodityId}", function (ret) {
-                if (ret.code == "0") {
-                    commodityNumber = ret.data.commodityNumber;
-                    subData.commodityId = ret.data.id;
-                    subData.commodityPrice = ret.data.commodityPice;
-                    var img = ret.data.commodityImager;
-                    if (img != null && img != "" && img != undefined) {//拼接显示商品信息
-                        var imgSrc = img.split("|")
-                        var str = "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId='" + ret.data.id + ">";
-                        str += "<img src=" + imgSrc[1] + "></a></li>"
-                        str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + ret.data.commodityName +ret.data.commodityName +ret.data.commodityName +ret.data.commodityName +"</p>";
-                        str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
-                        str += '<li class="pading-10">运费:<span class="freight-money">' + ret.data.freight + '元</span></li>'
-                        str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
-                        str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
-                        str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul> </li>';
-                        $(".am-list-border").append(str);
-                    }
-                    commodityPrice = parseFloat(ret.data.commodityPice + ret.data.freight, 2).toFixed(2);//商品单价
-                    $("#payMoney").html(parseInt($("#buyNumber").val()) * commodityPrice);//显示实付金额
-                    //减少商品数量
-                    $(".remove-number").on("click", function () {
-                        var buyNumber = $("#buyNumber").val();
-                        if (buyNumber <= 1) {
-                            buyNumber = 1;
-                        } else {
-                            buyNumber--;
-                        }
-                        $("#buyNumber").val(buyNumber);
-                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
-                    })
-                    //添加商品数量
-                    $(".add-number").on("click", function () {
-                        var buyNumber = $("#buyNumber").val();
-                        if (parseInt(buyNumber) >= parseInt(commodityNumber)) {//如果加入购物车的数量大于库存
-                            buyNumber = commodityNumber;
-                        } else {
-                            if (buyNumber >= 99) { //最高购买数不能大于你200
-                                buyNumber = 99;
-                            } else {
-                                buyNumber++;
-                            }
-                        }
-                        $("#buyNumber").val(buyNumber);
-                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice).toFixed(2));
-
-                    })
-                    //输入商品数量
-                    $("#buyNumber").on("keyup", function () {
-                        var buyNumber = $(this).val();
-                        if (!parseInt(buyNumber)) {
-                            buyNumber = 1;
-                        }
-                        if (buyNumber >= commodityNumber) {//如果加入购物车的数量大于库存
-                            buyNumber = commodityNumber;
-                        } else if (buyNumber >= 99) {
-                            buyNumber = 99
-                        }
-                        $(this).val(buyNumber);
-                        $("#payMoney").html(parseFloat(buyNumber * commodityFreight).toFixed(2));
-                    })
-                }
-            })
-        }
 
         //选择地址
         $(".selectAddress").on("click", function () {
             window.location.href = "${ctx}/m/addressList?userId=${sessionScope.mUser.id}&isOrderPage=yes&addressId=" + $(this).find("input").val();
         })
     })
+    /**
+     * 运费计算+总金额运算
+     * @param weight 商品重量
+     * @param expressFirst 首重
+     * @param expressIncreasing 递增
+     */
+    function expressAddPrice(weight, expressFirst, expressIncreasing) {
+        if (weight <= 1) {//如果小于等于首重
+            return expressFirst
+        } else {
+            var weightProvinceIncreasing = parseInt(weight);
+            return (parseFloat(parseInt(expressFirst) + (expressIncreasing * parseInt(weightProvinceIncreasing))).toFixed(2))
+        }
+    }
 </script>
 </body>
 </html>

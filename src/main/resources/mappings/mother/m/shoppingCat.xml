@@ -53,11 +53,21 @@
         commodity_price as commodityPice,
         cat.commodity_number as shoppingNumber,
         com.commodity_number as commodityNumber,
-         com.freight as freight
+        com.free_shipping as freeShipping,
+        com.freight as freight,
+        com.weight as weight,
+        ex.id as expressId,
+        ex.express_name as expressName,
+        ex.express_province_first as expressProvinceFirst,
+        ex.express_province_increasing as expressProvinceIncreasing,
+        ex.express_outside_first as expressOutsideFirst,
+        ex.express_outside_increasing as expressOutsideIncreasing
         FROM
         mq_shopping_cat cat
         LEFT JOIN mq_commodity com ON
         cat.commodity_id = com.id
+        LEFT JOIN mq_express ex ON
+        com.default_express = ex.id
         WHERE
         cat.del_flag = '0'
         AND user_id = #{userId}
