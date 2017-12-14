@@ -60,7 +60,7 @@ public class OrderController {
                     map.put("consigneePhone", o.getConsigneePhone());
                     map.put("consignee", o.getConsignee());
                     map.put("commodityNumber", o.getCommodityNumber());
-                    map.put("commodityPrice", o.getCommodityPrice());
+                    map.put("commodityPrice", o.getCommodityPrice().toString());
                     map.put("orderNumber", o.getOrderNumber());
                     map.put("createDate", o.getCreateDate());
                     map.put("orderState", o.getOrderState());

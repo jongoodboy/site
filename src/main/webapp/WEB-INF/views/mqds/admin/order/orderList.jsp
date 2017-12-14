@@ -81,7 +81,7 @@
             <td>${tpl.consignee}</td>
             <td>${tpl.consigneePhone}</td>
             <td>${tpl.address}</td>
-            <td>${fns:getDictLabel(tpl.express, 'express_type', '')}</td>
+            <td>${tpl.express}</td>
             <td>${tpl.expressNumber}</td>
             <td><fmt:formatDate value="${tpl.deliveryTime}" pattern="yyyy-mm-dd HH:mm:ss"/></td>
             <td>${tpl.deliveryPeolpe}</td>
