@@ -33,7 +33,9 @@
         .am-list-border > li {
             border-bottom: 1px solid #eee;
         }
-
+        .am-list-border{
+            margin-bottom: 50px;
+        }
         li.selectAddress {
             padding-left: 30px !important;
             height: 80px;
@@ -219,6 +221,7 @@
                         str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
                         str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '快递</span></li>'//快递
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
+                        str += '<li class="pading-10">重量:<span class="freight-money">' +  ret.data.weight + 'kg</span></li>'
                         str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
                         str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
                         str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul> </li>';
@@ -338,6 +341,7 @@
                     str += "<span class='commodity-money'>￥" + carPrice[i] + "</span></li></ul></li>";
                     str += '<li class="pading-10">快递:<span class="freight-money select-express">' + expressName[i] + '快递</span></li>'//快递
                     str += '<li class="pading-10">运费:<span class="freight-money">' + expressStr + '</span></li>'
+                    str += '<li class="pading-10">重量:<span class="freight-money">' + weight[i] + 'kg</span></li>'
                     str += '<li class="pading-10">购买数量:<span class="freight-money">' + buyNumber[i] + '</span></li>'
                 }
             }
@@ -357,10 +361,10 @@
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
-           /* if (subData.consignee == undefined || subData.consignee == null || subData.consignee == "") {
+            if (subData.consignee == undefined || subData.consignee == null || subData.consignee == "") {
                 loadingShow("请先选择收货人");
                 return;
-            }*/
+            }
             if (('${param.nowBuy}' != "")) {//如果立即购买
                 subData.buyNumber = $("#buyNumber").val();
                 subData.expressName = $(".select-express").html();

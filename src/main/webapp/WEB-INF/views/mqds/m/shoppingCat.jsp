@@ -85,6 +85,11 @@
     .shoppoing-title {
         font-size: 16px;
         color: #5d5959;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
     .am-btn-danger {
@@ -129,11 +134,12 @@
                     <div class="am-list-main am-u-sm-7 shopping-am-list-main ">
                         <div class="am-list-item-text">
                             <a href="${ctx}/m/commodityDetail?commodityId=${map.id }" style="color: #333">
-                                <span class="shoppoing-title">${map.commodityName}</span><br/>
+                                <span class="shoppoing-title">${map.commodityName}</span>
                             </a>
+                            <span style="color: #e65c5c">￥${map.commodityPice}</span>
+                            <span>重量:${map.weight}kg</span>
                                 <%--  <span>颜色:黑色&nbsp;尺码:40</span>--%>
                             <ul class="nav-menu">
-                                <li class="active">￥${map.commodityPice}</li>
                                 <li style="font-size: 14px">运费:<c:if test="${map.freeShipping == 0}"><span
                                         class="freight-show">${map.freight == null ? 0 : map.freight}</span></c:if>
                                     <c:if test="${map.freeShipping == 1}">包邮</c:if>

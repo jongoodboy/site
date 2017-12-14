@@ -208,7 +208,8 @@
                     <span style="display: inline-block;  width: 100%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
                         ${commodity.commodityName}
                     </span>
-                    <span class="price">￥:${commodity.commodityPice}</span><br>
+                    <span class="price">￥:${commodity.commodityPice}</span>
+                    <span style="display: inline-block;float: right">重量:${commodity.weight}kg</span><br>
                     <span>库存:${commodity.commodityNumber}</span><br>
                     <%--<span>商品编号:5555522</span><br>--%>
                 </li>
