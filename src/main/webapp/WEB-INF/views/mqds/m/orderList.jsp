@@ -176,7 +176,7 @@
                             if (comFreight == 0) {
                                 comFreight = "包邮"
                             }
-                            str += '<span class="cxpress">单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
+                            str += '<span class="cxpress">重量:'+ ret.data[i].shppingList[j].comWeight+'kg&nbsp;&nbsp;&nbsp;单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
                             str += '<span class="cxpress">运费:' + comFreight + '</span>';
                             str += '<span class="cxpress">' + commodityStateSpan + '</span>';
                             /* }*/

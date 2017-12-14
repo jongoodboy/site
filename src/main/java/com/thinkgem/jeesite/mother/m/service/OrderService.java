@@ -83,8 +83,10 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("comPrice", price);//商品的价格
                             commodityMap.put("comImage", com.getCommodityImager());//商品图片
                             commodityMap.put("conFreeShipping", com.getFreeShipping());//是否包邮1包0不包
+                            BigDecimal weight = com.getWeight();
+                            commodityMap.put("comWeight", weight);//是否包邮1包0不包
                             Map<String, Object> expressMap = freightSum(expressService.get(com.getDefaultExpress()),
-                                    com.getWeight(), o.getCommodityNumber(), o.getAddress(), com.getFreeShipping());
+                                    weight, o.getCommodityNumber(), o.getAddress(), com.getFreeShipping());
                             BigDecimal freight = (BigDecimal) expressMap.get("freight");//商品总运费
                             commodityMap.put("comFreight", freight);//商品总运费
                             commodityMap.put("comExpress", expressMap.get("express"));//快递公司
