@@ -2,16 +2,18 @@ package com.thinkgem.jeesite.mother.admin.entity;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
+import java.math.BigDecimal;
+
 /**
  * Created by wangJH on 2017/12/13.
  * 快递实体
  */
 public class Express extends DataEntity<Express> {
     private String expressName;//快递名称
-    private String expressProvinceFirst;//省内首重
-    private String expressProvinceIncreasing;//省内递增
-    private String expressOutsideFirst;//省外首重
-    private String expressOutsideIncreasing;//省外递增
+    private BigDecimal expressProvinceFirst;//省内首重
+    private BigDecimal expressProvinceIncreasing;//省内递增
+    private BigDecimal expressOutsideFirst;//省外首重
+    private BigDecimal expressOutsideIncreasing;//省外递增
 
     public String getExpressName() {
         return expressName;
@@ -21,35 +23,35 @@ public class Express extends DataEntity<Express> {
         this.expressName = expressName;
     }
 
-    public String getExpressProvinceFirst() {
+    public BigDecimal getExpressProvinceFirst() {
         return expressProvinceFirst;
     }
 
-    public void setExpressProvinceFirst(String expressProvinceFirst) {
+    public void setExpressProvinceFirst(BigDecimal expressProvinceFirst) {
         this.expressProvinceFirst = expressProvinceFirst;
     }
 
-    public String getExpressProvinceIncreasing() {
+    public BigDecimal getExpressProvinceIncreasing() {
         return expressProvinceIncreasing;
     }
 
-    public void setExpressProvinceIncreasing(String expressProvinceIncreasing) {
+    public void setExpressProvinceIncreasing(BigDecimal expressProvinceIncreasing) {
         this.expressProvinceIncreasing = expressProvinceIncreasing;
     }
 
-    public String getExpressOutsideFirst() {
+    public BigDecimal getExpressOutsideFirst() {
         return expressOutsideFirst;
     }
 
-    public void setExpressOutsideFirst(String expressOutsideFirst) {
+    public void setExpressOutsideFirst(BigDecimal expressOutsideFirst) {
         this.expressOutsideFirst = expressOutsideFirst;
     }
 
-    public String getExpressOutsideIncreasing() {
+    public BigDecimal getExpressOutsideIncreasing() {
         return expressOutsideIncreasing;
     }
 
-    public void setExpressOutsideIncreasing(String expressOutsideIncreasing) {
+    public void setExpressOutsideIncreasing(BigDecimal expressOutsideIncreasing) {
         this.expressOutsideIncreasing = expressOutsideIncreasing;
     }
 }

@@ -3,8 +3,11 @@ package com.thinkgem.jeesite.mother.m.service;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
+import com.thinkgem.jeesite.mother.admin.dao.ExpressDao;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
+import com.thinkgem.jeesite.mother.admin.entity.Express;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
+import com.thinkgem.jeesite.mother.admin.service.ExpressService;
 import com.thinkgem.jeesite.mother.m.dao.MuserDao;
 import com.thinkgem.jeesite.mother.m.dao.OrderDao;
 import com.thinkgem.jeesite.mother.m.dao.ProfitDao;
@@ -38,6 +41,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
     MuserDao muserDao;
     @Resource
     ProfitDao profitDao;
+    @Resource
+    ExpressService expressService;
 
     public int addList(List<Order> list) {
         return orderDao.addList(list);
@@ -57,7 +62,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                     if (listOrder != null && listOrder.size() > 0) {
                         Map<String, Object> map1 = new HashedMap();
                         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();//返回页面订单对应所有商品列表
-                        float sumOrderMoney = 0;//每个订单总金额
+                        BigDecimal sumOrderMoney = new BigDecimal(0);//每个订单总金额
                         Integer commodityIndex = 0;//每个订单对应的商品总数量
                         String orderState = "";//订单状态
                         for (int j = 0; j < listOrder.size(); j++) {
@@ -72,15 +77,21 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("comState", o.getOrderState());//每一个商品的订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
                             commodityMap.put("comId", com.getId());//商品ID
                             commodityMap.put("orderId", o.getId());//订单ID
-                            commodityMap.put("comFreight", com.getFreight());//商品运费
                             commodityMap.put("comNumber", o.getCommodityNumber());//订单对应的购买商品的数量
                             commodityMap.put("comCompany", dic.getDictLabel(com.getCommodityCompany().toString(), "commodity_company", ""));//商品单位(1.个2.条3.件4.根 -->)
-                            commodityMap.put("comPrice", o.getCommodityPrice());//生成订单时商品的价格
+                            BigDecimal price = o.getCommodityPrice();
+                            commodityMap.put("comPrice", price);//商品的价格
                             commodityMap.put("comImage", com.getCommodityImager());//商品图片
-                            commodityMap.put("comExpress", dic.getDictLabel(o.getExpress(), "express_type", ""));//快递公司
+                            commodityMap.put("conFreeShipping", com.getFreeShipping());//是否包邮1包0不包
+                            Map<String, Object> expressMap = freightSum(expressService.get(com.getDefaultExpress()),
+                                    com.getWeight(), o.getCommodityNumber(), o.getAddress(), com.getFreeShipping());
+                            BigDecimal freight = (BigDecimal) expressMap.get("freight");//商品总运费
+                            commodityMap.put("comFreight", freight);//商品总运费
+                            commodityMap.put("comExpress", expressMap.get("express"));//快递公司
                             commodityMap.put("comExpressNumber", o.getExpressNumber());//快递号
                             list.add(commodityMap);//添加每个订单对应的商品
-                            sumOrderMoney += (Float.parseFloat(o.getCommodityPrice()) * o.getCommodityNumber());
+                            //sumOrderMoney += (Float.parseFloat(o.getCommodityPrice()) * o.getCommodityNumber());//原订单多条商品总金额统计
+                            sumOrderMoney = sumOrderMoney.add(price.multiply(BigDecimal.valueOf(o.getCommodityNumber()))).add(freight);//订单总价//每个订单商品的总运费
                         }
                         map1.put("orderState", orderState);//订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
                         map1.put("commodityIndex", commodityIndex);//订单对应的商品量
@@ -95,6 +106,43 @@ public class OrderService extends CrudService<OrderDao, Order> {
             e.printStackTrace();
         }
         return returnListMap;
+    }
+
+    //计算运费
+
+    /**
+     * @param express        快递信息
+     * @param weight         商品重量
+     * @param shoppingNumber 购买商品的数量
+     * @param address        收货地址
+     * @param freeShipping   是否包邮1包0不包
+     * @return
+     */
+    public Map<String, Object> freightSum(Express express, BigDecimal weight, int shoppingNumber, String address, int freeShipping) {
+        Map<String, Object> retMap = new HashedMap();
+        BigDecimal expressProvinceFirst, expressProvinceIncreasing;
+        retMap.put("express", express.getExpressName());
+        if (freeShipping == 1) {//包邮
+            retMap.put("freight", new BigDecimal(0));
+            return retMap;
+        } else {//不包邮
+            String addressStr = address.substring(0, 3);//截取前三个
+            if (addressStr.equals("贵州省")) {
+                expressProvinceFirst = express.getExpressProvinceFirst();//省内首重
+                expressProvinceIncreasing = express.getExpressOutsideIncreasing();//省内递增
+            } else {
+                expressProvinceFirst = express.getExpressOutsideFirst();//省外首重
+                expressProvinceIncreasing = express.getExpressOutsideIncreasing();//省外递增
+            }
+            double d = weight.doubleValue() * shoppingNumber;//总重量
+            if (d <= 1.0) {//1gk以内
+                retMap.put("freight", expressProvinceFirst);
+            } else if (d > 1) {//大于1gk
+                int y = (int) d;
+                retMap.put("freight", expressProvinceFirst.add(BigDecimal.valueOf(expressProvinceIncreasing.intValue() * y)));//首重加上超出的部份每超出1gk+递增
+            }
+            return retMap;
+        }
     }
 
     //订单详情
@@ -211,8 +259,9 @@ public class OrderService extends CrudService<OrderDao, Order> {
     public int updateRefund(Map<String, Object> map) {
         return orderDao.updateRefund(map);
     }
+
     //确认收货
-    public int confirmReceipt(Map<String,Object> map){
+    public int confirmReceipt(Map<String, Object> map) {
         return orderDao.updateOrderState(map);
     }
 }

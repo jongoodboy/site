@@ -352,16 +352,18 @@
             address: '${address.province}' + '${address.city}' + '${address.county}' + '${address.address}',//收货地址
             userId: '${sessionScope.mUser.id}', //个人Id
             consignee: '${address.consignee}',
-            consigneePhone: '${address.consigneePhone}'
+            consigneePhone: '${address.consigneePhone}',
+            expressName: '${param.expressName}'//快递名称多个用","分割
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
-            if (subData.consignee == undefined || subData.consignee == null || subData.consignee == "") {
+           /* if (subData.consignee == undefined || subData.consignee == null || subData.consignee == "") {
                 loadingShow("请先选择收货人");
                 return;
-            }
+            }*/
             if (('${param.nowBuy}' != "")) {//如果立即购买
                 subData.buyNumber = $("#buyNumber").val();
+                subData.expressName = $(".select-express").html();
             }
             $.post("${ctx}/m/saveOrder", subData, function (data) {
                 /* loadingShow()*/

@@ -72,7 +72,8 @@
         commodity_price,
         create_date,
         del_flag,
-        share_code
+        share_code,
+        express
         )
         VALUES
         <foreach collection="list" item="itme" separator=",">
@@ -89,7 +90,8 @@
             #{itme.commodityPrice},
             #{itme.createDate},
             #{itme.delFlag},
-            #{itme.shareCode}
+            #{itme.shareCode},
+            #{itme.express}
             )
         </foreach>
 

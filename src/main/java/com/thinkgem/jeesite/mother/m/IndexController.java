@@ -235,7 +235,7 @@ public class IndexController {
                 listMap.get(i).put("freight", expressProvinceFirst);
             } else if (d > 1) {//大于1gk
                 int y = (int) d;
-                 listMap.get(i).put("freight", expressProvinceFirst.add(BigDecimal.valueOf(y * expressProvinceIncreasing.intValue())));//首重加上超出的部份每超出1gk+递增
+                listMap.get(i).put("freight", expressProvinceFirst.add(BigDecimal.valueOf(y * expressProvinceIncreasing.intValue())));//首重加上超出的部份每超出1gk+递增
             }
         }
         model.addAttribute("listMap", listMap);
@@ -338,7 +338,8 @@ public class IndexController {
     @RequestMapping("/saveOrder")
     @ResponseBody
     public Map<String, Object> saveOrder(HttpServletRequest request, String commodityId, String buyNumber,
-                                         String commodityPrice, String address, String consignee, String consigneePhone, String userId) {
+                                         String commodityPrice, String address,
+                                         String consignee, String consigneePhone, String userId, String expressName) {
         List<Order> list = new ArrayList<Order>();
         Map<String, Object> returnMap = new HashedMap();
         Map<String, Object> map = new HashedMap();
@@ -349,6 +350,7 @@ public class IndexController {
         String[] commodityIdList = commodityId.split(",");//截取每一个商品id
         String[] buyNumberList = buyNumber.split(",");//截取每一个商品id对应购买的数量
         String[] commodityPriceList = commodityPrice.split(",");//截取每一个商品id对应购买的数量
+        String[] expressNameList = expressName.split(",");//截取每一家快递
         List<Object> listt = new ArrayList<Object>();
         for (int i = 1; i < commodityIdList.length; i++) {//购物车购买
             Order order = new Order();
@@ -357,12 +359,14 @@ public class IndexController {
             order.setCommodityId(commodityIdList[i]);//设置商品id
             listt.add(commodityIdList[i]);//用于清空购物车
             order.setCommodityNumber(Integer.parseInt(buyNumberList[i]));//设置商品购买的数量
-            order.setCommodityPrice(commodityPriceList[i]);//设置商品购买的单价
+            BigDecimal price = new BigDecimal(commodityPriceList[i]);
+            order.setCommodityPrice(price);//设置商品购买的单价
             order.setOrderState("1");//待付款
             order.setAddress(address);
             order.setConsignee(consignee);
             order.setConsigneePhone(consigneePhone);
             order.setOrderNumber(orderNumber);
+            order.setExpress(expressNameList[i]);
             order.setCreateDate(d);
             order.setShareCode(shareCode);
             list.add(order);//用于生成订单
@@ -374,9 +378,11 @@ public class IndexController {
                 order.setId(IdGen.uuid());//设置id
                 order.setCommodityId(commodityId);//设置商品id
                 order.setCommodityNumber(Integer.parseInt(buyNumber));//设置商品购买的数量
-                order.setCommodityPrice(commodityPrice);//设置商品购买的单价
+                BigDecimal price = new BigDecimal(commodityPrice);
+                order.setCommodityPrice(price);//设置商品购买的单价
                 order.setOrderState("1");//待付款
                 order.setAddress(address);
+                order.setExpress(expressName);
                 order.setConsignee(consignee);
                 order.setConsigneePhone(consigneePhone);
                 order.setOrderNumber(orderNumber);

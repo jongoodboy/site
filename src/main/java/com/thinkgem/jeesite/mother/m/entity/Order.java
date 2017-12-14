@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.mother.m.entity;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 import javax.xml.crypto.Data;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ public class Order extends DataEntity<Order> {
     private String consignee;//收货人姓名
     private String consigneePhone;//收货人电话
     private Integer commodityNumber;//商品购买的数量
-    private String commodityPrice;//商品单价
+    private BigDecimal commodityPrice;//商品单价
     private String express;//快递
     private String expressNumber;//快递单号
     private Date deliveryTime;//发货时间
@@ -96,11 +97,11 @@ public class Order extends DataEntity<Order> {
         this.commodityNumber = commodityNumber;
     }
 
-    public String getCommodityPrice() {
+    public BigDecimal getCommodityPrice() {
         return commodityPrice;
     }
 
-    public void setCommodityPrice(String commodityPrice) {
+    public void setCommodityPrice(BigDecimal commodityPrice) {
         this.commodityPrice = commodityPrice;
     }
 

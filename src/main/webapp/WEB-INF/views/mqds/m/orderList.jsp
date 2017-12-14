@@ -127,13 +127,12 @@
                                 gopay = "退款成功";
                                 break;
                         }
-                        var sumMoney = 0;//商品总价格单价+运费
+                        var sumMoney = parseFloat(ret.data[i].sumOrderMoney).toFixed(2);//商品总价格单价+运费
 
                         str += '<span class="orderNumber">订单号:' + ret.data[i].sumOrderNnmber + '</span><span class="order-title">' + orderTitle + '</span></div>';
                         var shoppingListIndex = ret.data[i].shppingList.length;
                         str += '<ul class="one-shopping">';
                         for (var j = 0; j < ret.data[i].shppingList.length; j++) {
-                            sumMoney += ret.data[i].sumOrderMoney + ret.data[i].shppingList[j].comFreight * ret.data[i].shppingList[j].comNumber;
                             var commodityStateSpan = "暂无物流信息";
                             var commodityState = ret.data[i].shppingList[j].comState;//每个商品的发货状态
                             var operation = "";//操作提示
@@ -165,16 +164,22 @@
                             str += '<div><span class="commodityName" onclick="commodityDetail(\'' + ret.data[i].shppingList[j].comId + '\')">' + ret.data[i].shppingList[j].comName + '</span>';
                             str += '<span class="buy-number-order-list">数量:' + ret.data[i].shppingList[j].comNumber + '' + ret.data[i].shppingList[j].comCompany + '</span>';
                             if (operation != "") {
+                                /* alert(ret.data[i].shppingList[j].);*/
                                 var refundMoney = (ret.data[i].shppingList[j].comPrice + ret.data[i].shppingList[j].comFreight) * ret.data[i].shppingList[j].comNumber;//支付总金额
                                 str += '<span class="refund" onclick="operation(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].shppingList[j].orderId + '\',\'' + refundMoney +
                                         '\',' + ret.data[i].shppingList[j].comState + ')">' + operation + '</span>'
 
                             }
                             str += '</div></li>';
-                            if (gopay != "去支付") {//不等于待付款(去支付) 才有物流信息
-                                str += '<span class="cxpress">单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
-                                str += '<span class="cxpress">' + commodityStateSpan + '</span>';
+                            /*  if (gopay != "去支付") {*///不等于待付款(去支付) 才有物流信息
+                            var comFreight = ret.data[i].shppingList[j].comFreight;
+                            if (comFreight == 0) {
+                                comFreight = "包邮"
                             }
+                            str += '<span class="cxpress">单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
+                            str += '<span class="cxpress">运费:' + comFreight + '</span>';
+                            str += '<span class="cxpress">' + commodityStateSpan + '</span>';
+                            /* }*/
                         }
                         str += '</ul>';
                         <!--底部-->
