@@ -238,7 +238,6 @@
         if(desc == undefined){
             desc = $(".commodityMaker").find("p:first").html();
         }
-        alert(desc);
         //url必须是获取的当前的页面路径
         $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
             //微信分享
@@ -414,4 +413,5 @@
     }
 </script>
 </body>
+<script language="javascript" src="http://pbt.zoosnet.net/JS/LsJS.aspx?siteid=PBT64556000&float=1&lng=cn"></script>
 </html>

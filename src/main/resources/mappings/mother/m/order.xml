@@ -141,7 +141,6 @@
         UPDATE mq_order
         SET
         order_state = #{orderState},
-      /*  express = #{express},*/
         express_number = #{expressNumber},
         delivery_time = #{deliveryTime},
         delivery_peolpe = #{deliveryPeolpe}

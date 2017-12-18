@@ -147,7 +147,9 @@
                                     operation = "申请退款";
                                     break;
                                 case "3":
-                                    commodityStateSpan = "物流信息:" + ret.data[i].shppingList[j].comExpress + "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber;
+                                    commodityStateSpan = "物流信息:" + ret.data[i].shppingList[j].comExpress +
+                                            "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber
+                                            + "<span class='show-express' onclick='showExpress(\""+ret.data[i].shppingList[j].comExpressNumber+"\")'>查看物流</span>";
                                     operation = "确认收货"
                                     break;
                                 case "4":
@@ -176,7 +178,7 @@
                             if (comFreight == 0) {
                                 comFreight = "包邮"
                             }
-                            str += '<span class="cxpress">重量:'+ ret.data[i].shppingList[j].comWeight+'kg&nbsp;&nbsp;&nbsp;单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
+                            str += '<span class="cxpress">重量:' + ret.data[i].shppingList[j].comWeight + 'kg&nbsp;&nbsp;&nbsp;单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
                             str += '<span class="cxpress">运费:' + comFreight + '</span>';
                             str += '<span class="cxpress">' + commodityStateSpan + '</span>';
                             /* }*/
@@ -276,6 +278,11 @@
                 })
                 break;
         }
+    }
+
+    //查看物流信息
+    function showExpress(number) {
+        window.location.href = "${ctx}/expressInfo?number=" + number;
     }
 </script>
 </html>
