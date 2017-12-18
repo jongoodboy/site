@@ -101,8 +101,9 @@
         font-size: 16px;
         padding: 0;
     }
-    .area_ctrl{
-        min-height: 40%!important;
+
+    .area_ctrl {
+        min-height: 40% !important;
     }
 </style>
 <body>
@@ -111,12 +112,14 @@
     <c:set value="${param.addressId}" var="addressId"></c:set>  <!--如果是生成订单页面点过来的-->
     <ul class="am-list am-list-static am-list-border">
         <c:forEach var="itme" items="${list}">
-            <li  <c:if test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
-                <span>
+            <li>
+                <div <c:if test="${isOrderPage!= null}"> onclick="selectAddess('${itme.id}')" </c:if>>
+                     <span>
                         收货人:${itme.consignee}
-                </span>
-                <span class="phone-address"> ${itme.consigneePhone}</span>
-                <span>${itme.province}${itme.city}${itme.county}${itme.address}</span>
+                    </span>
+                    <span class="phone-address"> ${itme.consigneePhone}</span>
+                    <span>${itme.province}${itme.city}${itme.county}${itme.address}</span>
+                </div>
                 <hr data-am-widget="divider" style="" class="am-divider am-divider-default"/>
                 <!--不是生成订单页面点击过来-->
                 <label class="am-radio" addressId="${itme.id}">
@@ -154,8 +157,8 @@
                 </li>
                 <li class="am-g am-list-item-dated">
                     <span>所在区域:</span>
-                    <input id="demo2" type="text" name="location" readonly onfocus="this.blur();" placeholder="地区信息" />
-                    <input type="hidden"  id="city">
+                    <input id="demo2" type="text" name="location" readonly onfocus="this.blur();" placeholder="地区信息"/>
+                    <input type="hidden" id="city">
                 </li>
                 <li class="am-g am-list-item-dated">
                     <span>详细地址:</span><input name="receipAddress">
