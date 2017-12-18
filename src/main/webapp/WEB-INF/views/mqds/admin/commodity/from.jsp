@@ -75,7 +75,7 @@
     <div class="control-group">
         <label class="control-label">是否包邮:</label>
         <div class="controls">
-            <form:select path="defaultExpress" class="input-mini">
+            <form:select path="freeShipping" class="input-mini">
                 <form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false" />
             </form:select>
         </div>

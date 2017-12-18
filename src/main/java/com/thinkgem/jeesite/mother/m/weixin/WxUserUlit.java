@@ -76,6 +76,7 @@ public class WxUserUlit {
                 httpsConn1.disconnect();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                return strBackUrl;//首页
             } catch (IOException e) {
                 e.printStackTrace();
             }
