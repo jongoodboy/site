@@ -195,5 +195,8 @@
 .show-express{
     padding: 3px;
     border: 1px solid #ccc;
-    margin-left: 5px;
+    display: inline-block;
+    margin-bottom: 2px;
+    width: 20%;
+    text-align: center;
 }

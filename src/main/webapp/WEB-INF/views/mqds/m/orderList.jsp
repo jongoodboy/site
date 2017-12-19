@@ -144,12 +144,12 @@
                                     commodityStateSpan = "等待付款";
                                     break;
                                 case "2":
-                                    operation = "申请退款";
+                                /*    operation = "申请退款";*/
                                     break;
                                 case "3":
-                                    commodityStateSpan = "物流信息:" + ret.data[i].shppingList[j].comExpress +
+                                    commodityStateSpan = /*"物流信息:" + ret.data[i].shppingList[j].comExpress +
                                             "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber
-                                            + "<span class='show-express' onclick='showExpress(\""+ret.data[i].shppingList[j].comExpressNumber+"\")'>查看物流</span>";
+                                            + */"<span class='show-express' onclick='showExpress(\""+ret.data[i].shppingList[j].comExpressNumber+"\")'>查看物流</span>";
                                     operation = "确认收货"
                                     break;
                                 case "4":
@@ -165,23 +165,20 @@
                             str += '<li><img class="lazy" src="' + img[1] + '" onclick="commodityDetail(\'' + ret.data[i].shppingList[j].comId + '\')"/>';
                             str += '<div><span class="commodityName" onclick="commodityDetail(\'' + ret.data[i].shppingList[j].comId + '\')">' + ret.data[i].shppingList[j].comName + '</span>';
                             str += '<span class="buy-number-order-list">数量:' + ret.data[i].shppingList[j].comNumber + '' + ret.data[i].shppingList[j].comCompany + '</span>';
-                            if (operation != "") {
-                                /* alert(ret.data[i].shppingList[j].);*/
+                            if (operation != "") {//退款申请
                                 var refundMoney = (ret.data[i].shppingList[j].comPrice + ret.data[i].shppingList[j].comFreight) * ret.data[i].shppingList[j].comNumber;//支付总金额
                                 str += '<span class="refund" onclick="operation(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].shppingList[j].orderId + '\',\'' + refundMoney +
                                         '\',' + ret.data[i].shppingList[j].comState + ')">' + operation + '</span>'
 
                             }
                             str += '</div></li>';
-                            /*  if (gopay != "去支付") {*///不等于待付款(去支付) 才有物流信息
                             var comFreight = ret.data[i].shppingList[j].comFreight;
                             if (comFreight == 0) {
                                 comFreight = "包邮"
                             }
-                            str += '<span class="cxpress">重量:' + ret.data[i].shppingList[j].comWeight + 'kg&nbsp;&nbsp;&nbsp;单价:' + ret.data[i].shppingList[j].comPrice + '</span>';
-                            str += '<span class="cxpress">运费:' + comFreight + '</span>';
+                            str += '<span class="cxpress">重量:' + ret.data[i].shppingList[j].comWeight + 'kg&nbsp;&nbsp;&nbsp;单价:￥' + ret.data[i].shppingList[j].comPrice + '</span>';
+                            str += '<span class="cxpress">运费:￥' + comFreight + '</span>';
                             str += '<span class="cxpress">' + commodityStateSpan + '</span>';
-                            /* }*/
                         }
                         str += '</ul>';
                         <!--底部-->

@@ -10,8 +10,12 @@
     $(document).ready(function (e) {
         var t = JSON.parse('${data}');//物流信息
         var str = "";
-        for (var i = 0; i < t.result.list.length; i++) {
-            str += "<li>"  + t.result.list[i].time + t.result.list[i].status + "</li>";
+        if (t.msg == "ok") {
+            for (var i = 0; i < t.result.list.length; i++) {
+                str += "<li>" + t.result.list[i].status + "<br><span class='time'>" + t.result.list[i].time + "</span></li>";
+            }
+        } else {
+            str += "<li>暂无物流信息</li>";
         }
         $("#expressInfo").append(str);
         var h = $(".about4_main ul li:first-child").height() / 2;
@@ -23,7 +27,7 @@
     });
 </script>
 <div class="about4">
-    <div class="about4_ch">物流信息</div>
+    <div class="about4_ch"></div>
     <div class="about4_main">
         <div class="line"></div>
         <ul id="expressInfo">

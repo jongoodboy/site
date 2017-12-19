@@ -59,7 +59,7 @@ a {
 }
 
 body {
-    background: url(../img/bg.png) left top repeat-y;
+/*    background: url(../img/bg.png) left top repeat-y;*/
     padding-bottom: 10%;
 }
 
@@ -103,4 +103,7 @@ body {
 
 .about4_main ul li:last-child {
     margin-bottom: 0px;
+}
+.time{
+    font-size: 20px;
 }

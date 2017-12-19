@@ -229,6 +229,7 @@
     </form>
 </div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<%--<script src="//assets.kf5.com/supportbox/main.js" id="kf5-provide-supportBox" kf5-domain="mqyb.kf5.com"></script>--%>
 <script>
     $(document).ready(function () {
         var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
@@ -411,7 +412,22 @@
         }
 
     }
+    //微聊
+     (function(window,a,b) {
+     window[a] = window[a] || function() {
+     (window[a].a = window[a].a || []).push(arguments)
+     };
+     window[b] = window[b] || function() {
+     (window[b].a = window[b].a || []).push(arguments)
+     };
+     var s=document.createElement("script");
+     s.src="http://jsapi.weiliaokefu.com/Public/dist/js/jsapi.js?v="+Math.round(Math.random()*1000);
+     s.async=true;
+     s.charset="UTF-8";
+     document.getElementsByTagName("head")[0].appendChild(s);
+     })(window,'_FENBOT',"_FENBOT_API");
+     _FENBOT({cid:'15690',type:'0'});
 </script>
+
 </body>
-<script language="javascript" src="http://pbt.zoosnet.net/JS/LsJS.aspx?siteid=PBT64556000&float=1&lng=cn"></script>
 </html>
