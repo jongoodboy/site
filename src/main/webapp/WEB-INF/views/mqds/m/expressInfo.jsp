@@ -8,15 +8,21 @@
 <body>
 <script type="text/javascript">
     $(document).ready(function (e) {
-        var t = JSON.parse('${data}');//物流信息
+        var data = '${data}';
         var str = "";
-        if (t.msg == "ok") {
-            for (var i = 0; i < t.result.list.length; i++) {
-                str += "<li>" + t.result.list[i].status + "<br><span class='time'>" + t.result.list[i].time + "</span></li>";
+        if(data != ""){
+            var t = JSON.parse(data);//物流信息
+            if (t.msg == "ok") {
+                for (var i = 0; i < t.result.list.length; i++) {
+                    str += "<li>" + t.result.list[i].status + "<br><span class='time'>" + t.result.list[i].time + "</span></li>";
+                }
+            } else {
+                str = "<li>暂无物流信息</li>";
             }
-        } else {
-            str += "<li>暂无物流信息</li>";
+        }else{
+            str = "<li>暂无物流信息</li>";
         }
+
         $("#expressInfo").append(str);
         var h = $(".about4_main ul li:first-child").height() / 2;
         <!--第一个li高度的一半-->

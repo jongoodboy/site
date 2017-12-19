@@ -107,10 +107,16 @@
                         <span>待收货</span>
                     </a>
                 </li>
-                <li>
+               <%-- <li>
                     <a href="${ctx}/m/orderList?index=1">
                         <i class="reund"></i>
                         <span>退款</span>
+                    </a>
+                </li>--%>
+                <li>
+                    <a href="${ctx}/m/orderList?index=0">
+                        <i class="complete"></i>
+                        <span>已完成</span>
                     </a>
                 </li>
             </ul>

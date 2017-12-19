@@ -55,6 +55,7 @@
     border-radius: 3px;
     font-size: 14px;
     padding-top: 0;
+    margin-bottom: -15px;
 }
 
 .order-title {
@@ -129,7 +130,7 @@
     right: 10px;
     text-align: center;
     padding: 3px;
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
 }
 .buy-number-order-list{
     position: absolute;
@@ -194,9 +195,12 @@
 }
 .show-express{
     padding: 3px;
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
     display: inline-block;
     margin-bottom: 2px;
     width: 20%;
     text-align: center;
+}
+.boutique{
+    padding: 5px 0px 15px 10px;
 }

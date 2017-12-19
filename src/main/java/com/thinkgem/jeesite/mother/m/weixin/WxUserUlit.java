@@ -81,7 +81,7 @@ public class WxUserUlit {
                 e.printStackTrace();
             }
         }
-        try {
+       /* try {
             Map<String, Object> paramMap = new HashedMap();
             paramMap.put("openId", openId);
             Muser muser = mUserSerivce.findUser(paramMap);
@@ -99,7 +99,7 @@ public class WxUserUlit {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         String personalStores = (String) request.getSession().getAttribute("personalStores");//我要创业
         if (personalStores != null && personalStores != "") {
             return strBackUrl;
