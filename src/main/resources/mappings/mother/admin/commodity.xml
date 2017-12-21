@@ -50,7 +50,7 @@
         WHERE
         1 = 1
         AND del_flag = '0'
-        AND commodity_state NOT IN (1,3)
+        AND commodity_state NOT IN (1,3,5)
         <if test="type != '' and type != null">
             AND commodity_state = #{type}
         </if>
@@ -141,7 +141,7 @@
         WHERE
         id = #{id}
     </update>
-    <!--手机端banner和精品推荐-->
+    <!--手机端banner和精品推荐和首页6个菜单-->
     <select id="findAdvertising" resultType="Commodity" parameterType="java.util.Map">
         SELECT
         <include refid="commodity"/>

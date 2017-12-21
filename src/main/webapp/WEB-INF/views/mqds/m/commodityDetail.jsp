@@ -74,7 +74,9 @@
     article div p {
         width: 100%;
     }
-
+    .am-paragraph-default img{
+        border: none;
+    }
     .comdiyi {
         display: inline-block;
         margin-top: 25px;
@@ -109,13 +111,15 @@
         <div data-am-widget="slider" class="am-slider am-slider-manual am-slider-c4">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    <c:forEach var="img" items="${imgItme}">
+                    <c:forEach var="img" items="${imgItme}" begin="1">
                         <div class="swiper-slide">
                             <img class="lazy" src="${img}">
                         </div>
                     </c:forEach>
                 </div>
+                <div class="swiper-pagination"></div>
             </div>
+
         </div>
 
         <article data-am-widget="paragraph"
@@ -130,13 +134,15 @@
             <div class="commodityMaker">
                 <spen class="commodity-name comdiyi">商品描述</spen>
                 <!--商品描述-->
-                ${itme.commodityMaker}
+
             </div>
             <!-- 评论-->
-            <!--推荐商品-->
-            <spen class="commodity-name for-yuo">为您推荐</spen>
-
         </article>
+        <div style="width: 100%; overflow: hidden">
+            ${itme.commodityMaker}
+        </div>
+        <!--推荐商品-->
+        <spen class="commodity-name for-yuo">为您推荐</spen>
         <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
             data-am-gallery="{  }">
             <c:forEach items="${commodityList}" var="itme">
@@ -332,8 +338,9 @@
         }
     })
     var mySwiper = new Swiper('.swiper-container', {
-        autoplay: 3000,//可选选项，自动滑动
-        autoplayDisableOnInteraction: false
+        /*autoplay: 3000,//可选选项，自动滑动
+        autoplayDisableOnInteraction: false*/
+        pagination : '.swiper-pagination'
     })
     //弹出添加到购物车
     $(".join-this-shopping-cat").on("click", function () {
@@ -401,7 +408,7 @@
         $(this).removeAttr("disabled");//设置为可用
     })
     $(document).ready(function () {
-        $("article p img").attr("style", "");//设置商品描图片
+        $("p img").attr("style", "width:100%");//设置商品描图片
     })
     //立即购买
     function buyNow() {

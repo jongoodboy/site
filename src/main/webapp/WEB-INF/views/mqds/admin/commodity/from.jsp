@@ -39,7 +39,6 @@
             <form:input path="commodityName" htmlEscape="false" maxlength="200" class="input-xxlarge required measure-input"/>
         </div>
     </div>
-
     <div class="control-group">
         <label class="control-label">商品类型:</label>
         <div class="controls">
@@ -113,16 +112,13 @@
             <form:input path="weight" htmlEscape="false" class="required" maxlength="5" type="number"/>KG
         </div>
     </div>
-
-
     <div class="control-group">
         <label class="control-label">商品图片:</label>
         <div class="controls">
-            <sys:ckfinder input="images" type="images" uploadPath="/cms/article" selectMultiple="true"/>
             <input type="hidden" id="images" name="commodityImager" class="required"  value="${commodity.commodityImager}" />
+            <sys:ckfinder input="images" type="images" uploadPath="/cms/article" selectMultiple="true"/>
         </div>
     </div>
-
     <div class="control-group">
         <label class="control-label">商品库存量:</label>
         <div class="controls">

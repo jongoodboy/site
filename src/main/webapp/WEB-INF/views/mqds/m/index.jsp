@@ -8,10 +8,8 @@
 <body>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
-    <c:if test="${param.personalCenter == null}"><!-- 不是从个人中心点击我的店铺-->
     <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
     <button class="but-search"><span class="sousuo"></span></button>
-    </c:if>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
         <li onclick="tapMenu(this,2)">热门</li>
@@ -27,7 +25,11 @@
                 </div>
             </div>
         </div>
-        <div class="am-slider am-slider-default am-slider-carousel boutique" style="height: 290px;">
+        <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
+            data-am-gallery="{  }" id="commodityXisMenu">
+            <!--6个商品菜单-->
+        </ul>
+        <div class="am-slider am-slider-carousel boutique">
             <span class="title">推荐精品</span>
             <div class="swiper-container products">
                 <div class="swiper-wrapper" id="products">
@@ -35,7 +37,6 @@
                 </div>
             </div>
         </div>
-
         <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
             data-am-gallery="{  }" id="commodityLsit">
             <!--商品列表-->
@@ -97,7 +98,8 @@
         pageNo: 0,
         pageSize: 5,
         type: 1,//1推荐2热门
-        commodityName: ""//模糊查询商品名称
+        commodityName: "",//模糊查询商品名称
+        region: null
     }
     var userId = '${sessionScope.mUser.id}';//用户Id
     //页面初始数据
@@ -152,6 +154,27 @@
                     if (productsStr == "") {//如果没有精品图片
                         $('#products').parent().hide();
                     }
+                    var data = ret.listIndexMenuSix;//首页6个菜单商品
+                    var commodityXisMenuStr = "";//首页6个菜单商品列表
+                    for (var i = 0; i < data.length; i++) {//首页6个菜单商品商品列表
+                        var img = "";
+                        if (data[i].commodityImager != null) {
+                            img = data[i].commodityImager.split("|");
+                        }
+                        commodityXisMenuStr += '<li><div class="am-gallery-item">';
+                        commodityXisMenuStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
+                     /*   commodityXisMenuStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';*/
+                        var price = data[i].commodityPice;
+                        if ((/(^[1-9]\d*$)/.test(price))) {
+                            price += ".00"
+                        }
+                      /*  commodityXisMenuStr += '<li class="active">' + price + '</li><li>';
+                        commodityXisMenuStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
+                        commodityXisMenuStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
+                        commodityXisMenuStr += '<h3>' + data[i].commodityName + '</h3><span>￥'+price+'</span></a>';
+                    }
+
+                    $("#commodityXisMenu").append(commodityXisMenuStr);//首页6个菜单商品商品列表
                 }
                 var data = ret.listCommodity;//商品数据
                 var commodityListStr = "";//商品列表
@@ -162,16 +185,15 @@
                     }
                     commodityListStr += '<li><div class="am-gallery-item">';
                     commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
-                    commodityListStr += '<h3>' + data[i].commodityName + '</h3></a>';
-                    commodityListStr += '<div class="am-gallery-desc"><hr/><%--<ul class="nav-menu"><li><i class="my-icon like"></i></li>';
-                    commodityListStr += '<li class="active"><99k</li>--%></ul><ul class="nav-menu"><li><%--<i class="my-icon like"></i>--%>￥</li>';
+                    //commodityListStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';
                     var price = data[i].commodityPice;
                     if ((/(^[1-9]\d*$)/.test(price))) {
                         price += ".00"
                     }
-                    commodityListStr += '<li class="active">' + price + '</li><li>';
-                    commodityListStr += '<a href="javascript:buyNow(\''+data[i].id +'\')">';
-                    commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';
+               /*     commodityListStr += '<li class="active">' + price + '</li><li>';
+                    commodityListStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
+                    commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
+                    commodityListStr += '<h3>' + data[i].commodityName + '</h3><span>￥'+price+'</span></a>';
                 }
                 if (commodityListStr != "") {
                     $("#commodityLsit").append(commodityListStr);//商品列表
@@ -227,7 +249,7 @@
     //立即购买
     function buyNow(commodityId) {
         if (userId != "") {//立即购买页面
-            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId='+commodityId+'&userId='+userId;
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=' + commodityId + '&userId=' + userId;
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/loginPage";
         }

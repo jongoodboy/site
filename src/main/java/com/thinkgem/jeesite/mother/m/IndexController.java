@@ -116,7 +116,8 @@ public class IndexController {
     @RequestMapping("/indexData")
     @ResponseBody
     public Map<String, Object> indexData(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
-                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize, Integer type, String commodityName) {
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                         Integer type, String commodityName) {
         Map<String, Object> returnMap = new HashedMap();
         try {
             Map<String, Object> paramMapIndex = new HashedMap();
@@ -130,13 +131,17 @@ public class IndexController {
                 Map<String, Object> paramMap = new HashedMap();
                 paramMap.put("pageNo", 0);
                 paramMap.put("pageSize", 4);//顶部banner
-                paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+                paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
                 List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
                 returnMap.put("banner", listBanner);//顶部banner
                 paramMap.put("pageSize", 5);//推荐精品
-                paramMap.put("commodityState", 1);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+                paramMap.put("commodityState", 1);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
                 List<Commodity> listProducts = commodityService.findAdvertising(paramMap);
-                returnMap.put("products", listProducts);//精品推荐
+                returnMap.put("products", listProducts);//推荐精品
+                paramMap.put("pageSize", 6);//首页6个菜单
+                paramMap.put("commodityState", 5);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
+                List<Commodity> listIndexMenuSix = commodityService.findAdvertising(paramMap);
+                returnMap.put("listIndexMenuSix", listIndexMenuSix);//首首页6个菜单
             }
             returnMap.put("msg", "数据查询成功");
             returnMap.put("code", "0");
@@ -885,7 +890,7 @@ public class IndexController {
     public Map<String, Object> monthProfitDetail(String userId) {
         Map<String, Object> retMap = new HashedMap();
         try {
-            retMap.put("data", profitService.monthProfitDetail());
+            retMap.put("data", profitService.monthProfitDetail(userId));
             retMap.put("code", "0");
             retMap.put("msg", "查询成功");
         } catch (Exception e) {

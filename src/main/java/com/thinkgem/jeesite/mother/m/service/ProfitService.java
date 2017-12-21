@@ -30,20 +30,21 @@ public class ProfitService extends CrudService<ProfitDao, Profit> {
     }
 
     //本月收益详情
-    public  List<List<Map<String, Object>>> monthProfitDetail() {
-        List<List<Map<String, Object>>> returnList =  new ArrayList<List<Map<String, Object>>>();
+    public List<List<Map<String, Object>>> monthProfitDetail(String userId) {
+        List<List<Map<String, Object>>> returnList = new ArrayList<List<Map<String, Object>>>();
         Date dateProfit = new Date();
-    SimpleDateFormat toMonthFormat = new SimpleDateFormat("yyyy-MM");//当月收益
-    String toMonthProfit = toMonthFormat.format(dateProfit);
-    List<Map<String, Object>> listWeek = DateUtils.getWeek(toMonthProfit);
+        SimpleDateFormat toMonthFormat = new SimpleDateFormat("yyyy-MM");//当月收益
+        String toMonthProfit = toMonthFormat.format(dateProfit);
+        List<Map<String, Object>> listWeek = DateUtils.getWeek(toMonthProfit);
         if (listWeek != null && listWeek.size() > 0) {
-                for (int i = 0; i < listWeek.size(); i++) {
-        Map<String,Object> paramMap = new HashedMap();
-        paramMap.put("stateDate",listWeek.get(i).get("stateDate"));
-        paramMap.put("endDate",listWeek.get(i).get("endDate"));
-        returnList.add(profitDao.monthProfitDetail(paramMap));
-        }
+            for (int i = 0; i < listWeek.size(); i++) {
+                Map<String, Object> paramMap = new HashedMap();
+                paramMap.put("stateDate", listWeek.get(i).get("stateDate"));
+                paramMap.put("endDate", listWeek.get(i).get("endDate"));
+                paramMap.put("userId",userId);
+                returnList.add(profitDao.monthProfitDetail(paramMap));
+            }
         }
         return returnList;
-        }
-        }
+    }
+}
