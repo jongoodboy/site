@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.admin.dao.ClassificationDao">
+    <sql id="classification">
+         id as "id",
+        commodity_classification_name as "commodityClassificationName",
+        commodity_classification_parant as "commodityClassificationParant",
+        commodity_classification_thumbnail as "commodityClassificationThumbnail"
+    </sql>
+    <!--后台特产列表 -->
+    <select id="findList" resultType="Classification" parameterType="Classification">
+        SELECT
+        <include refid="classification"/>
+        FROM
+        mq_commodity_classification
+        WHERE
+        1 = 1
+        <if test="commodityClassificationParant != null and commodityClassificationParant != ''">
+           AND commodity_classification_parant = #{commodityClassificationParant}
+        </if>
+    </select>
+    <!--查看单条记录-->
+    <select id="get" resultType="Classification" parameterType="String">
+        SELECT
+        <include refid="classification"/>
+        FROM
+        mq_commodity_classification
+        WHERE
+        id=#{id}
+    </select>
+    <!--添加特产-->
+    <insert id="insert" parameterType="Classification">
+      INSERT  INTO mq_commodity_classification
+      (
+           id,
+        commodity_classification_name,
+        commodity_classification_parant,
+        commodity_classification_thumbnail
+      )VALUES
+      (
+      #{id},
+      #{commodityClassificationName},
+      #{commodityClassificationParant},
+      #{commodityClassificationThumbnail}
+      )
+    </insert>
+    <!--修改特产-->
+    <update id="update" parameterType="Classification">
+        UPDATE mq_commodity_classification
+        SET
+        commodity_classification_name = #{commodityClassificationName},
+        commodity_classification_parant = #{commodityClassificationParant},
+        commodity_classification_thumbnail = #{commodityClassificationThumbnail}
+        WHERE
+        id = #{id}
+    </update>
+</mapper>

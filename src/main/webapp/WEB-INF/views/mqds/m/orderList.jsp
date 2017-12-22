@@ -58,7 +58,7 @@
 </div>
 </body>
 <script>
-    var userId = '${sessionScope.mUser.id}'; //'';
+    var userId = '30cc98a61ddc427da94d9ba6d2e20bd9'; //'';
     switch ('${param.index}') {
         case '1'://全部
             addClass(".all");

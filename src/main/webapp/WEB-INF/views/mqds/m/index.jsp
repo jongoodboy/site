@@ -8,7 +8,7 @@
 <body>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
-    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
+    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName" onkeyup="findCommdityByName()">
     <button class="but-search"><span class="sousuo"></span></button>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
@@ -53,6 +53,12 @@
                     <span>首页</span>
                 </a>
             </li>
+            <li>
+                <a href="${ctx}/m/classification" class="">
+                    <i class="classification"></i>
+                    <span>分类</span>
+                </a>
+            </li>
             <li onclick="openPage('${ctx}/m/shoppingCat?userId=${sessionScope.mUser.id}')">
                 <a href="javascript:void(0);" class="">
                     <i class="shopping-cat"></i>
@@ -72,6 +78,8 @@
     var phone = '${sessionScope.mUser.phone}';
     var login = '${sessionScope.mUser.login}';
     function openPage(url) {
+        window.location.href = url;
+        return;
         if (login == "no" || login == "") {//如果手动注销过
             window.location.href = "${ctx}/m/loginPage";
             return;
@@ -98,8 +106,7 @@
         pageNo: 0,
         pageSize: 5,
         type: 1,//1推荐2热门
-        commodityName: "",//模糊查询商品名称
-        region: null
+        commodityName: ""//模糊查询商品名称
     }
     var userId = '${sessionScope.mUser.id}';//用户Id
     //页面初始数据
@@ -161,6 +168,7 @@
                         if (data[i].commodityImager != null) {
                             img = data[i].commodityImager.split("|");
                         }
+
                         commodityXisMenuStr += '<li><div class="am-gallery-item">';
                         commodityXisMenuStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
                      /*   commodityXisMenuStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';*/
@@ -183,7 +191,11 @@
                     if (data[i].commodityImager != null) {
                         img = data[i].commodityImager.split("|");
                     }
-                    commodityListStr += '<li><div class="am-gallery-item">';
+                    var style = "";
+                    if (data.length == 1) { //如果只有一个商品
+                        style = "border-bottom: 1px solid #eee;margin-bottom: 8px;border-top: 10px solid #eee;";
+                    }
+                    commodityListStr += '<li style="'+style+'"><div class="am-gallery-item">';
                     commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
                     //commodityListStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';
                     var price = data[i].commodityPice;
@@ -232,8 +244,15 @@
     }
     //模糊搜索商品名称
     $(".but-search").on("click", function () {
+        findCommdityByName();
+
+    })
+    ///模糊搜索商品名称
+    function findCommdityByName() {
         var commodityName = $("#commodityName").val();
         if (commodityName == "") {
+            $(".am-slider").show();
+            $("#commodityXisMenu").show();
             return;
         }
         paramData.commodityName = commodityName;
@@ -243,9 +262,9 @@
         isLoading = true;
         $(".am-slider").hide();
         $("#commodityLsit").html("");//清空
+        $("#commodityXisMenu").hide();
         init();
-
-    })
+    }
     //立即购买
     function buyNow(commodityId) {
         if (userId != "") {//立即购买页面

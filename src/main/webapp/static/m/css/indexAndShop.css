@@ -4,7 +4,7 @@
 }
 
 .img-name {
-    color: #5d5959;
+    color: #000;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -59,7 +59,7 @@
     margin: 0 5%;
     font-size: 16px;
     font-weight: bold;
-    color: #5d5959;
+    color: #000;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -84,7 +84,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: right;
-    display: none;
 }
 
 .products img {
@@ -96,7 +95,7 @@
     margin-right: 3%;
 }
 
-#commodityLsit .am-gallery-item {
+#commodityLsit .am-gallery-item,#commodityXisMenu .am-gallery-item{
     padding: 1px 10px;
 }
 #commodityLsit .am-gallery-item a > h3{
@@ -121,4 +120,15 @@
 }
 .boutique{
     height: 290px;
+}
+.am-gallery, .am-gallery-bordered > li {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 8px;
+}
+.am-gallery, .am-gallery-bordered > li:last-child{
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.am-gallery, .am-gallery-bordered > li:first-child{
+   padding-top: 5px;
 }

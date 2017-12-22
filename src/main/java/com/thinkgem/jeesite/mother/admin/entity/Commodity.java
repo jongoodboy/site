@@ -14,7 +14,7 @@ public class Commodity extends DataEntity<Commodity> {
     private String commodityName;//商品名称
     private Integer commodityType;//商品类型 (1.水果2.服装3.其他 -->)
     private String commodityImager;//商品图片 (多张图片用｜分隔)commodityImager
-    private Integer commodityState;//商品状态(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
+    private Integer commodityState;//商品状态(1.精选商品2.热门商品4.其他状态商品3.会员商品' -->)
     private String commodityMaker;//商品描述
     private BigDecimal commodityPice;//商品单价
     private Integer commodityNumber;//商品库存量
@@ -25,6 +25,24 @@ public class Commodity extends DataEntity<Commodity> {
     private BigDecimal weight;//重量
     private Integer freeShipping;//是否包邮 1包 0不包
     private String defaultExpress;//默认快递
+    private String belongRegion;//所属于区域
+    private String belongSpecialty;//所属特产
+
+    public String getBelongRegion() {
+        return belongRegion;
+    }
+
+    public void setBelongRegion(String belongRegion) {
+        this.belongRegion = belongRegion;
+    }
+
+    public String getBelongSpecialty() {
+        return belongSpecialty;
+    }
+
+    public void setBelongSpecialty(String belongSpecialty) {
+        this.belongSpecialty = belongSpecialty;
+    }
 
     public String getDefaultExpress() {
         return defaultExpress;

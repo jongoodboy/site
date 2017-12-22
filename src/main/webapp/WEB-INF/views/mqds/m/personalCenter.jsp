@@ -178,6 +178,12 @@
                 </a>
             </li>
             <li>
+                <a href="${ctx}/m/classification" class="">
+                    <i class="classification"></i>
+                    <span>分类</span>
+                </a>
+            </li>
+            <li>
                 <a href="${ctx}/m/shoppingCat?userId=${sessionScope.mUser.id}" class="">
                     <i class="shopping-cat"></i>
                     <span>购物车</span>

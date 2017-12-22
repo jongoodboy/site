@@ -20,7 +20,9 @@
         del_flag as "delFlag",
         weight as "weight",
         free_shipping as "freeShipping",
-        default_express as "defaultExpress"
+        default_express as "defaultExpress",
+        belong_region as "belongRegion",
+        belong_specialty as "belongSpecialty"
     </sql>
     <!--后台商品列表 -->
     <select id="findList" resultType="Commodity" parameterType="Commodity">
@@ -92,7 +94,9 @@
         del_flag,
         weight,
         free_shipping,
-        default_express
+        default_express,
+        belong_region,
+        belong_specialty
       )VALUES
       (
       #{id},
@@ -113,7 +117,9 @@
       #{delFlag},
       #{weight},
       #{freeShipping},
-      #{defaultExpress}
+      #{defaultExpress},
+      #{belongRegion},
+      #{belongSpecialty}
       )
     </insert>
     <!--修改商品-->
@@ -137,7 +143,9 @@
         del_flag =  #{delFlag},
         weight = #{weight},
         free_shipping = #{freeShipping},
-        default_express = #{defaultExpress}
+        default_express = #{defaultExpress},
+        belong_region = #{belongRegion},
+        belong_specialty = #{belongSpecialty}
         WHERE
         id = #{id}
     </update>
@@ -149,6 +157,20 @@
         mq_commodity
         WHERE
         commodity_state = #{commodityState}
+        ORDER BY create_date DESC
+        LIMIT #{pageNo},#{pageSize}
+    </select>
+    <!--手机端商品特产-->
+    <select id="specialtyCommodity" resultType="Commodity" parameterType="java.util.Map">
+        SELECT
+        <include refid="commodity"/>
+        FROM
+        mq_commodity
+        WHERE
+        1 = 1
+        AND del_flag = '0'
+        AND commodity_state NOT IN (3)
+        AND belong_specialty = #{belongSpecialty}
         ORDER BY create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>

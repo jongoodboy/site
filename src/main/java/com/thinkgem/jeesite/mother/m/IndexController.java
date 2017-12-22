@@ -2,8 +2,10 @@ package com.thinkgem.jeesite.mother.m;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.IdGen;
+import com.thinkgem.jeesite.mother.admin.entity.Classification;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.entity.Express;
+import com.thinkgem.jeesite.mother.admin.service.ClassificationService;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
 import com.thinkgem.jeesite.mother.admin.service.ExpressService;
 import com.thinkgem.jeesite.mother.m.entity.*;
@@ -58,6 +60,9 @@ public class IndexController {
     //快递
     @Resource
     private ExpressService expressService;
+    //特产分类
+    @Resource
+    private ClassificationService classificationService;
 
     //每次请求都会先进这里
     @ModelAttribute
@@ -702,7 +707,7 @@ public class IndexController {
      */
     @RequestMapping("/bind")
     @ResponseBody
-    public Map<String, Object> bindPhone(String phone, String phoneCode, HttpServletRequest request) {
+    public Map<String, Object> bindPhone(String phone,HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
         try {
             Muser muser = new Muser();
@@ -891,6 +896,74 @@ public class IndexController {
         Map<String, Object> retMap = new HashedMap();
         try {
             retMap.put("data", profitService.monthProfitDetail(userId));
+            retMap.put("code", "0");
+            retMap.put("msg", "查询成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            retMap.put("code", "-1");
+            retMap.put("msg", "查询失败");
+        }
+        return retMap;
+    }
+
+    /**
+     * 手机端首页分类
+     *
+     * @return
+     */
+    @RequestMapping("/classification")
+    public String classification() {
+        return "mqds/m/classification";
+    }
+
+    /**
+     * 手机端首页分类页面数据
+     *
+     * @param value 所属于特产
+     * @return
+     */
+    @RequestMapping("/classificationData")
+    @ResponseBody
+    public Map<String, Object> classificationData(String value) {
+        Map<String, Object> retMap = new HashedMap();
+        Classification classification = new Classification();
+        classification.setCommodityClassificationParant(value);
+        try {
+            retMap.put("data", classificationService.findList(classification));
+            retMap.put("code", "0");
+            retMap.put("msg", "查询成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            retMap.put("code", "-1");
+            retMap.put("msg", "查询失败");
+        }
+        return retMap;
+    }
+    /**
+     * 手机端首页分类
+     *
+     * @return
+     */
+    @RequestMapping("/specialtyPage")
+    public String specialtyPage() {
+        return "mqds/m/specialty";
+    }
+    /**
+     * 手机端首特产页面数据
+     *
+     * @return
+     */
+    @RequestMapping("/specialtyData")
+    @ResponseBody
+    public Map<String, Object> specialtyData(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,String belongSpecialty) {
+        Map<String, Object> retMap = new HashedMap();
+        try {
+            Map<String,Object> paramMap = new HashedMap();
+            paramMap.put("pageNo",pageNo);
+            paramMap.put("pageSize",pageSize);
+            paramMap.put("belongSpecialty",belongSpecialty);
+            retMap.put("data", commodityService.specialtyCommodity(paramMap));
             retMap.put("code", "0");
             retMap.put("msg", "查询成功");
         } catch (Exception e) {

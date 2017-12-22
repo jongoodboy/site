@@ -8,7 +8,7 @@ html, body {
 }
 
 .am-slider-manual {
-    height: 40% !important;
+    height: 217px !important;
 }
 
 .boutique {
@@ -159,6 +159,14 @@ img.lazy {
 
 .am-navbar .am-navbar-nav .active .icon-home {
     background: url("../../img/shouye1.png") center center no-repeat;
+    background-size: 18px 18px;
+}
+.am-navbar .am-navbar-nav .active .classification {
+    background: url("../../img/classification-select.png") center center no-repeat;
+    background-size: 18px 18px;
+}
+.am-navbar .am-navbar-nav .classification {
+    background: url("../../img/classification.png") center center no-repeat;
     background-size: 18px 18px;
 }
 

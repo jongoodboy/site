@@ -35,10 +35,8 @@
 <%--</c:if>--%>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
-    <c:if test="${param.personalCenter == null}"><!-- 不是从个人中心点击我的店铺-->
-    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
+    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName" onkeyup="findCommdityByName()">
     <button class="but-search"><span class="sousuo"></span></button>
-    </c:if>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
         <li onclick="tapMenu(this,2)">热门</li>
@@ -80,6 +78,12 @@
                 <a href="${ctx}/m" class="">
                     <i class="icon-home"></i>
                     <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="${ctx}/m/classification" class="">
+                    <i class="classification"></i>
+                    <span>分类</span>
                 </a>
             </li>
             <li onclick="openPage('${ctx}/m/shoppingCat?userId=${sessionScope.mUser.id}')">
@@ -279,7 +283,7 @@
                         /*  commodityXisMenuStr += '<li class="active">' + price + '</li><li>';
                          commodityXisMenuStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
                          commodityXisMenuStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
-                        commodityXisMenuStr += '<h3>' + data[i].commodityName + '</h3><span>￥'+price+'</span></a>';
+                        commodityXisMenuStr += '<h3>' + data[i].commodityName + '</h3><span>￥' + price + '</span></a>';
                     }
 
                     $("#commodityXisMenu").append(commodityXisMenuStr);//首页6个菜单商品商品列表
@@ -291,7 +295,11 @@
                     if (data[i].commodityImager != null) {
                         img = data[i].commodityImager.split("|");
                     }
-                    commodityListStr += '<li><div class="am-gallery-item">';
+                    var style = "";
+                    if (data.length == 1) { //如果只有一个商品
+                        style = "border-bottom: 1px solid #eee;margin-bottom: 8px;border-top: 10px solid #eee;";
+                    }
+                    commodityListStr += '<li style="' + style + '"><div class="am-gallery-item">';
                     commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
                     //commodityListStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';
                     var price = data[i].commodityPice;
@@ -301,7 +309,7 @@
                     /*     commodityListStr += '<li class="active">' + price + '</li><li>';
                      commodityListStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
                      commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
-                    commodityListStr += '<h3>' + data[i].commodityName + '</h3><span>￥'+price+'</span></a>';
+                    commodityListStr += '<h3>' + data[i].commodityName + '</h3><span>￥' + price + '</span></a>';
                 }
                 if (commodityListStr != "") {
                     $("#commodityLsit").append(commodityListStr);//商品列表
@@ -340,8 +348,15 @@
     }
     //模糊搜索商品名称
     $(".but-search").on("click", function () {
+        findCommdityByName();
+
+    })
+    ///模糊搜索商品名称
+    function findCommdityByName() {
         var commodityName = $("#commodityName").val();
         if (commodityName == "") {
+            $(".am-slider").show();
+            $("#commodityXisMenu").show();
             return;
         }
         paramData.commodityName = commodityName;
@@ -351,9 +366,9 @@
         isLoading = true;
         $(".am-slider").hide();
         $("#commodityLsit").html("");//清空
+        $("#commodityXisMenu").hide();
         init();
-
-    })
+    }
     //立即购买
     function buyNow(commodityId) {
         if (userId != "") {//立即购买页面

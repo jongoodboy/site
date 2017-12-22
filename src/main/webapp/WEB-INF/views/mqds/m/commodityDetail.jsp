@@ -183,6 +183,12 @@
                     <span>首页</span>
                 </a>
             </li>
+            <li>
+                <a href="${ctx}/m/classification" class="">
+                    <i class="classification"></i>
+                    <span>分类</span>
+                </a>
+            </li>
             <%--  <li>
                   <a href="javascript:void (0)" class="">
                       <span>关注</span>
