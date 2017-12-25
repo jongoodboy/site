@@ -173,6 +173,7 @@ public class IndexController {
         model.addAttribute("express", express);
         //商品随机推荐
         Map<String, Object> mapParam = new HashedMap();
+        mapParam.put("commodityId",commodityId);
         mapParam.put("size", 6);
         model.addAttribute("commodityList", commodityService.recommended(mapParam));
         return "mqds/m/commodityDetail";
