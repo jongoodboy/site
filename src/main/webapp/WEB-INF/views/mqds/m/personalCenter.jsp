@@ -133,7 +133,7 @@
                         </a>
                     </c:if>
                     <c:if test="${isVip == '1'}"><!--不是会员-->
-                        <a href="${ctx}/m/?personalCenter=myStores">
+                        <a href="${ctx}/m/personalStores">
                             <span>我的店铺</span>
                         </a>
                     </c:if>

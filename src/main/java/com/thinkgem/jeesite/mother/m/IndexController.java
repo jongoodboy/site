@@ -171,11 +171,10 @@ public class IndexController {
         Express express = expressService.get(commodity.getDefaultExpress());//快递
         model.addAttribute("commodity", commodity);
         model.addAttribute("express", express);
-        //商品推荐
-        Commodity commodity1 = new Commodity();
-        Page<Commodity> page = new Page<Commodity>(1, 6);//分页查询
-        page = commodityService.findPage(page, commodity1);
-        model.addAttribute("commodityList", page.getList());
+        //商品随机推荐
+        Map<String, Object> mapParam = new HashedMap();
+        mapParam.put("size", 6);
+        model.addAttribute("commodityList", commodityService.recommended(mapParam));
         return "mqds/m/commodityDetail";
     }
 
@@ -249,11 +248,10 @@ public class IndexController {
             }
         }
         model.addAttribute("listMap", listMap);
-        //商品推荐
-        Commodity commodity = new Commodity();
-        Page<Commodity> page = new Page<Commodity>(1, 6);//分页查询
-        page = commodityService.findPage(page, commodity);
-        model.addAttribute("commodityList", page.getList());
+        //商品随机推荐
+        Map<String, Object> mapParam = new HashedMap();
+        mapParam.put("size", 6);
+        model.addAttribute("commodityList", commodityService.recommended(mapParam));
         return "mqds/m/shoppingCat";
     }
 
@@ -702,12 +700,11 @@ public class IndexController {
     /**
      * 绑定手机号
      *
-     * @param phoneCode 验证码
      * @return
      */
     @RequestMapping("/bind")
     @ResponseBody
-    public Map<String, Object> bindPhone(String phone,HttpServletRequest request) {
+    public Map<String, Object> bindPhone(String phone, HttpServletRequest request) {
         Map<String, Object> returnMap = new HashedMap();
         try {
             Muser muser = new Muser();
@@ -939,6 +936,7 @@ public class IndexController {
         }
         return retMap;
     }
+
     /**
      * 手机端首页分类
      *
@@ -948,6 +946,7 @@ public class IndexController {
     public String specialtyPage() {
         return "mqds/m/specialty";
     }
+
     /**
      * 手机端首特产页面数据
      *
@@ -956,13 +955,13 @@ public class IndexController {
     @RequestMapping("/specialtyData")
     @ResponseBody
     public Map<String, Object> specialtyData(@RequestParam(required = false, defaultValue = "0") Integer pageNo,
-                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,String belongSpecialty) {
+                                             @RequestParam(required = false, defaultValue = "10") Integer pageSize, String belongSpecialty) {
         Map<String, Object> retMap = new HashedMap();
         try {
-            Map<String,Object> paramMap = new HashedMap();
-            paramMap.put("pageNo",pageNo);
-            paramMap.put("pageSize",pageSize);
-            paramMap.put("belongSpecialty",belongSpecialty);
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("pageNo", pageNo);
+            paramMap.put("pageSize", pageSize);
+            paramMap.put("belongSpecialty", belongSpecialty);
             retMap.put("data", commodityService.specialtyCommodity(paramMap));
             retMap.put("code", "0");
             retMap.put("msg", "查询成功");

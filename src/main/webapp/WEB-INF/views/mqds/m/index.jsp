@@ -78,8 +78,6 @@
     var phone = '${sessionScope.mUser.phone}';
     var login = '${sessionScope.mUser.login}';
     function openPage(url) {
-        window.location.href = url;
-        return;
         if (login == "no" || login == "") {//如果手动注销过
             window.location.href = "${ctx}/m/loginPage";
             return;

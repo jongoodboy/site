@@ -29,9 +29,22 @@
         margin: 3px;
     }
 
-    .am-gallery-title, .am-gallery-desc {
+    .am-gallery-title{
         padding-left: 10px;
-        padding-right: 15px;
+        width: 60%;
+        float: left;
+    }
+
+    .am-gallery-item a span {
+        margin-top: 10px;
+        display: inline-block;
+        color: #eb616c;
+        float: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 40%;
+        text-align: right;
     }
 
     .buy-new {
@@ -74,9 +87,11 @@
     article div p {
         width: 100%;
     }
-    .am-paragraph-default img{
+
+    .am-paragraph-default img {
         border: none;
     }
+
     .comdiyi {
         display: inline-block;
         margin-top: 25px;
@@ -152,21 +167,22 @@
                         <a href="${ctx}/m/commodityDetail?commodityId=${itme.id }" class="">
                             <img class="lazy" data-original="${img[0]}"/>
                             <h3 class="am-gallery-title">${itme.commodityName}</h3>
+                            <span>￥${itme.commodityPice}</span>
                         </a>
-                        <div class="am-gallery-desc">
-                                <%--<ul class="nav-menu">
-                                    <li><i class="my-icon like"></i></li>
-                                    <li class="active">99k</li>
-                                </ul>--%>
-                            <ul class="nav-menu">
-                                <li><%--<i class="my-icon like"></i>--%>￥</li>
-                                <li class="active">${itme.commodityPice}</li>
-                            </ul>
-                            <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}"
-                               class="">
-                                <spen class="buy">#购买</spen>
-                            </a>
-                        </div>
+                            <%--<div class="am-gallery-desc">--%>
+                            <%--&lt;%&ndash;<ul class="nav-menu">--%>
+                            <%--<li><i class="my-icon like"></i></li>--%>
+                            <%--<li class="active">99k</li>--%>
+                            <%--</ul>&ndash;%&gt;--%>
+                            <%--<ul class="nav-menu">--%>
+                            <%--<li>&lt;%&ndash;<i class="my-icon like"></i>&ndash;%&gt;</li>--%>
+                            <%--<li class="active">}</li>--%>
+                            <%--</ul>--%>
+                            <%--<a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}"--%>
+                            <%--class="">--%>
+                            <%--<spen class="buy">#购买</spen>--%>
+                            <%--</a>--%>
+                            <%--</div>--%>
                     </div>
                 </li>
             </c:forEach>
@@ -248,7 +264,7 @@
         var commodityName = $(".commodity-name-title").html();//分享的标题
         var imgUrl = "http://www.muqinonline.com" + $(".swiper-slide").find("img").first().attr("src");
         var desc = $(".commodityMaker").find("p").find("span").html();//分享描述
-        if(desc == undefined){
+        if (desc == undefined) {
             desc = $(".commodityMaker").find("p:first").html();
         }
         //url必须是获取的当前的页面路径
@@ -327,7 +343,7 @@
         var expressProvinceFirst = '${express.expressProvinceFirst}';//省内首重
         var freeShipping = '${commodity.freeShipping}';//是否包邮 1包 0不包
         var express = $("#express");//显示运费
-        if(freeShipping == 0){
+        if (freeShipping == 0) {
             if (weight <= 1) {//如果小于等于首重
                 express.html(expressProvinceFirst)
             } else {
@@ -339,14 +355,14 @@
                     express.html(parseFloat(parseInt(expressProvinceFirst) + (expressProvinceIncreasing * weightProvinceIncreasing)).toFixed(2))
                 }
             }
-        }else{
+        } else {
             express.parent().html("运费:包邮");
         }
     })
     var mySwiper = new Swiper('.swiper-container', {
         /*autoplay: 3000,//可选选项，自动滑动
-        autoplayDisableOnInteraction: false*/
-        pagination : '.swiper-pagination'
+         autoplayDisableOnInteraction: false*/
+        pagination: '.swiper-pagination'
     })
     //弹出添加到购物车
     $(".join-this-shopping-cat").on("click", function () {
@@ -426,20 +442,20 @@
 
     }
     //微聊
-     (function(window,a,b) {
-     window[a] = window[a] || function() {
-     (window[a].a = window[a].a || []).push(arguments)
-     };
-     window[b] = window[b] || function() {
-     (window[b].a = window[b].a || []).push(arguments)
-     };
-     var s=document.createElement("script");
-     s.src="http://jsapi.weiliaokefu.com/Public/dist/js/jsapi.js?v="+Math.round(Math.random()*1000);
-     s.async=true;
-     s.charset="UTF-8";
-     document.getElementsByTagName("head")[0].appendChild(s);
-     })(window,'_FENBOT',"_FENBOT_API");
-     _FENBOT({cid:'15690',type:'0'});
+    (function (window, a, b) {
+        window[a] = window[a] || function () {
+                    (window[a].a = window[a].a || []).push(arguments)
+                };
+        window[b] = window[b] || function () {
+                    (window[b].a = window[b].a || []).push(arguments)
+                };
+        var s = document.createElement("script");
+        s.src = "http://jsapi.weiliaokefu.com/Public/dist/js/jsapi.js?v=" + Math.round(Math.random() * 1000);
+        s.async = true;
+        s.charset = "UTF-8";
+        document.getElementsByTagName("head")[0].appendChild(s);
+    })(window, '_FENBOT', "_FENBOT_API");
+    _FENBOT({cid: '15690', type: '0'});
 </script>
 
 </body>

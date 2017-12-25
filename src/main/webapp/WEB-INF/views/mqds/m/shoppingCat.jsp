@@ -81,6 +81,23 @@
         padding-left: 10px;
         padding-right: 15px;
     }
+    .am-gallery-title{
+        padding-left: 10px;
+        width: 60%;
+        float: left;
+    }
+
+    .am-gallery-item a span {
+        margin-top: 10px;
+        display: inline-block;
+        color: #eb616c;
+        float: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 40%;
+        text-align: right;
+    }
 
     .shoppoing-title {
         font-size: 16px;
@@ -170,20 +187,21 @@
                     <a href="${ctx}/m/commodityDetail?commodityId=${itme.id }" class="">
                         <img class="lazy" data-original="${img[0]}"/>
                         <h3 class="am-gallery-title">${itme.commodityName}</h3>
+                        <span>￥${itme.commodityPice}</span>
                     </a>
-                    <div class="am-gallery-desc">
-                            <%--   <ul class="nav-menu">
+                    <%--<div class="am-gallery-desc">
+                            &lt;%&ndash;   <ul class="nav-menu">
                                    <li><i class="my-icon like"></i></li>
                                    <li class="active">99k</li>
-                               </ul>--%>
+                               </ul>&ndash;%&gt;
                         <ul class="nav-menu">
-                            <li><%--<i class="my-icon like"></i>--%>￥</li>
+                            <li>&lt;%&ndash;<i class="my-icon like"></i>&ndash;%&gt;￥</li>
                             <li class="active">${itme.commodityPice}</li>
                         </ul>
                         <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }" class="">
                             <spen class="buy">#购买</spen>
                         </a>
-                    </div>
+                    </div>--%>
                 </div>
             </li>
         </c:forEach>
@@ -215,6 +233,12 @@
                 <a href="${ctx}/m" class="">
                     <i class="icon-home"></i>
                     <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="${ctx}/m/classification" class="">
+                    <i class="classification"></i>
+                    <span>分类</span>
                 </a>
             </li>
             <li class="active">

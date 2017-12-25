@@ -17,4 +17,6 @@ public interface CommodityDao extends CrudDao<Commodity> {
 
     List<Commodity> findPageCommodity(Map<String, Object> map);
     List<Commodity> specialtyCommodity(Map<String, Object> map);
+    List<Commodity> recommended(Map<String, Object> map);
+
 }

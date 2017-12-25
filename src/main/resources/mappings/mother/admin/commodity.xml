@@ -174,4 +174,11 @@
         ORDER BY create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
+    <!--为您推荐-->
+    <select id="recommended" resultType="Commodity" parameterType="java.util.Map">
+        select  <include refid="commodity"/>
+        from mq_commodity
+        where commodity_state NOT IN (1,3)
+        ORDER BY RAND() limit #{size}
+    </select>
 </mapper>

@@ -33,9 +33,11 @@
         .am-list-border > li {
             border-bottom: 1px solid #eee;
         }
-        .am-list-border{
+
+        .am-list-border {
             margin-bottom: 50px;
         }
+
         li.selectAddress {
             padding-left: 30px !important;
             height: 80px;
@@ -221,7 +223,7 @@
                         str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
                         str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
-                        str += '<li class="pading-10">重量:<span class="freight-money">' +  ret.data.weight + 'kg</span></li>'
+                        str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.weight + 'kg</span></li>'
                         str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
                         str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
                         str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul> </li>';
@@ -232,15 +234,22 @@
                     //减少商品数量
                     $(".remove-number").on("click", function () {
                         var buyNumber = $("#buyNumber").val();
-                        var reduceWeight = (parseInt(buyNumber) + 1) * weight;
-                        if (buyNumber <= 1) {
-                            buyNumber = 1;
-                        } else {
-                            buyNumber--;
+                        if (buyNumber != 1) {
+                            var reduceWeight = (parseInt(buyNumber) - 1) * weight;
+                            if (buyNumber <= 1) {
+                                buyNumber = 1;
+                            } else {
+                                buyNumber--;
+                            }
+
+                            $("#buyNumber").val(buyNumber);
+                            var thisWeight = 0;
+                            if (expressStr != "包邮") {
+                                thisWeight = parseInt(expressAddPrice(reduceWeight, expressProvinceFirst, expressProvinceIncreasing));
+                                $(".this-express").html(parseFloat(thisWeight).toFixed(2) + "元");
+                            }
+                            $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
                         }
-                        $("#buyNumber").val(buyNumber);
-                        var thisWeight = parseInt(expressAddPrice(reduceWeight, expressProvinceFirst, expressProvinceIncreasing));
-                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
                     })
                     //添加商品数量
                     $(".add-number").on("click", function () {
@@ -259,7 +268,7 @@
                         var thisWeight = 0;
                         if (expressStr != "包邮") {
                             thisWeight = parseInt(expressAddPrice(addWeight, expressProvinceFirst, expressProvinceIncreasing));
-                            $(".this-express").html(parseFloat(thisWeight).toFixed(2));
+                            $(".this-express").html(parseFloat(thisWeight).toFixed(2) + "元");
                         }
                         $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
 

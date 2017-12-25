@@ -30,4 +30,8 @@ public class CommodityService extends CrudService<CommodityDao, Commodity> {
     public List<Commodity> specialtyCommodity(Map<String, Object> map) {
         return commodityDao.specialtyCommodity(map);
     }
+    //为您推荐
+    public List<Commodity> recommended(Map<String, Object> map){
+        return commodityDao.recommended(map);
+    }
 }
