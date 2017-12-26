@@ -21,7 +21,7 @@
 </style>
 <c:set value="${listBanner}" var="banner"></c:set>
 <c:set value="${fn:split(banner[0].commodityImager, '|')}" var="imgItme"></c:set>
-<body style="background: url(${ctxStatic}/m/img/vip.jpg) no-repeat center; background-size: 100% 100%;">
+<body style="background: url(${ctxStatic}/m/img/new-vip.jpg) no-repeat center; background-size: 100% 100%;">
     <a class="am-btn am-btn-danger" href="${ctx}/m/commodityDetail?commodityId=${banner[0].id}" target="_blank">成为会员</a>
 </body>
 </html>
