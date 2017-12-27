@@ -262,11 +262,8 @@
     $(document).ready(function () {
         var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
         var commodityName = $(".commodity-name-title").html();//分享的标题
-        var imgUrl = "http://www.muqinonline.com" + $(".swiper-slide").find("img").first().attr("src");
-        var desc = $(".commodityMaker").find("p").find("span").html();//分享描述
-        if (desc == undefined) {
-            desc = $(".commodityMaker").find("p:first").html();
-        }
+        var imgUrl = "http://www.muqinyun.com" + $(".swiper-slide").find("img").first().attr("src");
+        var desc = '${commodity.sharingDescription}';//分享描述
         //url必须是获取的当前的页面路径
         $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
             //微信分享

@@ -144,12 +144,12 @@
                                     commodityStateSpan = "等待付款";
                                     break;
                                 case "2":
-                                /*    operation = "申请退款";*/
+                                  /*  operation = "申请退款";*/
                                     break;
                                 case "3":
                                     commodityStateSpan = /*"物流信息:" + ret.data[i].shppingList[j].comExpress +
-                                            "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber
-                                            + */"<span class='show-express' onclick='showExpress(\""+ret.data[i].shppingList[j].comExpressNumber+"\")'>查看物流</span>";
+                                     "&nbsp;&nbsp;货运号:" + ret.data[i].shppingList[j].comExpressNumber
+                                     + */"<span class='show-express' onclick='showExpress(\"" + ret.data[i].shppingList[j].comExpressNumber + "\")'>查看物流</span>";
                                     operation = "确认收货"
                                     break;
                                 case "4":
@@ -166,7 +166,7 @@
                             str += '<div><span class="commodityName" onclick="commodityDetail(\'' + ret.data[i].shppingList[j].comId + '\')">' + ret.data[i].shppingList[j].comName + '</span>';
                             str += '<span class="buy-number-order-list">数量:' + ret.data[i].shppingList[j].comNumber + '' + ret.data[i].shppingList[j].comCompany + '</span>';
                             if (operation != "") {//退款申请
-                                var refundMoney = (ret.data[i].shppingList[j].comPrice + ret.data[i].shppingList[j].comFreight) * ret.data[i].shppingList[j].comNumber;//支付总金额
+                                var refundMoney = (ret.data[i].shppingList[j].comPrice * ret.data[i].shppingList[j].comNumber) + ret.data[i].shppingList[j].comFreight;//支付总金额
                                 str += '<span class="refund" onclick="operation(\'' + ret.data[i].sumOrderNnmber + '\',\'' + ret.data[i].shppingList[j].orderId + '\',\'' + refundMoney +
                                         '\',' + ret.data[i].shppingList[j].comState + ')">' + operation + '</span>'
 

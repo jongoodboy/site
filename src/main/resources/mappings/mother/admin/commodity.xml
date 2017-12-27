@@ -22,7 +22,8 @@
         free_shipping as "freeShipping",
         default_express as "defaultExpress",
         belong_region as "belongRegion",
-        belong_specialty as "belongSpecialty"
+        belong_specialty as "belongSpecialty",
+        sharing_description as "sharingDescription"
     </sql>
     <!--后台商品列表 -->
     <select id="findList" resultType="Commodity" parameterType="Commodity">
@@ -96,7 +97,8 @@
         free_shipping,
         default_express,
         belong_region,
-        belong_specialty
+        belong_specialty,
+        sharing_description
       )VALUES
       (
       #{id},
@@ -119,7 +121,8 @@
       #{freeShipping},
       #{defaultExpress},
       #{belongRegion},
-      #{belongSpecialty}
+      #{belongSpecialty},
+      #{sharingDescription}
       )
     </insert>
     <!--修改商品-->
@@ -145,7 +148,8 @@
         free_shipping = #{freeShipping},
         default_express = #{defaultExpress},
         belong_region = #{belongRegion},
-        belong_specialty = #{belongSpecialty}
+        belong_specialty = #{belongSpecialty},
+        sharing_description = #{sharingDescription}
         WHERE
         id = #{id}
     </update>

@@ -27,6 +27,15 @@ public class Commodity extends DataEntity<Commodity> {
     private String defaultExpress;//默认快递
     private String belongRegion;//所属于区域
     private String belongSpecialty;//所属特产
+    private String sharingDescription;//分享描述
+
+    public String getSharingDescription() {
+        return sharingDescription;
+    }
+
+    public void setSharingDescription(String sharingDescription) {
+        this.sharingDescription = sharingDescription;
+    }
 
     public String getBelongRegion() {
         return belongRegion;
