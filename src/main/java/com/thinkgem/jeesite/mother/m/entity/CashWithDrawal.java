@@ -16,6 +16,15 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
     private BigDecimal balance;//用户余额
     private String remarks;//财务操作描述
     private String bankName;//所属银行
+    private String operator;//转账操作人
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
 
     public String getBankName() {
         return bankName;

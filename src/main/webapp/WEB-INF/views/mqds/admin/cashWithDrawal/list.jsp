@@ -50,6 +50,7 @@
         <th>用户名字</th>
         <th>提现金额</th>
         <th>提现状态</th>
+        <th>操作时间</th>
         <th>操作</th>
     </tr>
     <c:forEach items="${page.getList()}" var="tpl">
@@ -60,7 +61,14 @@
             <td>${tpl.bankNumberName}</td>
             <td>${tpl.getCash}</td>
             <td>${fns:getDictLabel(tpl.delFlag, 'withdrawals_state', '')}</td>
-            <td><c:if test="${tpl.delFlag == '0'}"><a href="javascript:transferAccounts('${tpl.id}','${tpl.getCash}')">转账</a></c:if></td>
+            <td><fmt:formatDate value="${tpl.updateDate }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+            <td><c:if test="${tpl.delFlag == '0'}">
+                <a href="javascript:transferAccounts('${tpl.id}','${tpl.getCash}')">转账</a>
+            </c:if>
+                <c:if test="${tpl.delFlag == '1'}">
+                    ${tpl.operator}
+                </c:if>
+            </td>
         </tr>
     </c:forEach>
 </table>

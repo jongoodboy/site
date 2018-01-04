@@ -12,8 +12,7 @@
       remarks as "remarks",
       create_date as "createDate",
       update_date as "updateDate",
-      update_by as "updateBy",
-      update_name as "updateName",
+      update_name as "operator",
       del_flag as "delFlag",
       bank_name as "bankName"
     </sql>
