@@ -63,12 +63,19 @@ public class IndexController {
     //特产分类
     @Resource
     private ClassificationService classificationService;
+    //提现
+    @Resource
+    private CashWithDrawalService cashWithDrawalService;
+    //银行卡
+    @Resource
+    private BankService bankService;
 
+    //提现
     //每次请求都会先进这里
     @ModelAttribute
     public void getMuser(HttpServletRequest request, HttpServletResponse response, String personalStores) throws IOException {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
-        if (openId == null) {
+      /* if (openId == null) {
             String strBackUrl = "http://" + request.getServerName() //服务器地址
                     + ":"
                     + request.getServerPort()           //端口号
@@ -83,7 +90,7 @@ public class IndexController {
                 request.getSession().setAttribute("personalStores", personalStores);//我要创业
             }
             response.sendRedirect(ConfigUtil.GET_CODE);//微信取code
-        }
+        }*/
         Map<String, Object> paramMap = new HashedMap();
         paramMap.put("openId", openId);
         Muser m = mUserSerivce.findUser(paramMap);
@@ -173,7 +180,7 @@ public class IndexController {
         model.addAttribute("express", express);
         //商品随机推荐
         Map<String, Object> mapParam = new HashedMap();
-        mapParam.put("commodityId",commodityId);
+        mapParam.put("commodityId", commodityId);
         mapParam.put("size", 6);
         model.addAttribute("commodityList", commodityService.recommended(mapParam));
         return "mqds/m/commodityDetail";
@@ -672,8 +679,55 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/bindBankCard")
-    public String bindBankCard() {
+    public String bindBankCard(Model model, String userId) {
+        List<Bank> list = bankService.findListByUserId(userId);//个人所有银行卡列表
+        model.addAttribute("bankList", list);
         return "mqds/m/bindBankCard";
+    }
+
+    /**
+     * 手机端银行卡绑定
+     *
+     * @return
+     */
+    @RequestMapping("/saveBankCard")
+    @ResponseBody
+    public Map<String, Object> saveBankCard(Bank bank) {
+        Map<String, Object> retMap = new HashedMap();
+        try {
+            bankService.save(bank);
+            retMap.put("code", "0");
+            retMap.put("msg", "绑定成功");
+        } catch (Exception e) {
+            retMap.put("code", "-1");
+            retMap.put("msg", "绑定失败");
+            e.printStackTrace();
+        }
+        return retMap;
+    }
+
+    /**
+     * 手机端银行卡删除
+     *
+     * @return
+     */
+    @RequestMapping("/delBank")
+    @ResponseBody
+    public Map<String, Object> delBank(String bankId) {
+        Map<String, Object> retMap = new HashedMap();
+        try {
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("id", bankId);
+            paramMap.put("updateDate", new Date());
+            bankService.delBank(paramMap);
+            retMap.put("code", "0");
+            retMap.put("msg", "删除成功");
+        } catch (Exception e) {
+            retMap.put("code", "-1");
+            retMap.put("msg", "删除失败");
+            e.printStackTrace();
+        }
+        return retMap;
     }
 
     /**
@@ -970,6 +1024,46 @@ public class IndexController {
             e.printStackTrace();
             retMap.put("code", "-1");
             retMap.put("msg", "查询失败");
+        }
+        return retMap;
+    }
+
+    /**
+     * 提现页面
+     *
+     * @return
+     */
+    @RequestMapping("/withdrawalsPage")
+    public String withdrawalsPage(Model model, String userId, String selecBankId) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("userId", userId);
+        paramMap.put("selecBankId", selecBankId);//提现选择银行列表点击选择时查询这一张
+        Bank bank = bankService.findBankOne(paramMap);//查最新绑定的银行卡。只是一张
+        model.addAttribute("bank", bank);
+        return "mqds/m/withdrawals";
+    }
+
+    /**
+     * 提交提现
+     *
+     * @return
+     */
+    @RequestMapping("/withdrawals")
+    @ResponseBody
+    public Map<String, Object> withdrawals(CashWithDrawal cashWithDrawal) {
+        Map<String, Object> retMap = new HashMap<String, Object>();
+        try {
+            cashWithDrawalService.save(cashWithDrawal);
+            retMap.put("msg", "提交成功");
+            retMap.put("code", "0");
+            Map<String, Object> paramMap = new HashedMap();
+            paramMap.put("balance", cashWithDrawal.getGetCash());//余额
+            paramMap.put("userId", cashWithDrawal.getUserId());//用户Id
+            cashWithDrawalService.updateByBalance(paramMap);
+        } catch (Exception e) {
+            retMap.put("msg", "提交失败");
+            retMap.put("code", "-1");
+            e.printStackTrace();
         }
         return retMap;
     }

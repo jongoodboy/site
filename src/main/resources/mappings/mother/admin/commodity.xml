@@ -23,7 +23,10 @@
         default_express as "defaultExpress",
         belong_region as "belongRegion",
         belong_specialty as "belongSpecialty",
-        sharing_description as "sharingDescription"
+        sharing_description as "sharingDescription",
+        commodity_position as "commodityPosition",
+        commodity_discount as "commodityDiscount",
+        commodity_discount_num as "commodityDiscountNum"
     </sql>
     <!--后台商品列表 -->
     <select id="findList" resultType="Commodity" parameterType="Commodity">
@@ -43,6 +46,7 @@
             and commodity_release = #{commodityRelease}
         </if>
         AND del_flag = '0'
+        ORDER BY commodity_position,commodity_state,create_date DESC
     </select>
     <!--手机端商品列表 -->
     <select id="findPageCommodity" resultType="Commodity" parameterType="java.util.Map">
@@ -60,7 +64,7 @@
         <if test="commodityName != '' and commodityName != null">
             AND commodity_name LIKE CONCAT('%',#{commodityName},'%')
         </if>
-        ORDER BY create_date DESC
+        ORDER BY commodity_position,create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
 
@@ -98,7 +102,10 @@
         default_express,
         belong_region,
         belong_specialty,
-        sharing_description
+        sharing_description,
+        commodity_position,
+        commodity_discount,
+        commodity_discount_num
       )VALUES
       (
       #{id},
@@ -122,7 +129,10 @@
       #{defaultExpress},
       #{belongRegion},
       #{belongSpecialty},
-      #{sharingDescription}
+      #{sharingDescription},
+      #{commodityPosition},
+      #{commodityDiscount},
+      #{commodityDiscountNum}
       )
     </insert>
     <!--修改商品-->
@@ -149,7 +159,10 @@
         default_express = #{defaultExpress},
         belong_region = #{belongRegion},
         belong_specialty = #{belongSpecialty},
-        sharing_description = #{sharingDescription}
+        sharing_description = #{sharingDescription},
+        commodity_position = #{commodityPosition},
+        commodity_discount = #{commodityDiscount},
+        commodity_discount_num = #{commodityDiscountNum}
         WHERE
         id = #{id}
     </update>
@@ -161,7 +174,7 @@
         mq_commodity
         WHERE
         commodity_state = #{commodityState}
-        ORDER BY create_date DESC
+        ORDER BY commodity_position,create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
     <!--手机端商品特产-->
@@ -175,7 +188,7 @@
         AND del_flag = '0'
         AND commodity_state NOT IN (3)
         AND belong_specialty = #{belongSpecialty}
-        ORDER BY create_date DESC
+        ORDER BY commodity_position,create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
     <!--为您推荐-->

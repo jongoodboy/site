@@ -57,25 +57,27 @@
             </c:forEach>
         </li>
 
-        <li>
+        <%--<li>
             <label>上线状态：</label>
             <c:forEach items="${fns:getDictList('commodity_release')}" var="type">
                 <input id="commodityRelease${type.value}" name="commodityRelease"
                        onclick="$('#searchForm').submit();" type="radio" value="${type.value}"<c:if test="${type.value == commodity.commodityRelease}">checked </c:if>/>
                 <label for="commodityRelease${type.value}">${type.label}</label>
             </c:forEach>
-        </li>
+        </li>--%>
         <li class="clearfix"></li>
     </ul>
 </form:form>
 <table id="treeTable" class="table table-striped table-bordered table-condensed">
-    <tr><th>商品名称</th><th>商品类型</th><th>操作</th></tr>
+    <tr><th>商品名称</th><th>商品类型</th><th>商品状态</th><th>商品位置</th><th>操作</th></tr>
     <c:forEach items="${page.getList()}" var="tpl">
         <tr>
             <td><a href="${ctx}/commodity/from?id=${tpl.id}&type=0">${tpl.commodityName}</a></td>
             <td>${fns:getDictLabel(tpl.commodityType, 'commodity_type', '商品类型')}</td>
+            <td>${fns:getDictLabel(tpl.commodityState, 'commodity_state', '商品状态')}</td>
+            <td>${tpl.commodityPosition}</td>
             <td><a href="${ctx}/commodity/from?id=${tpl.id}&type=1">修改</a>
-                &nbsp;&nbsp;<a href="#">下架</a></td>
+                &nbsp;&nbsp;<%--<a href="#">下架</a>--%></td>
         </tr>
     </c:forEach>
 </table>

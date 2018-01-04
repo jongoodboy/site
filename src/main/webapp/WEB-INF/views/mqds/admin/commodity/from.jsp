@@ -43,7 +43,7 @@
                         if (data[i].id == '${commodity.belongSpecialty}') {
                             selected = "selected";
                             $("#belongSpecialty").prev().find("span.select2-chosen").html(data[i].commodityClassificationName);
-                        }else{
+                        } else {
                             selected = "";
                         }
                         str += '<option value="' + data[i].id + '" ' + selected + '>' + data[i].commodityClassificationName + '</option>'
@@ -184,6 +184,24 @@
         <label class="control-label">分享描述:</label>
         <div class="controls">
             <form:input path="sharingDescription" htmlEscape="false" class="required"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">商品位置:</label>
+        <div class="controls">
+            <form:input path="commodityPosition" htmlEscape="false" maxlength="10" type="number"/>位置越小越靠前
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">商品折扣:</label>
+        <div class="controls">
+            <form:input path="commodityDiscount" htmlEscape="false" maxlength="5" type="number"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">满足打折数量:</label>
+        <div class="controls">
+            <form:input path="commodityDiscountNum" htmlEscape="false" maxlength="3" type="number"/>
         </div>
     </div>
     <div class="control-group">

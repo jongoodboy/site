@@ -77,13 +77,13 @@
             <td>${tpl.commodityNumber}</td>
             <td>${fns:getDictLabel(tpl.company, 'commodity_company', '')}</td>
             <td>${tpl.commodityPrice}</td>
-            <td><fmt:formatDate value="${tpl.createDate}" pattern="yyyy-mm-dd HH:mm:ss"/></td>
+            <td><fmt:formatDate value="${tpl.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
             <td>${tpl.consignee}</td>
             <td>${tpl.consigneePhone}</td>
             <td>${tpl.address}</td>
             <td>${tpl.express}</td>
             <td>${tpl.expressNumber}</td>
-            <td><fmt:formatDate value="${tpl.deliveryTime}" pattern="yyyy-mm-dd HH:mm:ss"/></td>
+            <td><fmt:formatDate value="${tpl.deliveryTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
             <td>${tpl.deliveryPeolpe}</td>
             <td>${fns:getDictLabel(tpl.orderState, 'order_state', '')}</td>
             <td>

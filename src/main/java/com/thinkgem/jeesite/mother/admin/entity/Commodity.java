@@ -28,6 +28,33 @@ public class Commodity extends DataEntity<Commodity> {
     private String belongRegion;//所属于区域
     private String belongSpecialty;//所属特产
     private String sharingDescription;//分享描述
+    private Integer commodityPosition;//商品位置 越小越在前
+    private BigDecimal commodityDiscount;//商品折扣
+    private Integer commodityDiscountNum;//满足折扣条件，如买两个商品以上开始打折
+
+    public Integer getCommodityPosition() {
+        return commodityPosition;
+    }
+
+    public void setCommodityPosition(Integer commodityPosition) {
+        this.commodityPosition = commodityPosition;
+    }
+
+    public BigDecimal getCommodityDiscount() {
+        return commodityDiscount;
+    }
+
+    public void setCommodityDiscount(BigDecimal commodityDiscount) {
+        this.commodityDiscount = commodityDiscount;
+    }
+
+    public Integer getCommodityDiscountNum() {
+        return commodityDiscountNum;
+    }
+
+    public void setCommodityDiscountNum(Integer commodityDiscountNum) {
+        this.commodityDiscountNum = commodityDiscountNum;
+    }
 
     public String getSharingDescription() {
         return sharingDescription;
@@ -80,9 +107,11 @@ public class Commodity extends DataEntity<Commodity> {
     public Integer getCommodityRelease() {
         return commodityRelease;
     }
+
     public void setCommodityRelease(Integer commodityRelease) {
         this.commodityRelease = commodityRelease;
     }
+
     public String getCommodityName() {
         return commodityName;
     }

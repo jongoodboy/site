@@ -66,7 +66,7 @@
     }
 
     .bottom-model > .model-title li input {
-        width: 77%;
+        width: 75%;
         border: none;
     }
 

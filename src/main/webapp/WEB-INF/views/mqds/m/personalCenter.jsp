@@ -32,7 +32,7 @@
         color: #ccc;
         margin-bottom: 1px;
         min-height: 100px;
-        margin-top: 14%;
+        margin-top: 5%;
         padding: 0 20px !important;
     }
 
@@ -76,7 +76,6 @@
         margin-top: 4px;
     }
 </style>
-
 <body>
 <div class="content">
     <s:set var="isVip" value="${sessionScope.mUser.isVip}"></s:set>
@@ -84,7 +83,14 @@
         <li class="title-personal">
             <h2>您好,${sessionScope.jb.getString("nickname")}</h2><!--微信名 -->
             <%--<span>我的下线：996人</span>--%>
-            <span>账户余额：${sessionScope.mUser.money} <a href="#">提现</a></span>
+            <span>账户余额：${sessionScope.mUser.money}
+                <c:if test="${sessionScope.mUser.money != '0.00'}">
+                    <a href="javascript:withdrawals()">提现</a>
+                </c:if>
+                <c:if test="${sessionScope.mUser.money == '0.00'}">
+                    <a href="${ctx}/m/personalStores">提现</a>
+                </c:if>
+            </span>
             <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/><!--微信头像-->
         </li>
         <li class="buy-img-list">
@@ -107,12 +113,12 @@
                         <span>待收货</span>
                     </a>
                 </li>
-               <%-- <li>
-                    <a href="${ctx}/m/orderList?index=1">
-                        <i class="reund"></i>
-                        <span>退款</span>
-                    </a>
-                </li>--%>
+                <%-- <li>
+                     <a href="${ctx}/m/orderList?index=1">
+                         <i class="reund"></i>
+                         <span>退款</span>
+                     </a>
+                 </li>--%>
                 <li>
                     <a href="${ctx}/m/orderList?index=0">
                         <i class="complete"></i>
@@ -128,29 +134,31 @@
                           <span>我的店铺</span>
                       </a>--%>
                     <c:if test="${isVip == '0'}"><!-- 会员-->
-                        <a href="${ctx}/m/userShop?myself=yes">
-                            <span>我的店铺</span>
-                        </a>
+                    <a href="${ctx}/m/userShop?myself=yes">
+                        <span>我的店铺</span>
+                    </a>
                     </c:if>
                     <c:if test="${isVip == '1'}"><!--不是会员-->
-                        <a href="${ctx}/m/personalStores">
-                            <span>我的店铺</span>
-                        </a>
+                    <a href="${ctx}/m/personalStores">
+                        <span>我的店铺</span>
+                    </a>
                     </c:if>
                     <i></i>
                 </li>
+                <c:if test="${isVip == '0'}"><!-- 会员-->
+                <li>
+                    <a href="${ctx}/m/bindBankCard?userId=${sessionScope.mUser.id}">
+                        <span>绑定银行卡</span>
+                    </a>
+                    <i></i>
+                </li>
+                </c:if>
                 <li>
                     <a href="${ctx}/m/addressList?userId=${sessionScope.mUser.id}">
                         <span>收货地址管理</span>
                     </a>
                     <i></i>
                 </li>
-                <%-- <li>
-                     <a href="${ctx}/m/bindBankCard">
-                         <span>绑定银行卡</span>
-                     </a>
-                     <i></i>
-                 </li>--%>
                 <li>
                     <a href="${ctx}/m/systemSettings">
                         <span>系统设置</span>
@@ -250,6 +258,15 @@
                 }
             });
         });
+    }
+    //提现
+    function withdrawals() {
+        var thisDay = new Date().getDay();//当前的几号
+        if (thisDay > 10) {//提现时间每月1号到10号
+            loadingShow("提现时间每月1号到10号", 3000);
+        } else {
+            window.location.href = "${ctx}/m/withdrawalsPage?withdrawalsMoney=${sessionScope.mUser.money}&userId=${sessionScope.mUser.id}";//提现页面
+        }
     }
 </script>
 </body>

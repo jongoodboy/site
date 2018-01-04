@@ -4,6 +4,7 @@
 <head>
     <%@include file="include/head.jsp" %>
 </head>
+<!--特产地区-->
 <style>
     body {
         text-align: center;

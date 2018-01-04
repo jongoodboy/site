@@ -157,7 +157,7 @@
                 <button type="button" class="am-btn am-btn-danger">提交订单</button>
             </li>
             <li style="float: right;color: #333;font-size: 14px;letter-spacing: 1px">
-                实付款:<span class="payMoney">￥<span id="payMoney"></span></span>
+                实付:<span class="payMoney">￥<span id="payMoney"></span></span>
             </li>
         </ul>
     </div>
@@ -194,6 +194,8 @@
             $(".buy-sum-number").hide();
             $.post("${ctx}/m/commodityById?commodityId=${param.commodityId}", function (ret) {
                 if (ret.code == "0") {
+                    var commodityDiscount = ret.data.commodityDiscount;//商品折扣
+                    var commodityDiscountNum = ret.data.commodityDiscountNum;//满足打折的数量
                     commodityNumber = ret.data.commodityNumber;
                     subData.commodityId = ret.data.id;
                     subData.commodityPrice = ret.data.commodityPice;
@@ -213,24 +215,29 @@
                         expressStr = "包邮";
                     } else {
                         express = expressAddPrice(weight, expressProvinceFirst, expressProvinceIncreasing);//计算运费
-                        expressStr = express + "元";
+                        expressStr = parseFloat(express).toFixed(2) + "元";
                     }
                     if (img != null && img != "" && img != undefined) {//拼接显示商品信息
                         var imgSrc = img.split("|")
                         var str = "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId='" + ret.data.id + ">";
                         str += "<img src=" + imgSrc[1] + "></a></li>"
-                        str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + ret.data.commodityName + ret.data.commodityName + ret.data.commodityName + ret.data.commodityName + "</p>";
+                        str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + "</p>";
                         str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
                         str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
                         str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.weight + 'kg</span></li>'
                         str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
                         str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
-                        str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul> </li>';
+                        str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul>';
+                        if(commodityDiscountNum != undefined && commodityDiscount != undefined){
+                            str += '<li class="pading-10">购买' + commodityDiscountNum + '个商品享有' + commodityDiscount + '折优惠</li>';
+                        }
+                        str += '</li>'
                         $(".am-list-border").append(str);
                     }
                     commodityPrice = parseFloat(ret.data.commodityPice).toFixed(2);//商品单价
                     $("#payMoney").html(parseFloat(parseInt($("#buyNumber").val()) * (parseFloat(commodityPrice) + parseInt(express))).toFixed(2));//显示实付金额
+
                     //减少商品数量
                     $(".remove-number").on("click", function () {
                         var buyNumber = $("#buyNumber").val();
@@ -248,7 +255,11 @@
                                 thisWeight = parseInt(expressAddPrice(reduceWeight, expressProvinceFirst, expressProvinceIncreasing));
                                 $(".this-express").html(parseFloat(thisWeight).toFixed(2) + "元");
                             }
-                            $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
+                            var discount = 1;//1默认不打折
+                            if (commodityDiscount != undefined && commodityDiscountNum != undefined && buyNumber >= commodityDiscountNum) {//如果有打折并且购买数量大于等于打折数量就开始打折
+                                discount = commodityDiscount / 10;
+                            }
+                            $("#payMoney").html(parseFloat(((buyNumber * commodityPrice) * discount) + thisWeight).toFixed(2));
                         }
                     })
                     //添加商品数量
@@ -270,8 +281,11 @@
                             thisWeight = parseInt(expressAddPrice(addWeight, expressProvinceFirst, expressProvinceIncreasing));
                             $(".this-express").html(parseFloat(thisWeight).toFixed(2) + "元");
                         }
-                        $("#payMoney").html(parseFloat(buyNumber * commodityPrice + thisWeight).toFixed(2));
-
+                        var discount = 1;//1默认不打折
+                        if (commodityDiscount != undefined && commodityDiscountNum != undefined && buyNumber >= commodityDiscountNum) {//如果有打折并且购买数量大于等于打折数量就开始打折
+                            discount = commodityDiscount / 10;
+                        }
+                        $("#payMoney").html(parseFloat(((buyNumber * commodityPrice) * discount) + thisWeight).toFixed(2));
                     })
                     //输入商品数量
                     $("#buyNumber").on("keyup", function () {
@@ -309,6 +323,8 @@
             var weight = '${param.weight}';//商品重量
             var payMoney = '${param.money}';
             var freeShipping = '${param.freeShipping}';//是否包邮 1包0不包
+            var commodityDiscount = "${param.commodityDiscount}";//商品折扣
+            var commodityDiscountNum = "${param.commodityDiscountNum}";//商品折扣满足数量
             if (imags != '' && imags != null) {//显示购物车提交过来的购物列表
                 var imags = imags.split(',');
                 var carPrice = carPrice.split(',');
@@ -323,6 +339,8 @@
                 var expressOutsideFirst = expressOutsideFirst.split(',');//省外首重
                 var expressOutsideIncreasing = expressOutsideIncreasing.split(',');//省外递增
                 var freeShipping = freeShipping.split(",");//是否包邮
+                var commodityDiscount = commodityDiscount.split(",");//商品折扣
+                var commodityDiscountNum = commodityDiscountNum.split(",");//商品折扣满足数量
                 var str = "";
                 for (var i = 1; i < imags.length; i++) {//最多显示三个商品的图片
                     var expressFirst, expressIncreasing, thisWeight, express = 0.00, expressStr;
@@ -343,7 +361,11 @@
                     } else {
                         expressStr = "包邮";
                     }
-                    payMoney = buyNumber[i] * carPrice[i] + parseInt(express) + payMoney;
+                    var discount = 1;//1默认不打折
+                    if (commodityDiscount[i] != "" && commodityDiscountNum[i] != "" && buyNumber[i] >= commodityDiscountNum[i]) {
+                        discount = commodityDiscount[i] / 10;
+                    }
+                    payMoney = ((buyNumber[i] * carPrice[i]) * discount) + parseInt(express) + payMoney;
                     str += "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId=" + buyCommodityId[i] + "'>";
                     str += "<img src=" + imags[i] + "></a></li>"
                     str += "<li style='width: 55%'><p class='commodity-name'>" + commodityNames[i] + "</p>";
@@ -352,10 +374,13 @@
                     str += '<li class="pading-10">运费:<span class="freight-money">' + expressStr + '</span></li>'
                     str += '<li class="pading-10">重量:<span class="freight-money">' + weight[i] + 'kg</span></li>'
                     str += '<li class="pading-10">购买数量:<span class="freight-money">' + buyNumber[i] + '</span></li>'
+                    if(commodityDiscountNum[i] != "" && commodityDiscount[i] != ""){
+                        str += '<li class="pading-10">购买' + commodityDiscountNum[i] + '个商品享有' + commodityDiscount[i] + '折优惠</li>';
+                    }
                 }
             }
             $(".am-list-border").append(str);
-            $("#payMoney").html(payMoney);//实付金额
+            $("#payMoney").html(parseFloat(payMoney).toFixed(2));//实付金额
             $("#sumNumber").html('${param.number}')//共件数
         }
         var subData = {

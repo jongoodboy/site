@@ -116,6 +116,14 @@
         width: 25px;
         height: 25px;
     }
+    .am-slider-manual{
+        height: 290px !important;
+    }
+    @media screen and (max-width:320px) {
+        .am-slider-manual{
+            height: 200px !important;
+        }
+    }
 </style>
 <body>
 <c:set value="${commodity}" var="itme"></c:set>
@@ -431,6 +439,8 @@
     })
     //立即购买
     function buyNow() {
+        window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
+        return;
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
             window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
         } else {//没有登录，去登录

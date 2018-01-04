@@ -14,6 +14,24 @@ public class Bank extends DataEntity<Bank> {
     private String stayBankPhone;//预留在银行电话
     private String cardName;//银行卡号对应姓名
     private String password;//取现密码
+    private String bankName;//所属银行
+    private String cardType;//银行卡类型 如借记卡，储蓄卡
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
 
     public String getCardNumber() {
         return cardNumber;

@@ -85,7 +85,7 @@
             <td>${tpl.ordPrice}</td>
             <td>${tpl.applyFundMoney}</td>
             <td>${tpl.applyDescribe}</td>
-            <td><fmt:formatDate value="${tpl.applyRefuntDate}" pattern="yyyy-mm-dd HH:mm:ss"/></td>
+            <td><fmt:formatDate value="${tpl.applyRefuntDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
             <td>${tpl.applyUpdateName}</td>
             <td>${tpl.refundDescribe}</td>
             <td>

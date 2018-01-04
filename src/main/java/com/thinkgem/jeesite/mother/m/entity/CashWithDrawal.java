@@ -13,8 +13,17 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
     private String bankAddress;//银行开户行
     private String bankNumberName;//银行卡号对应的姓名
     private BigDecimal getCash;//提取金额
-    private BigDecimal balance;//用户账用余额
+    private BigDecimal balance;//用户余额
     private String remarks;//财务操作描述
+    private String bankName;//所属银行
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
 
     public String getBankNumber() {
         return bankNumber;

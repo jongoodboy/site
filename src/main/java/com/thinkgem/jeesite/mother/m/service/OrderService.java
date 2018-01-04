@@ -92,8 +92,14 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("comExpress", expressMap.get("express"));//快递公司
                             commodityMap.put("comExpressNumber", o.getExpressNumber());//快递号
                             list.add(commodityMap);//添加每个订单对应的商品
+                            BigDecimal commodityDiscount = com.getCommodityDiscount();//商品折扣
+                            Integer commodityDiscountNum = com.getCommodityDiscountNum();//买满商品数量享有折扣
                             //sumOrderMoney += (Float.parseFloat(o.getCommodityPrice()) * o.getCommodityNumber());//原订单多条商品总金额统计
-                            sumOrderMoney = sumOrderMoney.add(price.multiply(BigDecimal.valueOf(o.getCommodityNumber()))).add(freight);//订单总价//每个订单商品的总运费
+                            price = price.multiply(BigDecimal.valueOf(o.getCommodityNumber()));
+                            if (commodityDiscount != null && commodityDiscountNum != null && o.getCommodityNumber() >= commodityDiscountNum) {//商品打折
+                                price = price.multiply(commodityDiscount.divide(BigDecimal.valueOf(10)));
+                            }
+                            sumOrderMoney = sumOrderMoney.add(price).add(freight);//订单总价/折扣/每个订单商品的总运费
                         }
                         map1.put("orderState", orderState);//订单状态 (0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
                         map1.put("commodityIndex", commodityIndex);//订单对应的商品量

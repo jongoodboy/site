@@ -11,16 +11,16 @@
       balance as "balance",
       remarks as "remarks",
       create_date as "createDate",
-      update_date as "createDate",
+      update_date as "updateDate",
       update_by as "updateBy",
       update_name as "updateName",
-      del_flag as "delFlag"
+      del_flag as "delFlag",
+      bank_name as "bankName"
     </sql>
     <!--申请提现 -->
     <insert id="insert" parameterType="CashWithDrawal">
       INSERT INTO mq_cash_withdrawal
-      SET (
-      id,
+      (id,
       user_id,
       bank_number,
       bank_address,
@@ -29,7 +29,8 @@
       balance,
       remarks,
       create_date,
-      del_flag
+      del_flag,
+      bank_name
       )
       VALUES
       (
@@ -42,7 +43,8 @@
         #{balance},
         #{remarks},
         #{createDate},
-        #{delFlag}
+        #{delFlag},
+        #{bankName}
       )
     </insert>
     <!--个人和所有提现列表-->
@@ -59,12 +61,27 @@
     <!-- 处理提现-->
     <update id="update" parameterType="java.util.Map">
     UPDATE mq_cash_withdrawal
+    SET
       remarks = #{remarks},
       update_date = #{updateDate},
-      update_by = #{updateBy},
-      update_name = #{updateName},
+      update_by = #{updateBy.id},
+      update_name = #{updateBy.name},
       del_flag = #{delFlag}
       WHERE
       id = #{id}
   </update>
+    <!--修改账户余额-->
+    <update id="upByBalance" parameterType="java.util.Map">
+      UPDATE mq_user
+        SET
+        money = money - ${balance}
+        WHERE id = #{userId}
+    </update>
+    <!--查看单条记录-->
+    <select id="get" resultType="CashWithDrawal" parameterType="String">
+        SELECT
+        <include refid="cashWithrawal"/>
+        FROM mq_cash_withdrawal
+        WHERE id=#{id}
+    </select>
 </mapper>

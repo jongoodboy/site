@@ -81,7 +81,8 @@
         padding-left: 10px;
         padding-right: 15px;
     }
-    .am-gallery-title{
+
+    .am-gallery-title {
         padding-left: 10px;
         width: 60%;
         float: left;
@@ -105,7 +106,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
     }
 
@@ -136,8 +137,10 @@
                                   expressProvinceFirst="${map.expressProvinceFirst}"
                                   expressProvinceIncreasing="${map.expressProvinceIncreasing}"
                                   expressOutsideFirst="${map.expressOutsideFirst}"
-                                  expressOutsideIncreasing="${map.expressOutsideIncreasing}" ,
+                                  expressOutsideIncreasing="${map.expressOutsideIncreasing}"
                                   freeShipping="${map.freeShipping}"
+                                  commodityDiscountNum="${map.commodityDiscountNum}"
+                                  commodityDiscount="${map.commodityDiscount}"
                             >
                             </span>
                         <%----%><!--商品单价用于计算-->
@@ -155,7 +158,9 @@
                             </a>
                             <span style="color: #e65c5c">￥${map.commodityPice}</span>
                             <span>重量:${map.weight}kg</span>
-                                <%--  <span>颜色:黑色&nbsp;尺码:40</span>--%>
+                            <c:if test="${map.commodityDiscount != null && map.commodityDiscountNum != null}">
+                                </br><span>购买${map.commodityDiscountNum}个商品享有${map.commodityDiscount}折优惠</span>
+                            </c:if>
                             <ul class="nav-menu">
                                 <li style="font-size: 14px">运费:<c:if test="${map.freeShipping == 0}"><span
                                         class="freight-show">${map.freight == null ? 0 : map.freight}</span></c:if>
@@ -189,19 +194,19 @@
                         <h3 class="am-gallery-title">${itme.commodityName}</h3>
                         <span>￥${itme.commodityPice}</span>
                     </a>
-                    <%--<div class="am-gallery-desc">
-                            &lt;%&ndash;   <ul class="nav-menu">
-                                   <li><i class="my-icon like"></i></li>
-                                   <li class="active">99k</li>
-                               </ul>&ndash;%&gt;
-                        <ul class="nav-menu">
-                            <li>&lt;%&ndash;<i class="my-icon like"></i>&ndash;%&gt;￥</li>
-                            <li class="active">${itme.commodityPice}</li>
-                        </ul>
-                        <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }" class="">
-                            <spen class="buy">#购买</spen>
-                        </a>
-                    </div>--%>
+                        <%--<div class="am-gallery-desc">
+                                &lt;%&ndash;   <ul class="nav-menu">
+                                       <li><i class="my-icon like"></i></li>
+                                       <li class="active">99k</li>
+                                   </ul>&ndash;%&gt;
+                            <ul class="nav-menu">
+                                <li>&lt;%&ndash;<i class="my-icon like"></i>&ndash;%&gt;￥</li>
+                                <li class="active">${itme.commodityPice}</li>
+                            </ul>
+                            <a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }" class="">
+                                <spen class="buy">#购买</spen>
+                            </a>
+                        </div>--%>
                 </div>
             </li>
         </c:forEach>
@@ -303,9 +308,11 @@
             var commodityPrice = "";//商品单价
             var freight = "";//商品运费
             var commodityNames = "";//商品名称
-            //快递名称,省内首重,省内递增,省外首重,省外递增
+            //快递名称,省内首重,省内递增,省外首重,省外递增,
             var expressName = "", expressProvinceFirst = "", expressProvinceIncreasing = "",
                     expressOutsideFirst = "", expressOutsideIncreasing = "", weight = "", freeShipping = "";
+            var commodityDiscount = "";//商品折扣
+            var commodityDiscountNum = "";//商品折扣满足数量
             for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
                 if (selectTshi.hasClass('xuanzhong')) {
@@ -322,6 +329,8 @@
                     buyCommodityId += ',' + selectTshi.attr("commodityId");
                     commodityPrice += ',' + selectTshi.attr("commodityPice");
                     freight += ',' + selectTshi.attr("freight");
+                    commodityDiscount +=","+ selectTshi.attr("commodityDiscount");//商品折扣
+                    commodityDiscountNum +=","+ selectTshi.attr("commodityDiscountNum");//商品折扣满足数量
                 }
             }
             var paramUrl = "money=" + $(".buySumMoney").html()
@@ -330,7 +339,8 @@
                     + "&imags=" + imags + "&freight=" + freight + "&commodityNames=" + commodityNames
                     + "&expressName=" + expressName + "&expressProvinceFirst=" + expressProvinceFirst
                     + "&expressProvinceIncreasing=" + expressProvinceIncreasing + "&expressOutsideFirst=" + expressOutsideFirst
-                    + "&expressOutsideIncreasing=" + expressOutsideIncreasing + "&weight=" + weight+"&freeShipping="+freeShipping;
+                    + "&expressOutsideIncreasing=" + expressOutsideIncreasing + "&weight=" + weight + "&freeShipping="
+                    + freeShipping+"&commodityDiscount="+commodityDiscount+"&commodityDiscountNum="+commodityDiscountNum;
 
             window.location.href = ctx + "/m/orderPage?" + paramUrl;
         })
@@ -367,7 +377,13 @@
                 }
                 $(selectTshi.parent().parent().last().find(".freight-show")).html(freight);
             }
-            buySumMoney += (money * number) + parseInt(freight);//单个商品总价
+            var commodityDiscount = selectTshi.attr("commodityDiscount");//商品折扣
+            var commodityDiscountNum = selectTshi.attr("commodityDiscountNum");//商品折扣满足数量
+            var discount = 1;//1默认不打折
+            if (commodityDiscount != "" && commodityDiscountNum != "" && number >= commodityDiscountNum) {
+                discount = commodityDiscount / 10;
+            }
+            buySumMoney += ((money * number) * discount) + parseInt(freight);//单个商品总价
         }
         buyNumberSpan.html(buyNumber);//显示购买的数量
         buySumMoneySpen.html(parseFloat(buySumMoney, 2).toFixed(2));//显示购买总金额

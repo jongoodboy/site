@@ -61,7 +61,9 @@
         ex.express_province_first as expressProvinceFirst,
         ex.express_province_increasing as expressProvinceIncreasing,
         ex.express_outside_first as expressOutsideFirst,
-        ex.express_outside_increasing as expressOutsideIncreasing
+        ex.express_outside_increasing as expressOutsideIncreasing,
+        com.commodity_discount as commodityDiscount,
+        com.commodity_discount_num as commodityDiscountNum
         FROM
         mq_shopping_cat cat
         LEFT JOIN mq_commodity com ON

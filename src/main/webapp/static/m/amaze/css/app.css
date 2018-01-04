@@ -539,3 +539,15 @@ i.suo {
     background: rgba(255,255,255, 0.9);
     border-radius: 3px !important;
 }
+.bank-1{
+    margin: 5px;
+    height: 250px;
+    background: url("../../img/bank-1.png") no-repeat;
+    background-size: 100% 100%;
+}
+.bank-2{
+    margin: 5px;
+    height: 250px;
+    background: url("../../img/bank-2.png") no-repeat;
+    background-size: 100% 100%;
+}
