@@ -90,7 +90,7 @@
 </div>
 </body>
 <script>
-    var url = '';//${param.url}
+    var url = '${param.url}';
     if (url == '') {
         url = "${ctx}/m/${url}";
     }

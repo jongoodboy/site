@@ -22,11 +22,11 @@
 <div class="am-panel am-panel-default" style="background: url(${ctxStatic}/m/img/myStores.jpg)
         no-repeat center center;background-size: 100% 100%;min-height: 130px;padding-top: 18px">
     <div class="am-panel-bd" style="padding: 0;">
-        <c:if test="${sessionScope.shopImgUrl != null}"><!--分享者的店铺-->
+        <c:if test="${sessionScope.shopImgUrl != ''}"><!--分享者的店铺并且自己还不是会员-->
         <img class="am-img-thumbnail am-circle" src="${sessionScope.shopImgUrl}"/>
         <span class="shop-name">${shopName}</span>
         </c:if>
-        <c:if test="${param.myself == 'yes' && sessionScope.shopImgUrl == null}"><!--自己的店铺-->
+        <c:if test="${sessionScope.shopImgUrl == ''}"><!--自己的店铺-->
         <img class="am-img-thumbnail am-circle" src="${sessionScope.jb.getString("headimgurl")}"/>
         <span class="shop-name">${sessionScope.jb.getString("nickname")}的店铺</span>
         </c:if>
@@ -54,6 +54,7 @@
         </div>
         <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
             data-am-gallery="{  }" id="commodityXisMenu">
+            <span class="title-six">超值热卖</span>
             <!--6个商品菜单-->
         </ul>
         <div class="am-slider am-slider-carousel boutique">

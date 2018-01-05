@@ -25,8 +25,10 @@
                 </div>
             </div>
         </div>
+
         <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-3 am-avg-lg-4 am-gallery-bordered"
             data-am-gallery="{  }" id="commodityXisMenu">
+            <span class="title-six">超值热卖</span>
             <!--6个商品菜单-->
         </ul>
         <div class="am-slider am-slider-carousel boutique">
