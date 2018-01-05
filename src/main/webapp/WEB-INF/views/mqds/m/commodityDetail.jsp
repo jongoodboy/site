@@ -439,8 +439,6 @@
     })
     //立即购买
     function buyNow() {
-        window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
-        return;
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
             window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
         } else {//没有登录，去登录
