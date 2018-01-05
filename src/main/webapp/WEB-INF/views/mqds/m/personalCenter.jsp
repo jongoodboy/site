@@ -84,7 +84,7 @@
             <h2>您好,${sessionScope.jb.getString("nickname")}</h2><!--微信名 -->
             <%--<span>我的下线：996人</span>--%>
             <span>账户余额：${sessionScope.mUser.money}
-                <c:if test="${sessionScope.mUser.money != '0.00'}">
+                <c:if test="${sessionScope.mUser.money != '0.00' && isVip == '0'}">
                     <a href="javascript:withdrawals()">提现</a>
                 </c:if>
                 <c:if test="${sessionScope.mUser.money == '0.00'}">

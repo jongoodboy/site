@@ -75,7 +75,7 @@ public class IndexController {
     @ModelAttribute
     public void getMuser(HttpServletRequest request, HttpServletResponse response, String personalStores) throws IOException {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
-      /* if (openId == null) {
+       if (openId == null) {
             String strBackUrl = "http://" + request.getServerName() //服务器地址
                     + ":"
                     + request.getServerPort()           //端口号
@@ -90,7 +90,7 @@ public class IndexController {
                 request.getSession().setAttribute("personalStores", personalStores);//我要创业
             }
             response.sendRedirect(ConfigUtil.GET_CODE);//微信取code
-        }*/
+        }
         Map<String, Object> paramMap = new HashedMap();
         paramMap.put("openId", openId);
         Muser m = mUserSerivce.findUser(paramMap);
