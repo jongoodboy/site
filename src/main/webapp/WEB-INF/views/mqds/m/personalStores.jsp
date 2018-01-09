@@ -160,7 +160,7 @@
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
     //每周的数据
-    var userId = '${param.userId}';//用户Id
+    var userId = '${sessionScope.mUser.id}';//用户Id
     //查看本月的细节
     $(".month-detail").on("click", function () {
         $(this).html('<i class="am-icon-spinner am-icon-spin"></i>加载中....')
