@@ -32,7 +32,8 @@
             <!--6个商品菜单-->
         </ul>
         <div class="am-slider am-slider-carousel boutique">
-            <span class="title">推荐精品</span>
+            <%--<span class="title">推荐精品</span>--%>
+            <span class="title-six">推荐精品</span>
             <div class="swiper-container products">
                 <div class="swiper-wrapper" id="products">
                     <!--推荐精品 -->
