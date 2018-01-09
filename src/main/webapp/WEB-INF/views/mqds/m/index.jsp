@@ -236,8 +236,10 @@
         $(ev).addClass("active");
         if (type == 2) {//热门
             $(".am-slider").hide();
+            $("#commodityXisMenu").hide();
         } else {//推荐
             $(".am-slider").show();
+            $("#commodityXisMenu").show();
         }
         $("#commodityLsit").html("");//清空
         init();

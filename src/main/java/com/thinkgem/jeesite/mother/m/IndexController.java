@@ -535,11 +535,7 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/personalCenter")
-    public String personalCenter(HttpServletRequest request) {
-        Muser m = (Muser) request.getSession().getAttribute("mUser");
-        request.getSession().setAttribute("code",m.getCode());//我的店铺个人分享码
-        request.getSession().removeAttribute("shopName");//删除分享店铺(针对从别人分享的店铺。自己变成会员后点击查看我的店铺)
-        request.getSession().removeAttribute("shopImgUrl");
+    public String personalCenter() {
         return "mqds/m/personalCenter";
     }
 
@@ -936,6 +932,11 @@ public class IndexController {
             request.getSession().setAttribute("code", code);
             request.getSession().setAttribute("shopName", shopName);
             request.getSession().setAttribute("shopImgUrl", shopImgUrl);
+        }else{
+            Muser m = (Muser) request.getSession().getAttribute("mUser");
+            request.getSession().setAttribute("code",m.getCode());//我的店铺个人分享码
+            request.getSession().removeAttribute("shopName");//删除分享店铺(针对从别人分享的店铺。自己变成会员后点击查看我的店铺)
+            request.getSession().removeAttribute("shopImgUrl");
         }
         return "mqds/m/userShop";
     }

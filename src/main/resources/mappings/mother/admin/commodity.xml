@@ -57,7 +57,9 @@
         WHERE
         1 = 1
         AND del_flag = '0'
-        AND commodity_state NOT IN (1,3,5)
+        <if test="commodityName == '' or commodityName == null">
+            AND commodity_state NOT IN (1,3,5)
+        </if>
         <if test="type != '' and type != null">
             AND commodity_state = #{type}
         </if>
