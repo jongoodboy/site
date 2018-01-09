@@ -8,7 +8,7 @@
 <body>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
-    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName" onkeyup="findCommdityByName()">
+    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
     <button class="but-search"><span class="sousuo"></span></button>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
@@ -172,15 +172,15 @@
 
                         commodityXisMenuStr += '<li><div class="am-gallery-item">';
                         commodityXisMenuStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
-                     /*   commodityXisMenuStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';*/
+                        /*   commodityXisMenuStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';*/
                         var price = data[i].commodityPice;
                         if ((/(^[1-9]\d*$)/.test(price))) {
                             price += ".00"
                         }
-                      /*  commodityXisMenuStr += '<li class="active">' + price + '</li><li>';
-                        commodityXisMenuStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
-                        commodityXisMenuStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
-                        commodityXisMenuStr += '<h3>' + data[i].commodityName + '</h3><span>￥'+price+'</span></a>';
+                        /*  commodityXisMenuStr += '<li class="active">' + price + '</li><li>';
+                         commodityXisMenuStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
+                         commodityXisMenuStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
+                        commodityXisMenuStr += '<h3>' + data[i].commodityName + '</h3><span>￥' + price + '</span></a>';
                     }
 
                     $("#commodityXisMenu").append(commodityXisMenuStr);//首页6个菜单商品商品列表
@@ -196,17 +196,17 @@
                     if (data.length == 1) { //如果只有一个商品
                         style = "border-bottom: 1px solid #eee;margin-bottom: 8px;border-top: 10px solid #eee;";
                     }
-                    commodityListStr += '<li style="'+style+'"><div class="am-gallery-item">';
+                    commodityListStr += '<li style="' + style + '"><div class="am-gallery-item">';
                     commodityListStr += ' <a href="${ctx}/m/commodityDetail?commodityId=' + data[i].id + '" class=""><img class="lazy" src="' + img[1] + '"/>';
                     //commodityListStr += '<div class="am-gallery-desc"><hr/></ul><ul class="nav-menu"><li>￥</li>';
                     var price = data[i].commodityPice;
                     if ((/(^[1-9]\d*$)/.test(price))) {
                         price += ".00"
                     }
-               /*     commodityListStr += '<li class="active">' + price + '</li><li>';
-                    commodityListStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
-                    commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
-                    commodityListStr += '<h3>' + data[i].commodityName + '</h3><span>￥'+price+'</span></a>';
+                    /*     commodityListStr += '<li class="active">' + price + '</li><li>';
+                     commodityListStr += '<a href="javascript:buyNow(\'' + data[i].id + '\')">';
+                     commodityListStr += '<spen class="buy">#购买</spen></a></li></ul></div></div></li>';*/
+                    commodityListStr += '<h3>' + data[i].commodityName + '</h3><span>￥' + price + '</span></a>';
                 }
                 if (commodityListStr != "") {
                     $("#commodityLsit").append(commodityListStr);//商品列表
@@ -245,6 +245,12 @@
         $("#commodityLsit").html("");//清空
         init();
     }
+    //模糊搜索商品名称 确认或完成建
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            findCommdityByName()
+        }
+    });
     //模糊搜索商品名称
     $(".but-search").on("click", function () {
         findCommdityByName();

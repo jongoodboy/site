@@ -35,7 +35,7 @@
 <%--</c:if>--%>
 <c:set value="${commodityList}" var="list"/>
 <div class="header">
-    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName" onkeyup="findCommdityByName()">
+    <input placeholder="输入您要查找的货物名称" class="input-search" id="commodityName">
     <button class="but-search"><span class="sousuo"></span></button>
     <ul class="nav-menu">
         <li class="active" onclick="tapMenu(this,1)">推荐</li>
@@ -58,7 +58,8 @@
             <!--6个商品菜单-->
         </ul>
         <div class="am-slider am-slider-carousel boutique">
-            <span class="title">推荐精品</span>
+            <%--<span class="title">推荐精品</span>--%>
+            <span class="title-six">推荐精品</span>
             <div class="swiper-container products">
                 <div class="swiper-wrapper" id="products">
                     <!--推荐精品 -->
@@ -349,6 +350,12 @@
         $("#commodityLsit").html("");//清空
         init();
     }
+    //模糊搜索商品名称 确认或完成建
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            findCommdityByName()
+        }
+    });
     //模糊搜索商品名称
     $(".but-search").on("click", function () {
         findCommdityByName();
