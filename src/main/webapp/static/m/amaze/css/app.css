@@ -13,7 +13,7 @@ html, body {
 
 .boutique {
     padding: 3% 0 5% 5%;
-    border-bottom: 10px solid #eee;
+    /*border-bottom: 10px solid #eee;*/
     margin-bottom: 0px !important;
 }
 
@@ -105,7 +105,7 @@ img.lazy {
 
 .am-gallery-bordered .am-gallery-item {
     box-shadow: none;
-    padding: 1px;
+    padding: 0px;
 }
 
 .my-icon {

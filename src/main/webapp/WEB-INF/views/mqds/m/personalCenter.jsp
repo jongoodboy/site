@@ -165,6 +165,12 @@
                     </a>
                     <i></i>
                 </li>
+                <li>
+                    <a href="${ctx}/m/systemSettings">
+                        <span>使用说明</span>
+                    </a>
+                    <i></i>
+                </li>
                 <%--<li>
                     <a href="javascript:void (0)">
                         <span>关于</span>
