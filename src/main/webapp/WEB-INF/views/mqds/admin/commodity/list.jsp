@@ -44,7 +44,7 @@
     <ul class="ul-form">
         <li>
             <label>商品类型：${commodityType}</label>
-            <select name="commodityType" onchange="$('#searchForm').submit();">
+            <select name="commodityType" onchange="$('#searchForm').submit();" style="width: 100px">
                 <option value="">全部</option>
                 <c:forEach items="${fns:getDictList('commodity_type')}" var="itme">
                     <option value="${itme.value}" <c:if
