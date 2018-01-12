@@ -118,15 +118,6 @@
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">默认快递:</label>
-        <div class="controls">
-            <form:select path="defaultExpress" class="input-mini">
-                <form:options items="${expressList}" itemLabel="expressName" itemValue="id" htmlEscape="false"/>
-            </form:select>
-                <%-- <form:input path="" htmlEscape="false" class="required" maxlength="5" type="number"/>--%>
-        </div>
-    </div>
-    <div class="control-group">
         <label class="control-label">所属区域:</label>
         <div class="controls">
             <form:select path="belongRegion" class="input-mini" onchange="classification('select')">
@@ -161,9 +152,28 @@
         </div>
     </div>--%>
     <div class="control-group">
+        <label class="control-label">默认快递:</label>
+        <div class="controls">
+            <form:select path="defaultExpress" class="input-mini">
+                <form:options items="${expressList}" itemLabel="expressName" itemValue="id" htmlEscape="false"/>
+            </form:select>
+                <%-- <form:input path="" htmlEscape="false" class="required" maxlength="5" type="number"/>--%>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">重量:</label>
         <div class="controls">
-            <form:input path="weight" htmlEscape="false" class="required" maxlength="5" type="number"/>KG
+            <form:input path="weight" htmlEscape="false" class="required" maxlength="5" type="number"/>KG(商品本身重量,不做展示)
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">展示重量:</label>
+        <div class="controls">
+            <form:input path="commodityWeightShow" htmlEscape="false" class="required" maxlength="5" type="number"/>
+            <form:select path="commodityWeightUnit" class="input-mini">
+                <form:options items="${fns:getDictList('commodity_nuit')}" itemLabel="label" itemValue="value"
+                              htmlEscape="false"/>
+            </form:select>
         </div>
     </div>
     <div class="control-group">

@@ -141,6 +141,8 @@
                                   freeShipping="${map.freeShipping}"
                                   commodityDiscountNum="${map.commodityDiscountNum}"
                                   commodityDiscount="${map.commodityDiscount}"
+                                  commodityWeightShow="${map.commodityWeightShow}"
+                                  commodityWeightUnit="${map.commodityWeightUnit}"
                             >
                             </span>
                         <%----%><!--商品单价用于计算-->
@@ -157,7 +159,7 @@
                                 <span class="shoppoing-title">${map.commodityName}</span>
                             </a>
                             <span style="color: #e65c5c">￥${map.commodityPice}</span>
-                            <span>重量:${map.weight}kg</span>
+                            <span>重量:${map.commodityWeightShow}${map.commodityWeightUnit}</span>
                             <c:if test="${map.commodityDiscount != null && map.commodityDiscountNum != null}">
                                 </br><span>购买${map.commodityDiscountNum}个商品享有${map.commodityDiscount}折优惠</span>
                             </c:if>
@@ -313,6 +315,8 @@
                     expressOutsideFirst = "", expressOutsideIncreasing = "", weight = "", freeShipping = "";
             var commodityDiscount = "";//商品折扣
             var commodityDiscountNum = "";//商品折扣满足数量
+            var commodityWeightShow = "";//展示给用户看的重量
+            var commodityWeightUnit = "";//展示给用户看的重量单位
             for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
                 if (selectTshi.hasClass('xuanzhong')) {
@@ -329,8 +333,10 @@
                     buyCommodityId += ',' + selectTshi.attr("commodityId");
                     commodityPrice += ',' + selectTshi.attr("commodityPice");
                     freight += ',' + selectTshi.attr("freight");
-                    commodityDiscount +=","+ selectTshi.attr("commodityDiscount");//商品折扣
-                    commodityDiscountNum +=","+ selectTshi.attr("commodityDiscountNum");//商品折扣满足数量
+                    commodityDiscount += "," + selectTshi.attr("commodityDiscount");//商品折扣
+                    commodityDiscountNum += "," + selectTshi.attr("commodityDiscountNum");//商品折扣满足数量
+                    commodityWeightShow += "," + selectTshi.attr("commodityWeightShow");//展示给用户看的重量
+                    commodityWeightUnit += "," + selectTshi.attr("commodityWeightUnit");//展示给用户看的重量单位
                 }
             }
             var paramUrl = "money=" + $(".buySumMoney").html()
@@ -340,7 +346,8 @@
                     + "&expressName=" + expressName + "&expressProvinceFirst=" + expressProvinceFirst
                     + "&expressProvinceIncreasing=" + expressProvinceIncreasing + "&expressOutsideFirst=" + expressOutsideFirst
                     + "&expressOutsideIncreasing=" + expressOutsideIncreasing + "&weight=" + weight + "&freeShipping="
-                    + freeShipping+"&commodityDiscount="+commodityDiscount+"&commodityDiscountNum="+commodityDiscountNum;
+                    + freeShipping + "&commodityDiscount=" + commodityDiscount + "&commodityDiscountNum=" + commodityDiscountNum
+                    + "&commodityWeightUnit=" + commodityWeightUnit + "&commodityWeightShow=" + commodityWeightShow;
 
             window.location.href = ctx + "/m/orderPage?" + paramUrl;
         })

@@ -91,6 +91,11 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("comFreight", freight);//商品总运费
                             commodityMap.put("comExpress", expressMap.get("express"));//快递公司
                             commodityMap.put("comExpressNumber", o.getExpressNumber());//快递号
+                            commodityMap.put("comCommodityWeightShow", com.getCommodityWeightShow());//展示给用户看的重量
+                            Object commodityWeightUnit = com.getCommodityWeightUnit();
+                            if (commodityWeightUnit != null) {
+                                commodityMap.put("comCommodityWeightUnit", DictUtils.getDictLabel(commodityWeightUnit.toString(), "commodity_nuit", "商品单位"));//展示给用户看的重量单位
+                            }
                             list.add(commodityMap);//添加每个订单对应的商品
                             BigDecimal commodityDiscount = com.getCommodityDiscount();//商品折扣
                             Integer commodityDiscountNum = com.getCommodityDiscountNum();//买满商品数量享有折扣

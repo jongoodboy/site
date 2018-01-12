@@ -144,7 +144,7 @@
                                     commodityStateSpan = "等待付款";
                                     break;
                                 case "2":
-                                  /*  operation = "申请退款";*/
+                                    /*  operation = "申请退款";*/
                                     break;
                                 case "3":
                                     commodityStateSpan = /*"物流信息:" + ret.data[i].shppingList[j].comExpress +
@@ -176,7 +176,9 @@
                             if (comFreight == 0) {
                                 comFreight = "包邮"
                             }
-                            str += '<span class="cxpress">重量:' + ret.data[i].shppingList[j].comWeight + 'kg&nbsp;&nbsp;&nbsp;单价:￥' + ret.data[i].shppingList[j].comPrice + '</span>';
+                            str += '<span class="cxpress">重量:' + ret.data[i].shppingList[j].comCommodityWeightShow + ''
+                                    + ret.data[i].shppingList[j].comCommodityWeightUnit + '&nbsp;&nbsp;&nbsp;单价:￥'
+                                    + ret.data[i].shppingList[j].comPrice + '</span>';
                             str += '<span class="cxpress">运费:￥' + comFreight + '</span>';
                             str += '<span class="cxpress">' + commodityStateSpan + '</span>';
                         }

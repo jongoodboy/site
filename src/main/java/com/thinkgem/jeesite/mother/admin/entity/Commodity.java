@@ -31,6 +31,24 @@ public class Commodity extends DataEntity<Commodity> {
     private Integer commodityPosition;//商品位置 越小越在前
     private BigDecimal commodityDiscount;//商品折扣
     private Integer commodityDiscountNum;//满足折扣条件，如买两个商品以上开始打折
+    private String commodityWeightUnit;//商品重量单位1.kg2.g3.L
+    private BigDecimal commodityWeightShow;//前端显示商品的重量(展示给用户看的)
+
+    public String getCommodityWeightUnit() {
+        return commodityWeightUnit;
+    }
+
+    public void setCommodityWeightUnit(String commodityWeightUnit) {
+        this.commodityWeightUnit = commodityWeightUnit;
+    }
+
+    public BigDecimal getCommodityWeightShow() {
+        return commodityWeightShow;
+    }
+
+    public void setCommodityWeightShow(BigDecimal commodityWeightShow) {
+        this.commodityWeightShow = commodityWeightShow;
+    }
 
     public Integer getCommodityPosition() {
         return commodityPosition;

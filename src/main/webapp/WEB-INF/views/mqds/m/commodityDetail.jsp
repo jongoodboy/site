@@ -29,7 +29,7 @@
         margin: 3px;
     }
 
-    .am-gallery-title{
+    .am-gallery-title {
         padding-left: 10px;
         width: 60%;
         float: left;
@@ -116,13 +116,22 @@
         width: 25px;
         height: 25px;
     }
-    .am-slider-manual{
+
+    .am-slider-manual {
         height: 290px !important;
     }
-    @media screen and (max-width:320px) {
-        .am-slider-manual{
+
+    @media screen and (max-width: 320px) {
+        .am-slider-manual {
             height: 200px !important;
         }
+        article .nav-menu li {
+            font-size: 17px;
+        }
+    }
+
+    article .nav-menu li.weight-show {
+        color: #333;
     }
 </style>
 <body>
@@ -152,6 +161,7 @@
             <ul class="nav-menu">
                 <li class="active">￥${itme.commodityPice}
                     / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
+                <li class="weight-show">${itme.commodityWeightShow}${commodityWeightUnit}</li>
                 <li class="freight">运费: <span id="express"></span>元</li><!--按照快递首重来算-->
             </ul>
             <div class="commodityMaker">
@@ -245,7 +255,7 @@
                         ${commodity.commodityName}
                     </span>
                     <span class="price">￥:${commodity.commodityPice}</span>
-                    <span style="display: inline-block;float: right">重量:${commodity.weight}kg</span><br>
+                    <span style="display: inline-block;float: right">重量:${commodity.commodityWeightShow}${commodityWeightUnit}</span><br>
                     <span>库存:${commodity.commodityNumber}</span><br>
                     <%--<span>商品编号:5555522</span><br>--%>
                 </li>

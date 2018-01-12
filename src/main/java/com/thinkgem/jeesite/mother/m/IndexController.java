@@ -2,6 +2,7 @@ package com.thinkgem.jeesite.mother.m;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.IdGen;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.mother.admin.entity.Classification;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.entity.Express;
@@ -183,6 +184,10 @@ public class IndexController {
         Express express = expressService.get(commodity.getDefaultExpress());//快递
         model.addAttribute("commodity", commodity);
         model.addAttribute("express", express);
+        String value = commodity.getCommodityWeightUnit();
+        if (value != null) {
+            model.addAttribute("commodityWeightUnit", DictUtils.getDictLabel(value, "commodity_nuit", "商品单位"));
+        }
         //商品随机推荐
         Map<String, Object> mapParam = new HashedMap();
         mapParam.put("commodityId", commodityId);
@@ -209,6 +214,10 @@ public class IndexController {
             returnMap.put("msg", "查询数据成功");
             returnMap.put("code", "0");
             returnMap.put("express", express);
+            String value = commodity.getCommodityWeightUnit();
+            if (value != null) {
+                returnMap.put("commodityWeightUnit", DictUtils.getDictLabel(value, "commodity_nuit", "商品单位"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             returnMap.put("msg", "查询数据失败");
@@ -258,6 +267,10 @@ public class IndexController {
             } else if (d > 1) {//大于1gk
                 int y = (int) d;
                 listMap.get(i).put("freight", expressProvinceFirst.add(BigDecimal.valueOf(y * expressProvinceIncreasing.intValue())));//首重加上超出的部份每超出1gk+递增
+            }
+            Object commodityWeightUnit = listMap.get(i).get("commodityWeightUnit");
+            if (commodityWeightUnit != null) {
+                listMap.get(i).put("commodityWeightUnit", DictUtils.getDictLabel(commodityWeightUnit.toString(), "commodity_nuit", "商品单位"));
             }
         }
         model.addAttribute("listMap", listMap);

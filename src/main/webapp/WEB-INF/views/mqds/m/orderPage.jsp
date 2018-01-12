@@ -225,11 +225,11 @@
                         str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
                         str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
-                        str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.weight + 'kg</span></li>'
+                        str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.commodityWeightShow + '' + ret.commodityWeightUnit + '</span></li>'
                         str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
                         str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
                         str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul>';
-                        if(commodityDiscountNum != undefined && commodityDiscount != undefined){
+                        if (commodityDiscountNum != undefined && commodityDiscount != undefined) {
                             str += '<li class="pading-10">购买' + commodityDiscountNum + '个商品享有' + commodityDiscount + '折优惠</li>';
                         }
                         str += '</li>'
@@ -325,6 +325,8 @@
             var freeShipping = '${param.freeShipping}';//是否包邮 1包0不包
             var commodityDiscount = "${param.commodityDiscount}";//商品折扣
             var commodityDiscountNum = "${param.commodityDiscountNum}";//商品折扣满足数量
+            var commodityWeightShow = "${param.commodityWeightShow}";//展示给用户看的重量
+            var commodityWeightUnit = "${param.commodityWeightUnit}";//展示给用户看的重量单位
             if (imags != '' && imags != null) {//显示购物车提交过来的购物列表
                 var imags = imags.split(',');
                 var carPrice = carPrice.split(',');
@@ -341,6 +343,8 @@
                 var freeShipping = freeShipping.split(",");//是否包邮
                 var commodityDiscount = commodityDiscount.split(",");//商品折扣
                 var commodityDiscountNum = commodityDiscountNum.split(",");//商品折扣满足数量
+                var commodityWeightShow = commodityWeightShow.split(",");//展示给用户看的重量
+                var commodityWeightUnit = commodityWeightUnit.split(",");//展示给用户看的重量单位
                 var str = "";
                 for (var i = 1; i < imags.length; i++) {//最多显示三个商品的图片
                     var expressFirst, expressIncreasing, thisWeight, express = 0.00, expressStr;
@@ -372,9 +376,9 @@
                     str += "<span class='commodity-money'>￥" + carPrice[i] + "</span></li></ul></li>";
                     str += '<li class="pading-10">快递:<span class="freight-money select-express">' + expressName[i] + '快递</span></li>'//快递
                     str += '<li class="pading-10">运费:<span class="freight-money">' + expressStr + '</span></li>'
-                    str += '<li class="pading-10">重量:<span class="freight-money">' + weight[i] + 'kg</span></li>'
+                    str += '<li class="pading-10">重量:<span class="freight-money">' + commodityWeightShow[i] + '' + commodityWeightUnit[i] + '</span></li>'
                     str += '<li class="pading-10">购买数量:<span class="freight-money">' + buyNumber[i] + '</span></li>'
-                    if(commodityDiscountNum[i] != "" && commodityDiscount[i] != ""){
+                    if (commodityDiscountNum[i] != "" && commodityDiscount[i] != "") {
                         str += '<li class="pading-10">购买' + commodityDiscountNum[i] + '个商品享有' + commodityDiscount[i] + '折优惠</li>';
                     }
                 }
