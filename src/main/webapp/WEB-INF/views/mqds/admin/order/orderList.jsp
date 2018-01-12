@@ -63,7 +63,8 @@
         <th>收货人</th>
         <th>收货人电话</th>
         <th>收货地址</th>
-        <th>快递</th>
+        <th>应发快递</th>
+        <th>实发快递</th>
         <th>快递单号</th>
         <th>发货时间</th>
         <th>发货人</th>
@@ -82,6 +83,7 @@
             <td>${tpl.consigneePhone}</td>
             <td>${tpl.address}</td>
             <td>${tpl.express}</td>
+            <td>${fns:getDictLabel(tpl.expressRealHair, 'express_type', '')}</td>
             <td>${tpl.expressNumber}</td>
             <td><fmt:formatDate value="${tpl.deliveryTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
             <td>${tpl.deliveryPeolpe}</td>
@@ -102,16 +104,15 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">操作</h4>
+                <h4 class="modal-title" id="myModalLabel">发货操作</h4>
             </div>
             <div class="modal-body">
-                <input type="text" placeholder="输入货运单" name="expressNumber"><br/>
-                <%-- <c:forEach items="${fns:getDictList('express_type')}" var="express">
-                     <input id="expressType${express.value}" type="radio" value="${express.value}"
-                            onclick="express(this)"
-                            <c:if test="${express.value == '1'}">checked </c:if>/>
-                     <label for="expressType${express.value}">${express.label}</label>
-                 </c:forEach>--%>
+                <select name="expressRealHair" id="expressRealHair" onchange="express()" style="width: 100px;height: 40px">
+                    <c:forEach items="${fns:getDictList('express_type')}" var="itme">
+                        <option value="${itme.value}">${itme.label}</option>
+                    </c:forEach>
+                </select>
+                <input type="text" placeholder="输入货运单" name="expressNumber">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -125,18 +126,13 @@
         orderState: "3",//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
         orderId: "",//订单ID
         expressNumber: "",//快递单号
-        /*   express: "1",//快递公司 默认圆通*/
+        expressRealHair: "",//快递公司 默认圆通*/
         deliveryPeolpe: '${fns:getUser().name}'//发货人
     }
     //打开发货窗口
     function delivery(id) {
         paramDate.orderId = id;
         $('#myModal').modal('show');
-    }
-    //发货单选框事件
-    function express(ev) {
-        $(ev).siblings().attr("checked", false);
-        paramDate.express = $(ev).val();
     }
     //确认发货
     function deliveryActeve() {
@@ -145,11 +141,8 @@
             alertx("请输入订单号");
             return;
         }
-        /*  if (paramDate.express == "") {
-         alert("请选择快递公司");
-         return;
-         }*/
         paramDate.expressNumber = expressNumber;
+        paramDate.expressRealHair = $("#expressRealHair").val();
         $.post("${ctx}/order/delivery", paramDate, function (ret) {
             alertx(ret.msg);
             if (ret.code == "0") {

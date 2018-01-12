@@ -223,7 +223,7 @@
                         str += "<img src=" + imgSrc[1] + "></a></li>"
                         str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + "</p>";
                         str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
-                        str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
+                       // str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
                         str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.commodityWeightShow + '' + ret.commodityWeightUnit + '</span></li>'
                         str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
@@ -374,7 +374,7 @@
                     str += "<img src=" + imags[i] + "></a></li>"
                     str += "<li style='width: 55%'><p class='commodity-name'>" + commodityNames[i] + "</p>";
                     str += "<span class='commodity-money'>￥" + carPrice[i] + "</span></li></ul></li>";
-                    str += '<li class="pading-10">快递:<span class="freight-money select-express">' + expressName[i] + '快递</span></li>'//快递
+                    //str += '<li class="pading-10">快递:<span class="freight-money select-express">' + expressName[i] + '快递</span></li>'//快递
                     str += '<li class="pading-10">运费:<span class="freight-money">' + expressStr + '</span></li>'
                     str += '<li class="pading-10">重量:<span class="freight-money">' + commodityWeightShow[i] + '' + commodityWeightUnit[i] + '</span></li>'
                     str += '<li class="pading-10">购买数量:<span class="freight-money">' + buyNumber[i] + '</span></li>'

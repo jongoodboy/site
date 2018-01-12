@@ -67,6 +67,7 @@ public class OrderController {
                     map.put("express", o.getExpress());
                     map.put("expressNumber", o.getExpressNumber());
                     map.put("deliveryTime", o.getDeliveryTime());
+                    map.put("expressRealHair", o.getExpressRealHair());
                     map.put("deliveryPeolpe", o.getDeliveryPeolpe());
                     Commodity c = commodityService.get(o.getCommodityId());//每一个商品
                     map.put("commodityName", c.getCommodityName());

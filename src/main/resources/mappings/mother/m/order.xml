@@ -19,7 +19,8 @@
         share_code as "shareCode",
         create_date as "createDate",
         update_date as "updateDate",
-        del_flag as "delFlag"
+        del_flag as "delFlag",
+        express_real_hair as "expressRealHair"
     </sql>
 
     <!--个人所有订单号-->
@@ -143,7 +144,8 @@
         order_state = #{orderState},
         express_number = #{expressNumber},
         delivery_time = #{deliveryTime},
-        delivery_peolpe = #{deliveryPeolpe}
+        delivery_peolpe = #{deliveryPeolpe},
+        express_real_hair = #{expressRealHair}
         WHERE
         id = #{id}
     </update>

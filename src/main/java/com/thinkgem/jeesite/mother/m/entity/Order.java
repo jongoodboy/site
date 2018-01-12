@@ -19,11 +19,21 @@ public class Order extends DataEntity<Order> {
     private String consigneePhone;//收货人电话
     private Integer commodityNumber;//商品购买的数量
     private BigDecimal commodityPrice;//商品单价
-    private String express;//快递
+    private String express;//应发快递
+    private String expressRealHair;//实发快递
     private String expressNumber;//快递单号
     private Date deliveryTime;//发货时间
     private String deliveryPeolpe;//发货人
     private String shareCode;//分享码
+
+
+    public String getExpressRealHair() {
+        return expressRealHair;
+    }
+
+    public void setExpressRealHair(String expressRealHair) {
+        this.expressRealHair = expressRealHair;
+    }
 
     public String getShareCode() {
         return shareCode;
