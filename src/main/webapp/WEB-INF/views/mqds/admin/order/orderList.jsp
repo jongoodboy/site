@@ -106,12 +106,12 @@
             </div>
             <div class="modal-body">
                 <input type="text" placeholder="输入货运单" name="expressNumber"><br/>
-               <%-- <c:forEach items="${fns:getDictList('express_type')}" var="express">
-                    <input id="expressType${express.value}" type="radio" value="${express.value}"
-                           onclick="express(this)"
-                           <c:if test="${express.value == '1'}">checked </c:if>/>
-                    <label for="expressType${express.value}">${express.label}</label>
-                </c:forEach>--%>
+                <%-- <c:forEach items="${fns:getDictList('express_type')}" var="express">
+                     <input id="expressType${express.value}" type="radio" value="${express.value}"
+                            onclick="express(this)"
+                            <c:if test="${express.value == '1'}">checked </c:if>/>
+                     <label for="expressType${express.value}">${express.label}</label>
+                 </c:forEach>--%>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -125,7 +125,7 @@
         orderState: "3",//(0已完成,1待付款,2.待发货,3已发货,4退款中,5已退款)
         orderId: "",//订单ID
         expressNumber: "",//快递单号
-     /*   express: "1",//快递公司 默认圆通*/
+        /*   express: "1",//快递公司 默认圆通*/
         deliveryPeolpe: '${fns:getUser().name}'//发货人
     }
     //打开发货窗口
@@ -145,10 +145,10 @@
             alertx("请输入订单号");
             return;
         }
-      /*  if (paramDate.express == "") {
-            alert("请选择快递公司");
-            return;
-        }*/
+        /*  if (paramDate.express == "") {
+         alert("请选择快递公司");
+         return;
+         }*/
         paramDate.expressNumber = expressNumber;
         $.post("${ctx}/order/delivery", paramDate, function (ret) {
             alertx(ret.msg);

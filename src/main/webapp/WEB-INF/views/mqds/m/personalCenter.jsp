@@ -166,7 +166,7 @@
                     <i></i>
                 </li>
                 <li>
-                    <a href="${ctx}/m/systemSettings">
+                    <a href="${ctx}/m/instructionsList">
                         <span>使用说明</span>
                     </a>
                     <i></i>

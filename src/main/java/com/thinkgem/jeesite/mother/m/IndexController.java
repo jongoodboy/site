@@ -5,9 +5,11 @@ import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.mother.admin.entity.Classification;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.entity.Express;
+import com.thinkgem.jeesite.mother.admin.entity.Instructions;
 import com.thinkgem.jeesite.mother.admin.service.ClassificationService;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
 import com.thinkgem.jeesite.mother.admin.service.ExpressService;
+import com.thinkgem.jeesite.mother.admin.service.InstructionsService;
 import com.thinkgem.jeesite.mother.m.entity.*;
 import com.thinkgem.jeesite.mother.m.service.*;
 import com.thinkgem.jeesite.mother.m.weixin.*;
@@ -69,6 +71,9 @@ public class IndexController {
     //银行卡
     @Resource
     private BankService bankService;
+    //使用说明
+    @Resource
+    private InstructionsService instructionsService;
 
     //提现
     //每次请求都会先进这里
@@ -932,9 +937,9 @@ public class IndexController {
             request.getSession().setAttribute("code", code);
             request.getSession().setAttribute("shopName", shopName);
             request.getSession().setAttribute("shopImgUrl", shopImgUrl);
-        }else{
+        } else {
             Muser m = (Muser) request.getSession().getAttribute("mUser");
-            request.getSession().setAttribute("code",m.getCode());//我的店铺个人分享码
+            request.getSession().setAttribute("code", m.getCode());//我的店铺个人分享码
             request.getSession().removeAttribute("shopName");//删除分享店铺(针对从别人分享的店铺。自己变成会员后点击查看我的店铺)
             request.getSession().removeAttribute("shopImgUrl");
         }
@@ -1071,5 +1076,27 @@ public class IndexController {
             e.printStackTrace();
         }
         return retMap;
+    }
+
+    /**
+     * 使用说明列表
+     *
+     * @return
+     */
+    @RequestMapping("/instructionsList")
+    public String instructions() {
+        return "mqds/m/instructionsList";
+    }
+
+    /**
+     * 使用说明详情
+     *
+     * @return
+     */
+    @RequestMapping("/instructionsDetail")
+    public String instructionsDetail(String instructionsType, Model model) {
+        List<Instructions> instructionsLsit = instructionsService.findByInstructionsType(instructionsType);
+        model.addAttribute("instructionsLsit", instructionsLsit);
+        return "mqds/m/instructionsDetail";
     }
 }
