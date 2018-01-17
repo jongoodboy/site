@@ -290,11 +290,13 @@ li.right-menu .am-btn-danger {
     width: 100%;
     background: #fff;
     position: relative;
+    overflow: auto;
+    padding-bottom: 50px;
 }
 
 .bottom-model > .am-btn-danger {
     width: 100%;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     height: 50px;
@@ -536,7 +538,6 @@ i.suo {
     width: auto;
     font-size: 15px !important;
     color: #000;
-    background: rgba(255,255,255, 0.9);
     border-radius: 3px !important;
 }
 .bank-1{

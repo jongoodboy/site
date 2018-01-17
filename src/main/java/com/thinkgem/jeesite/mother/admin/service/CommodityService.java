@@ -18,12 +18,12 @@ public class CommodityService extends CrudService<CommodityDao, Commodity> {
     CommodityDao commodityDao;
 
     //商城banner和精品推荐
-    public List<Commodity> findAdvertising(Map<String, Object> map) {
+    public List<Map<String,Object>> findAdvertising(Map<String, Object> map) {
         return commodityDao.findAdvertising(map);
     }
 
     //手机端分页查询数据
-    public List<Commodity> findPageCommodity(Map<String, Object> map) {
+    public List<Map<String,Object>> findPageCommodity(Map<String, Object> map) {
         return commodityDao.findPageCommodity(map);
     }
     //特产列表
@@ -31,7 +31,7 @@ public class CommodityService extends CrudService<CommodityDao, Commodity> {
         return commodityDao.specialtyCommodity(map);
     }
     //为您推荐
-    public List<Commodity> recommended(Map<String, Object> map){
+    public List<Map<String,Object>> recommended(Map<String, Object> map){
         return commodityDao.recommended(map);
     }
 }

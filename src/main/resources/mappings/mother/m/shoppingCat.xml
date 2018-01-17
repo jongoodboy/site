@@ -8,7 +8,9 @@
         commodity_number as "commodityNumber",
         create_date as "createDate",
         update_date as "updateDate",
-        del_flag as "delFlag"
+        del_flag as "delFlag",
+        commodity_flavor as "commodityFlavor",
+        commodity_specifications as "commoditySpecifications"
     </sql>
     <!--加入购物车-->
     <insert id="insert" parameterType="ShoppingCat">
@@ -19,7 +21,9 @@
       commodity_id,
       commodity_number,
       create_date,
-      del_flag
+      del_flag,
+      commodity_flavor,
+      commodity_specifications
       )
       VALUES (
       #{id},
@@ -27,7 +31,9 @@
       #{commodityId},
       #{commodityNumber},
       #{createDate},
-      #{delFlag}
+      #{delFlag},
+      #{commodityFlavor},
+      #{commoditySpecifications}
       )
     </insert>
     <!--修改购物车-->
@@ -47,31 +53,35 @@
     <!--查看个人的购物车 -->
     <select id="findShoppingCatByUserId" parameterType="String" resultType="java.util.Map">
         SELECT
-        com.commodity_name as commodityName,
-        com.commodity_imager as commodityImager,
-        com.id as id,
-        commodity_price as commodityPice,
-        cat.commodity_number as shoppingNumber,
-        com.commodity_number as commodityNumber,
-        com.free_shipping as freeShipping,
-        com.freight as freight,
-        com.weight as weight,
-        ex.id as expressId,
-        ex.express_name as expressName,
-        ex.express_province_first as expressProvinceFirst,
-        ex.express_province_increasing as expressProvinceIncreasing,
-        ex.express_outside_first as expressOutsideFirst,
-        ex.express_outside_increasing as expressOutsideIncreasing,
-        com.commodity_discount as commodityDiscount,
-        com.commodity_discount_num as commodityDiscountNum,
-        com.commodity_weight_unit as commodityWeightUnit,
-        com.commodity_weight_show as commodityWeightShow
+        com.commodity_name AS commodityName,
+        com.commodity_imager AS commodityImager,
+        com.id AS id,
+        sp.specifications_commodityPice AS commodityPice,
+        cat.commodity_flavor as commodityFlavor,
+        sp.specifications_parameter as specificationsParameter,
+        cat.commodity_number AS shoppingNumber,
+        com.commodity_number AS commodityNumber,
+        com.free_shipping AS freeShipping,
+        com.freight AS freight,
+        com.weight AS weight,
+        ex.id AS expressId,
+        ex.express_name AS expressName,
+        ex.express_province_first AS expressProvinceFirst,
+        ex.express_province_increasing AS expressProvinceIncreasing,
+        ex.express_outside_first AS expressOutsideFirst,
+        ex.express_outside_increasing AS expressOutsideIncreasing,
+        com.commodity_discount AS commodityDiscount,
+        com.commodity_discount_num AS commodityDiscountNum,
+        com.commodity_weight_unit AS commodityWeightUnit,
+        com.commodity_weight_show AS commodityWeightShow
         FROM
         mq_shopping_cat cat
         LEFT JOIN mq_commodity com ON
         cat.commodity_id = com.id
         LEFT JOIN mq_express ex ON
         com.default_express = ex.id
+        LEFT JOIN mq_specifications sp ON
+        sp.id = cat.commodity_specifications
         WHERE
         cat.del_flag = '0'
         AND user_id = #{userId}
@@ -84,9 +94,9 @@
         update_date = #{update},
         del_flag = 1
         WHERE commodity_id in (
-          <foreach collection="commodityList" item="itme" separator=",">
-              #{itme}
-          </foreach>
+        <foreach collection="commodityList" item="itme" separator=",">
+            #{itme}
+        </foreach>
         )
         AND user_id = #{userId}
     </update>

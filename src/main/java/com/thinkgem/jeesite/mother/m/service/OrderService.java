@@ -6,8 +6,10 @@ import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.mother.admin.dao.ExpressDao;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
 import com.thinkgem.jeesite.mother.admin.entity.Express;
+import com.thinkgem.jeesite.mother.admin.entity.Specifications;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
 import com.thinkgem.jeesite.mother.admin.service.ExpressService;
+import com.thinkgem.jeesite.mother.admin.service.SprcifictionsService;
 import com.thinkgem.jeesite.mother.m.dao.MuserDao;
 import com.thinkgem.jeesite.mother.m.dao.OrderDao;
 import com.thinkgem.jeesite.mother.m.dao.ProfitDao;
@@ -43,6 +45,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
     ProfitDao profitDao;
     @Resource
     ExpressService expressService;
+    @Resource
+    SprcifictionsService sprcifictionsService;
 
     public int addList(List<Order> list) {
         return orderDao.addList(list);
@@ -68,6 +72,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         for (int j = 0; j < listOrder.size(); j++) {
                             Order o = listOrder.get(j);
                             Commodity com = comodityService.get(o.getCommodityId());//查询得到每个商品
+                            Specifications specifications = sprcifictionsService.get(o.getCommoditySpecifications());//商品购买的规格
                             Map<String, Object> commodityMap = new HashedMap();//组装商品数据返回前台
                             if (j == 0) {
                                 orderState = o.getOrderState();
@@ -79,7 +84,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("orderId", o.getId());//订单ID
                             commodityMap.put("comNumber", o.getCommodityNumber());//订单对应的购买商品的数量
                             commodityMap.put("comCompany", dic.getDictLabel(com.getCommodityCompany().toString(), "commodity_company", ""));//商品单位(1.个2.条3.件4.根 -->)
-                            BigDecimal price = o.getCommodityPrice();
+                            BigDecimal price = specifications.getSpecificationsCommodityPice();
                             commodityMap.put("comPrice", price);//商品的价格
                             commodityMap.put("comImage", com.getCommodityImager());//商品图片
                             commodityMap.put("conFreeShipping", com.getFreeShipping());//是否包邮1包0不包
@@ -142,7 +147,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
             String addressStr = address.substring(0, 3);//截取前三个
             if (addressStr.equals("贵州省")) {
                 expressProvinceFirst = express.getExpressProvinceFirst();//省内首重
-                expressProvinceIncreasing = express.getExpressOutsideIncreasing();//省内递增
+                expressProvinceIncreasing = express.getExpressProvinceIncreasing();//省内递增
             } else {
                 expressProvinceFirst = express.getExpressOutsideFirst();//省外首重
                 expressProvinceIncreasing = express.getExpressOutsideIncreasing();//省外递增
@@ -276,5 +281,10 @@ public class OrderService extends CrudService<OrderDao, Order> {
     //确认收货
     public int confirmReceipt(Map<String, Object> map) {
         return orderDao.updateOrderState(map);
+    }
+
+    //删除订单
+    public int updateByOrderNumber(String orderNumber) {
+        return orderDao.updateByOrderNumber(orderNumber);
     }
 }

@@ -20,7 +20,9 @@
         create_date as "createDate",
         update_date as "updateDate",
         del_flag as "delFlag",
-        express_real_hair as "expressRealHair"
+        express_real_hair as "expressRealHair",
+        commodity_flavor as "commodityFlavor",
+        commodity_specifications as "commoditySpecifications"
     </sql>
 
     <!--个人所有订单号-->
@@ -74,7 +76,9 @@
         create_date,
         del_flag,
         share_code,
-        express
+        express,
+        commodity_flavor,
+        commodity_specifications
         )
         VALUES
         <foreach collection="list" item="itme" separator=",">
@@ -92,7 +96,9 @@
             #{itme.createDate},
             #{itme.delFlag},
             #{itme.shareCode},
-            #{itme.express}
+            #{itme.express},
+            #{itme.commodityFlavor},
+            #{itme.commoditySpecifications}
             )
         </foreach>
 
@@ -166,4 +172,12 @@
         WHERE
         id=#{id}
     </select>
+    <!-- 删除订单-->
+    <update id="updateByOrderNumber" parameterType="String">
+        UPDATE mq_order
+        SET
+        del_flag = 1
+        WHERE
+        order_number = #{orderNumber}
+    </update>
 </mapper>

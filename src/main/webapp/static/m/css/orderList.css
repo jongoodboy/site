@@ -175,7 +175,7 @@
     width: 24px;
     display: inline-block;
 }
-.am-modal-dialog{
+#my-prompt .am-modal-dialog{
     width: 80%;
 }
 .am-modal-hd{

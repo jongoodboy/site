@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.mother.admin.dao.SprcifictionsDao">
+    <sql id="specifications">
+        id as "id",
+        specifications_parameter as "specificationsParameter",
+        specifications_commodityPice as "specificationsCommodityPice",
+        commodity_id as "commodityId"
+    </sql>
+    <!--批量添加规格-->
+    <insert id="insertAll" parameterType="Specifications">
+        INSERT INTO mq_specifications
+        (
+        id,
+        specifications_parameter,
+        specifications_commodityPice,
+        commodity_id
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.specificationsParameter},
+            #{item.specificationsCommodityPice},
+            #{item.commodityId}
+            )
+        </foreach>
+    </insert>
+    <!--查看单条记录-->
+    <select id="get" resultType="Specifications" parameterType="String">
+        SELECT
+        <include refid="specifications"/>
+        FROM
+        mq_specifications
+        WHERE
+        id=#{id}
+    </select>
+    <!--商品对应的所规格和价钱-->
+    <select id="findSprcifictionsList" resultType="Specifications" parameterType="String">
+        SELECT
+        <include refid="specifications"/>
+        FROM
+        mq_specifications
+        WHERE
+        commodity_id = #{commodityId}
+        ORDER BY specificationsCommodityPice
+    </select>
+    <!--批量更新-->
+    <update id="updateAll" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE mq_specifications
+            <set>
+                specifications_parameter = #{item.specificationsParameter},
+                specifications_commodityPice= #{item.specificationsCommodityPice},
+                commodity_id = #{item.commodityId}
+            </set>
+            WHERE
+            id = #{item.id}
+        </foreach>
+    </update>
+</mapper>

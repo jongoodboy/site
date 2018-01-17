@@ -52,6 +52,19 @@
                 }
             })
         }
+        function addSpecifications(ev) {
+            var evThis = $(ev);
+            if (evThis.html() == "-删除规格") {
+                evThis.parent().parent().remove();
+                return;
+            }
+            evThis.html("-删除规格");
+            var str = '<div class="control-group"><label class="control-label">商品规格:</label><div class="controls">';
+            str += '<input type="text" name="specificationsParameter" class="form-control required"/> <label>商品价格:</label>';
+            str += '<input type="number" name="specificationsCommodityPice" class="form-control required" maxlength="200"/>';
+            str += ' <span class="btn" onclick="addSpecifications(this)">+添加规格</span></div></div>';
+            evThis.parent().parent().after(str);
+        }
     </script>
 </head>
 <body>
@@ -64,7 +77,6 @@
            class="form-horizontal">
     <form:hidden path="id"/>
     <sys:message content="${message}"/>
-
     <div class="control-group">
         <label class="control-label">商品名称:</label>
         <div class="controls">
@@ -79,40 +91,19 @@
                 <form:options items="${fns:getDictList('commodity_type')}" itemLabel="label" itemValue="value"
                               htmlEscape="false"/>
             </form:select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">商品状态:</label>
-        <div class="controls">
+            <label>商品状态:</label>
             <form:select path="commodityState" class="input-mini">
                 <form:options items="${fns:getDictList('commodity_state')}" itemLabel="label" itemValue="value"
                               htmlEscape="false"/>
             </form:select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">商品发布状态:</label>
-        <div class="controls">
-            <form:select path="commodityRelease" class="input-mini">
-                <form:options items="${fns:getDictList('commodity_release')}" itemLabel="label" itemValue="value"
-                              htmlEscape="false"/>
-            </form:select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">商品单位:</label>
-        <div class="controls">
+            <label>商品单位:</label>
             <form:select path="commodityCompany" class="input-mini">
                 <form:options items="${fns:getDictList('commodity_company')}" itemLabel="label" itemValue="value"
                               htmlEscape="false"/>
             </form:select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">是否包邮:</label>
-        <div class="controls">
-            <form:select path="freeShipping" class="input-mini">
-                <form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value"
+            <label>发布状态:</label>
+            <form:select path="commodityRelease" class="input-mini">
+                <form:options items="${fns:getDictList('commodity_release')}" itemLabel="label" itemValue="value"
                               htmlEscape="false"/>
             </form:select>
         </div>
@@ -124,19 +115,32 @@
                 <form:options items="${fns:getDictList('commodity_classification')}" itemLabel="label" itemValue="value"
                               htmlEscape="false"/>
             </form:select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">所属特产:</label>
-        <div class="controls">
+            <label>所属特产:</label>
             <form:select path="belongSpecialty" class="input-mini required">
+            </form:select>
+            <label>默认快递:</label>
+            <form:select path="defaultExpress" class="input-mini">
+                <form:options items="${expressList}" itemLabel="expressName" itemValue="id" htmlEscape="false"/>
+            </form:select>
+            <label>是否包邮:</label>
+            <form:select path="freeShipping" class="input-mini">
+                <form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value"
+                              htmlEscape="false"/>
             </form:select>
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">商品单价:</label>
+        <label class="control-label">商品口味:</label>
         <div class="controls">
-            <form:input path="commodityPice" cssClass="required" htmlEscape="false" maxlength="200" type="number"/>元
+            <c:forEach var="itme" items="${fns:getDictList('commodity_flavor')}">
+                <input type="checkbox" value="${itme.value}"
+                       id="commodityFlavor${itme.value}" name="commodityFlavor"
+                <c:forEach items="${fn:split(commodity.commodityFlavor,',')}" var="flavor">
+                       <c:if test="${itme.value == flavor}">checked</c:if>
+                </c:forEach>>
+                <label for="commodityFlavor${itme.value}">${itme.label}</label>
+
+            </c:forEach>
         </div>
     </div>
     <%-- <div class="control-group">
@@ -152,18 +156,19 @@
         </div>
     </div>--%>
     <div class="control-group">
-        <label class="control-label">默认快递:</label>
+        <label class="control-label">商品库存量:</label>
         <div class="controls">
-            <form:select path="defaultExpress" class="input-mini">
-                <form:options items="${expressList}" itemLabel="expressName" itemValue="id" htmlEscape="false"/>
-            </form:select>
-                <%-- <form:input path="" htmlEscape="false" class="required" maxlength="5" type="number"/>--%>
+            <form:input path="commodityNumber" htmlEscape="false" maxlength="3" class="required" type="number"/>
+            <label>商品位置:</label>
+            <form:input path="commodityPosition" htmlEscape="false" maxlength="10" type="number"/>位置越小越靠前
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">重量:</label>
+        <label class="control-label">商品折扣:</label>
         <div class="controls">
-            <form:input path="weight" htmlEscape="false" class="required" maxlength="5" type="number"/>KG(商品本身重量,不做展示)
+            <form:input path="commodityDiscount" htmlEscape="false" maxlength="5" type="number"/>
+            <label>打折数量:</label>
+            <form:input path="commodityDiscountNum" htmlEscape="false" maxlength="3" type="number"/>满足该数量才打折
         </div>
     </div>
     <div class="control-group">
@@ -174,6 +179,33 @@
                 <form:options items="${fns:getDictList('commodity_nuit')}" itemLabel="label" itemValue="value"
                               htmlEscape="false"/>
             </form:select>
+            <label>重量:</label>
+            <form:input path="weight" htmlEscape="false" class="required" maxlength="5" type="number"/>KG(商品本身重量,不做展示)
+        </div>
+    </div>
+    <c:if test="${specificationsList != '[]'}"><!--等于空-->
+        <c:forEach var="itme" items="${specificationsList}">
+            <div class="control-group">
+                <label class="control-label">商品规格:</label>
+                <div class="controls">
+                    <input type="text" name="specificationsId" value="${itme.id}" style="display: none">
+                    <input type="text" name="specificationsParameter" class="form-control required"
+                           value="${itme.specificationsParameter}"/>
+                    <label>商品价格:</label>
+                    <input type="number" name="specificationsCommodityPice" class="form-control required"
+                           maxlength="200" value="${itme.specificationsCommodityPice}"/>
+                    <span class="btn" onclick="addSpecifications(this)">-删除规格</span>
+                </div>
+            </div>
+        </c:forEach>
+    </c:if>
+    <div class="control-group">
+        <label class="control-label">商品规格:</label>
+        <div class="controls">
+            <input type="text" name="specificationsParameter" class="form-control required"/>
+            <label>商品价格:</label>
+            <input type="number" name="specificationsCommodityPice" class="form-control required" maxlength="200"/>
+            <span class="btn" onclick="addSpecifications(this)">+添加规格</span>
         </div>
     </div>
     <div class="control-group">
@@ -185,33 +217,9 @@
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label">商品库存量:</label>
-        <div class="controls">
-            <form:input path="commodityNumber" htmlEscape="false" maxlength="3" class="required" type="number"/>
-        </div>
-    </div>
-    <div class="control-group">
         <label class="control-label">分享描述:</label>
         <div class="controls">
-            <form:input path="sharingDescription" htmlEscape="false" class="required"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">商品位置:</label>
-        <div class="controls">
-            <form:input path="commodityPosition" htmlEscape="false" maxlength="10" type="number"/>位置越小越靠前
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">商品折扣:</label>
-        <div class="controls">
-            <form:input path="commodityDiscount" htmlEscape="false" maxlength="5" type="number"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">满足打折数量:</label>
-        <div class="controls">
-            <form:input path="commodityDiscountNum" htmlEscape="false" maxlength="3" type="number"/>
+            <form:textarea path="sharingDescription" htmlEscape="false" class="required"/>
         </div>
     </div>
     <div class="control-group">

@@ -13,10 +13,10 @@ import java.util.Map;
  */
 @MyBatisDao
 public interface CommodityDao extends CrudDao<Commodity> {
-    List<Commodity> findAdvertising(Map<String, Object> map);
+    List<Map<String,Object>> findAdvertising(Map<String, Object> map);
 
-    List<Commodity> findPageCommodity(Map<String, Object> map);
+    List<Map<String,Object>> findPageCommodity(Map<String, Object> map);
     List<Commodity> specialtyCommodity(Map<String, Object> map);
-    List<Commodity> recommended(Map<String, Object> map);
+    List<Map<String,Object>> recommended(Map<String, Object> map);
 
 }

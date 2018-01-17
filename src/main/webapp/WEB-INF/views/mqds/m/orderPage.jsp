@@ -192,7 +192,7 @@
         if ('${param.nowBuy}' != "") {//如果立即购买
             var commodityNumber = 0;//立即购买-》商品库存
             $(".buy-sum-number").hide();
-            $.post("${ctx}/m/commodityById?commodityId=${param.commodityId}", function (ret) {
+            $.post("${ctx}/m/commodityById?commodityId=${param.commodityId}&commoditySpecifications=${param.commoditySpecifications}", function (ret) {
                 if (ret.code == "0") {
                     var commodityDiscount = ret.data.commodityDiscount;//商品折扣
                     var commodityDiscountNum = ret.data.commodityDiscountNum;//满足打折的数量
@@ -219,14 +219,16 @@
                     }
                     if (img != null && img != "" && img != undefined) {//拼接显示商品信息
                         var imgSrc = img.split("|")
-                        var str = "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId='" + ret.data.id + ">";
+                        var str = "<li class='buy-img-list'><ul class='nav-menu show-shopping'><li><a href='${ctx}/m/commodityDetail?commodityId=${param.commodityId}'>";
                         str += "<img src=" + imgSrc[1] + "></a></li>"
                         str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + "</p>";
-                        str += "<span class='commodity-money'>￥" + ret.data.commodityPice + "</span></ul></li></li>"
-                       // str += '<li class="pading-10">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
+                        str += "<span class='commodity-money'>￥" + ret.specifications.specificationsCommodityPice + "</span></ul></li></li>";
+                         str += '<li class="pading-10" style="display: none">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
+                        str += "<li class='pading-10'>口味:<span class='freight-money'>${fns:getDictLabel(param.commodityFlavor, "commodity_flavor", "商品口味")}</span></li>";
+                        str += '<li class="pading-10">规格:<span class="freight-money">' + ret.specifications.specificationsParameter + '</span></li>';
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
                         str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.commodityWeightShow + '' + ret.commodityWeightUnit + '</span></li>'
-                        str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span> </li>'
+                        str += '<li class="buy-pay-stlye pading-10""> <ul class="nav-menu"> <li> <span>购买数量</span></li>'
                         str += '<li style="float: right;"> <div class="buy-number"><span class="buy-span buy-del remove-number"></span> <input value="1" id="buyNumber" style="margin-top: -10px; margin-left: -5px"/>'
                         str += '<span class="buy-span buy-add add-number"></span> </div></li> </ul>';
                         if (commodityDiscountNum != undefined && commodityDiscount != undefined) {
@@ -235,7 +237,7 @@
                         str += '</li>'
                         $(".am-list-border").append(str);
                     }
-                    commodityPrice = parseFloat(ret.data.commodityPice).toFixed(2);//商品单价
+                    commodityPrice = parseFloat(ret.specifications.specificationsCommodityPice).toFixed(2);//商品单价
                     $("#payMoney").html(parseFloat(parseInt($("#buyNumber").val()) * (parseFloat(commodityPrice) + parseInt(express))).toFixed(2));//显示实付金额
 
                     //减少商品数量
@@ -395,7 +397,9 @@
             userId: '${sessionScope.mUser.id}', //个人Id
             consignee: '${address.consignee}',
             consigneePhone: '${address.consigneePhone}',
-            expressName: '${param.expressName}'//快递名称多个用","分割
+            expressName: '${param.expressName}',//快递名称多个用","分割
+            commodityFlavor:'${param.commodityFlavor}',//商品口味多个用","分割
+            commoditySpecifications:'${param.commoditySpecifications}'//商品规格Id多个用","分割
         }
         //提交订单
         $(".am-btn-danger").on("click", function () {
@@ -406,6 +410,7 @@
             if (('${param.nowBuy}' != "")) {//如果立即购买
                 subData.buyNumber = $("#buyNumber").val();
                 subData.expressName = $(".select-express").html();
+                subData.commodityPrice = $("#payMoney").html();
             }
             $.post("${ctx}/m/saveOrder", subData, function (data) {
                 /* loadingShow()*/

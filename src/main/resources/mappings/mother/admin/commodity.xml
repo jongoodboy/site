@@ -28,7 +28,14 @@
         commodity_discount as "commodityDiscount",
         commodity_discount_num as "commodityDiscountNum",
         commodity_weight_unit as "commodityWeightUnit",
-        commodity_weight_show as "commodityWeightShow"
+        commodity_weight_show as "commodityWeightShow",
+        commodity_flavor as "commodityFlavor"
+    </sql>
+    <sql id="map">
+        com.id as "id",
+        com.commodity_name as "commodityName",
+        com.commodity_imager as "commodityImager",
+        MIN(sp.specifications_commodityPice) as commodityPice
     </sql>
     <!--后台商品列表 -->
     <select id="findList" resultType="Commodity" parameterType="Commodity">
@@ -54,25 +61,26 @@
         ORDER BY commodity_position,commodity_state,create_date DESC
     </select>
     <!--手机端商品列表 -->
-    <select id="findPageCommodity" resultType="Commodity" parameterType="java.util.Map">
+    <select id="findPageCommodity" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
-        <include refid="commodity"/>
+        <include refid="map"/>
         FROM
-        mq_commodity
+        mq_commodity com LEFT JOIN mq_specifications sp
+        ON com.id = sp.commodity_id
         WHERE
         1 = 1
-        AND del_flag = '0'
-        AND commodity_release = '0'
+        AND com.del_flag = '0'
+        AND com.commodity_release = '0'
         <if test="commodityName == '' or commodityName == null">
-            AND commodity_state NOT IN (1,3,5)
+            AND com.commodity_state NOT IN (1,3,5)
         </if>
         <if test="type != '' and type != null">
-            AND commodity_state = #{type}
+            AND com.commodity_state = #{type}
         </if>
         <if test="commodityName != '' and commodityName != null">
-            AND commodity_name LIKE CONCAT('%',#{commodityName},'%')
+            AND com.commodity_name LIKE CONCAT('%',#{commodityName},'%')
         </if>
-        ORDER BY commodity_position,create_date DESC
+        ORDER BY com.commodity_position,com.create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
 
@@ -86,7 +94,7 @@
         id=#{id}
     </select>
     <!--添加商品-->
-    <insert id="insert" parameterType="Commodity">
+    <insert id="insert" parameterType="Commodity" useGeneratedKeys="true" keyProperty="id">
       INSERT  INTO mq_commodity
       (
         id,
@@ -115,7 +123,8 @@
         commodity_discount,
         commodity_discount_num,
         commodity_weight_unit,
-        commodity_weight_show
+        commodity_weight_show,
+        commodity_flavor
       )VALUES
       (
       #{id},
@@ -144,7 +153,8 @@
       #{commodityDiscount},
       #{commodityDiscountNum},
       #{commodityWeightUnit},
-      #{commodityWeightShow}
+      #{commodityWeightShow},
+      #{commodityFlavor}
       )
     </insert>
     <!--修改商品-->
@@ -176,31 +186,33 @@
         commodity_discount = #{commodityDiscount},
         commodity_discount_num = #{commodityDiscountNum},
         commodity_weight_unit = #{commodityWeightUnit},
-        commodity_weight_show = #{commodityWeightShow}
+        commodity_weight_show = #{commodityWeightShow},
+        commodity_flavor = #{commodityFlavor}
         WHERE
         id = #{id}
     </update>
     <!--手机端banner和精品推荐和首页6个菜单-->
-    <select id="findAdvertising" resultType="Commodity" parameterType="java.util.Map">
+    <select id="findAdvertising" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
-        <include refid="commodity"/>
-        FROM
-        mq_commodity
+        <include refid="map"/>
+        FROM mq_commodity com LEFT JOIN mq_specifications sp
+        ON com.id = sp.commodity_id
         WHERE
-        commodity_state = #{commodityState}
-        AND commodity_release = '0'
-        ORDER BY commodity_position,create_date DESC
+        com.commodity_state = #{commodityState}
+        AND com.commodity_release = '0'
+        AND com.del_flag = '0'
+        ORDER BY com.commodity_position,com.create_date DESC
         LIMIT #{pageNo},#{pageSize}
     </select>
     <!--手机端商品特产-->
     <select id="specialtyCommodity" resultType="Commodity" parameterType="java.util.Map">
         SELECT
-        <include refid="commodity"/>
-        FROM
-        mq_commodity
+        <include refid="map"/>
+        FROM mq_commodity com LEFT JOIN mq_specifications sp
+        ON com.id = sp.commodity_id
         WHERE
-        1 = 1
-        AND del_flag = '0'
+        del_flag = '0'
+        AND com.commodity_release = '0'
         AND commodity_state NOT IN (3)
         AND belong_specialty = #{belongSpecialty}
         ORDER BY commodity_position,create_date DESC
@@ -209,12 +221,14 @@
     <!--为您推荐-->
     <select id="recommended" resultType="Commodity" parameterType="java.util.Map">
         select
-        <include refid="commodity"/>
-        from mq_commodity
-        where commodity_state NOT IN (1,3)
-        AND commodity_release = '0'
+        <include refid="map"/>
+        FROM mq_commodity com LEFT JOIN mq_specifications sp
+        ON com.id = sp.commodity_id
+        WHERE com.commodity_state NOT IN (1,3)
+        AND com.commodity_release = '0'
+        AND com.del_flag = '0'
         <if test="commodityId != null and commodityId != ''">
-            AND id != #{commodityId}
+            AND com.id != #{commodityId}
         </if>
         ORDER BY RAND() limit #{size}
     </select>

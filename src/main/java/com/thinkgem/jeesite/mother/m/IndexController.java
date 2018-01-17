@@ -3,14 +3,8 @@ package com.thinkgem.jeesite.mother.m;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
-import com.thinkgem.jeesite.mother.admin.entity.Classification;
-import com.thinkgem.jeesite.mother.admin.entity.Commodity;
-import com.thinkgem.jeesite.mother.admin.entity.Express;
-import com.thinkgem.jeesite.mother.admin.entity.Instructions;
-import com.thinkgem.jeesite.mother.admin.service.ClassificationService;
-import com.thinkgem.jeesite.mother.admin.service.CommodityService;
-import com.thinkgem.jeesite.mother.admin.service.ExpressService;
-import com.thinkgem.jeesite.mother.admin.service.InstructionsService;
+import com.thinkgem.jeesite.mother.admin.entity.*;
+import com.thinkgem.jeesite.mother.admin.service.*;
 import com.thinkgem.jeesite.mother.m.entity.*;
 import com.thinkgem.jeesite.mother.m.service.*;
 import com.thinkgem.jeesite.mother.m.weixin.*;
@@ -75,6 +69,9 @@ public class IndexController {
     //使用说明
     @Resource
     private InstructionsService instructionsService;
+    //规格
+    @Resource
+    private SprcifictionsService sprcifictionsService;
 
     //提现
     //每次请求都会先进这里
@@ -143,22 +140,22 @@ public class IndexController {
             paramMapIndex.put("pageSize", pageSize);
             paramMapIndex.put("type", type == 1 ? "" : type);//如果是1就查所有
             paramMapIndex.put("commodityName", commodityName);
-            List<Commodity> listCommodity = commodityService.findPageCommodity(paramMapIndex);//页面商品列表数据
+            List<Map<String, Object>> listCommodity = commodityService.findPageCommodity(paramMapIndex);//页面商品列表数据
             returnMap.put("listCommodity", listCommodity);
             if (pageNo == 0 && type == 1 && commodityName == "") {//如果是第一次加载
                 Map<String, Object> paramMap = new HashedMap();
                 paramMap.put("pageNo", 0);
                 paramMap.put("pageSize", 4);//顶部banner
                 paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
-                List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
+                List<Map<String, Object>> listBanner = commodityService.findAdvertising(paramMap);
                 returnMap.put("banner", listBanner);//顶部banner
                 paramMap.put("pageSize", 5);//推荐精品
                 paramMap.put("commodityState", 1);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
-                List<Commodity> listProducts = commodityService.findAdvertising(paramMap);
+                List<Map<String, Object>> listProducts = commodityService.findAdvertising(paramMap);
                 returnMap.put("products", listProducts);//推荐精品
                 paramMap.put("pageSize", 6);//首页6个菜单
                 paramMap.put("commodityState", 5);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
-                List<Commodity> listIndexMenuSix = commodityService.findAdvertising(paramMap);
+                List<Map<String, Object>> listIndexMenuSix = commodityService.findAdvertising(paramMap);
                 returnMap.put("listIndexMenuSix", listIndexMenuSix);//首首页6个菜单
             }
             returnMap.put("msg", "数据查询成功");
@@ -182,8 +179,10 @@ public class IndexController {
         //商品详情页面
         Commodity commodity = commodityService.get(commodityId);
         Express express = expressService.get(commodity.getDefaultExpress());//快递
+        List<Specifications> slist = sprcifictionsService.findSprcifictionsList(commodityId);//规格
         model.addAttribute("commodity", commodity);
         model.addAttribute("express", express);
+        model.addAttribute("slist", slist);
         String value = commodity.getCommodityWeightUnit();
         if (value != null) {
             model.addAttribute("commodityWeightUnit", DictUtils.getDictLabel(value, "commodity_nuit", "商品单位"));
@@ -204,16 +203,18 @@ public class IndexController {
      */
     @RequestMapping("/commodityById")
     @ResponseBody
-    public Map<String, Object> commodityById(String commodityId) {
+    public Map<String, Object> commodityById(String commodityId, String commoditySpecifications) {
         Map<String, Object> returnMap = new HashedMap();
         //商品详情页面
         try {
             Commodity commodity = commodityService.get(commodityId);
             Express express = expressService.get(commodity.getDefaultExpress());//快递
+            Specifications specifications = sprcifictionsService.get(commoditySpecifications);//单条规格
             returnMap.put("data", commodity);
             returnMap.put("msg", "查询数据成功");
             returnMap.put("code", "0");
             returnMap.put("express", express);
+            returnMap.put("specifications", specifications);
             String value = commodity.getCommodityWeightUnit();
             if (value != null) {
                 returnMap.put("commodityWeightUnit", DictUtils.getDictLabel(value, "commodity_nuit", "商品单位"));
@@ -360,6 +361,27 @@ public class IndexController {
     }
 
     /**
+     * 手机端删除订单
+     *
+     * @return
+     */
+    @RequestMapping("/delByOrderNumber")
+    @ResponseBody
+    public Map<String, Object> delByOrderNumber(String orderNumber) {
+        Map<String, Object> returnMap = new HashedMap();
+        try {
+            orderService.updateByOrderNumber(orderNumber);
+            returnMap.put("msg", "删除成功");
+            returnMap.put("code", "0");
+        } catch (Exception e) {
+            returnMap.put("msg", "删除失败");
+            returnMap.put("code", "-1");
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
+
+    /**
      * 手机端成生订单方法
      *
      * @param commodityId    商品id 多个用","分割
@@ -373,18 +395,20 @@ public class IndexController {
     @ResponseBody
     public Map<String, Object> saveOrder(HttpServletRequest request, String commodityId, String buyNumber,
                                          String commodityPrice, String address,
-                                         String consignee, String consigneePhone, String userId, String expressName) {
+                                         String consignee, String consigneePhone, String userId, String expressName,
+                                         String commodityFlavor, String commoditySpecifications) {
         List<Order> list = new ArrayList<Order>();
         Map<String, Object> returnMap = new HashedMap();
         Map<String, Object> map = new HashedMap();
         Date d = new Date();
         String shareCode = (String) request.getSession().getAttribute("code");//分享人的分享码
-        SimpleDateFormat foramt = new SimpleDateFormat("yyyMMddHHmmss");
         String orderNumber = new Date().getTime() + "";//生成订单号
         String[] commodityIdList = commodityId.split(",");//截取每一个商品id
         String[] buyNumberList = buyNumber.split(",");//截取每一个商品id对应购买的数量
         String[] commodityPriceList = commodityPrice.split(",");//截取每一个商品id对应购买的数量
         String[] expressNameList = expressName.split(",");//截取每一家快递
+        String[] commodityFlavorList = commodityFlavor.split(",");//截取商品口味
+        String[] commoditySpecificationsList = commoditySpecifications.split(",");//截取商品规格Id
         List<Object> listt = new ArrayList<Object>();
         for (int i = 1; i < commodityIdList.length; i++) {//购物车购买
             Order order = new Order();
@@ -401,6 +425,8 @@ public class IndexController {
             order.setConsigneePhone(consigneePhone);
             order.setOrderNumber(orderNumber);
             order.setExpress(expressNameList[i]);
+            order.setCommodityFlavor(commodityFlavorList[i]);
+            order.setCommoditySpecifications(commoditySpecificationsList[i]);
             order.setCreateDate(d);
             order.setShareCode(shareCode);
             list.add(order);//用于生成订单
@@ -421,6 +447,8 @@ public class IndexController {
                 order.setConsigneePhone(consigneePhone);
                 order.setOrderNumber(orderNumber);
                 order.setShareCode(shareCode);
+                order.setCommodityFlavor(commodityFlavor);
+                order.setCommoditySpecifications(commoditySpecifications);
                 order.setCreateDate(d);
                 list.add(order);//用于生成订单
             } else {
@@ -896,7 +924,7 @@ public class IndexController {
                 listBannerparamMap.put("pageNo", 0);
                 listBannerparamMap.put("pageSize", 4);//顶部banner
                 listBannerparamMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
-                List<Commodity> listBanner = commodityService.findAdvertising(listBannerparamMap);
+                List<Map<String, Object>> listBanner = commodityService.findAdvertising(listBannerparamMap);
                 model.addAttribute("listBanner", listBanner);
                 return "mqds/m/personalStoresVIP";
             } else {
@@ -934,7 +962,7 @@ public class IndexController {
         paramMap.put("pageNo", 0);
         paramMap.put("pageSize", 4);//顶部banner
         paramMap.put("commodityState", 3);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品' -->)
-        List<Commodity> listBanner = commodityService.findAdvertising(paramMap);
+        List<Map<String, Object>> listBanner = commodityService.findAdvertising(paramMap);
         model.addAttribute("listBanner", listBanner);
         return "mqds/m/personalStoresVIP";
     }

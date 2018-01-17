@@ -56,6 +56,19 @@
         </div>
     </div>
 </div>
+<!--删除操作-->
+<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            删除后不可恢复<br/>
+            您确定要删除该订单吗?
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
 </body>
 <script>
     var userId = '${sessionScope.mUser.id}'; //'';
@@ -129,7 +142,11 @@
                         }
                         var sumMoney = parseFloat(ret.data[i].sumOrderMoney).toFixed(2);//商品总价格单价+运费
 
-                        str += '<span class="orderNumber">订单号:' + ret.data[i].sumOrderNnmber + '</span><span class="order-title">' + orderTitle + '</span></div>';
+                        str += '<span class="orderNumber">订单号:' + ret.data[i].sumOrderNnmber + '</span>';
+                        if (orderState == "") {
+                            str += '<span class="order-title" onclick="delOrder(' + ret.data[i].sumOrderNnmber + ')">删除订单</span>';
+                        }
+                        str += ' <span class="order-title">' + orderTitle + '</span></div>';
                         var shoppingListIndex = ret.data[i].shppingList.length;
                         str += '<ul class="one-shopping">';
                         for (var j = 0; j < ret.data[i].shppingList.length; j++) {
@@ -282,6 +299,26 @@
     //查看物流信息
     function showExpress(number) {
         window.location.href = "${ctx}/expressInfo?number=" + number;
+    }
+    var orderNumber = "";
+    //删除订单
+    function delOrder(orderNum) {
+        loadingShow("21",60000)
+        return;
+        orderNumber = orderNum;
+        $('#my-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function (options) {
+                $.post("${ctx}/m/delByOrderNumber?orderNumber=" + orderNumber, paramData, function (ret) {
+                    loadingShow(ret.msg)
+                    if (ret.code == "0") {
+                        init("");
+                    }
+                })
+            },
+            onCancel: function () {
+            }
+        });
     }
 </script>
 </html>

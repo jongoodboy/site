@@ -20,9 +20,14 @@ public interface OrderDao extends CrudDao<Order> {
 
     List<Order> findOrderListByOrderNumber(List<String> list);
 
-    int updateOrderState(Map<String,Object> map);
+    int updateOrderState(Map<String, Object> map);
+
     //后台发货
     int delivery(Order order);
+
     //退费操作
     int updateRefund(Map<String, Object> map);
+
+    //删除
+    int updateByOrderNumber(String orderNumber);
 }

@@ -102,11 +102,6 @@
         margin: 20px 0 25px 0;
     }
 
-    .buy-number {
-        text-align: right;
-        padding-right: 15px;
-    }
-
     .number-input {
         margin-top: -20px;
         margin-left: -7px;
@@ -115,6 +110,8 @@
     .buy-span {
         width: 25px;
         height: 25px;
+        float: right;
+        margin-top: 2px;
     }
 
     .am-slider-manual {
@@ -125,6 +122,7 @@
         .am-slider-manual {
             height: 200px !important;
         }
+
         article .nav-menu li {
             font-size: 17px;
         }
@@ -132,6 +130,43 @@
 
     article .nav-menu li.weight-show {
         color: #333;
+    }
+
+    .model-title {
+        margin: 0;
+    }
+
+    .specifications {
+        text-align: left;
+        padding: 3px 5px;
+        border-bottom: 1px solid #eee;
+        line-height: 30px;
+    }
+
+    .specifications .am-btn {
+        padding: 2px 5px;
+        border: 1px solid #eee;
+    }
+
+    .specifications p {
+        margin: 0 !important;
+    }
+
+    .buy-number {
+        display: inline-block;
+    }
+
+    .specifications input.number-input {
+        width: 30px;
+        border: none;
+        text-align: center;
+        display: inline-block;
+        float: right;
+        margin-top: 5px;
+    }
+
+    .padding-right {
+        padding-right: 30px;
     }
 </style>
 <body>
@@ -159,7 +194,8 @@
                  data-am-paragraph="{ tableScrollable: true, pureview: true }">
             <spen class="commodity-name-title">${itme.commodityName}</spen>
             <ul class="nav-menu">
-                <li class="active">￥${itme.commodityPice}
+                <li class="active">￥<span
+                        class="specificationsCommodityPice">${slist[0].specificationsCommodityPice}</span>
                     / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
                 <li class="weight-show">${itme.commodityWeightShow}${commodityWeightUnit}</li>
                 <li class="freight">运费: <span id="express"></span>元</li><!--按照快递首重来算-->
@@ -187,20 +223,6 @@
                             <h3 class="am-gallery-title">${itme.commodityName}</h3>
                             <span>￥${itme.commodityPice}</span>
                         </a>
-                            <%--<div class="am-gallery-desc">--%>
-                            <%--&lt;%&ndash;<ul class="nav-menu">--%>
-                            <%--<li><i class="my-icon like"></i></li>--%>
-                            <%--<li class="active">99k</li>--%>
-                            <%--</ul>&ndash;%&gt;--%>
-                            <%--<ul class="nav-menu">--%>
-                            <%--<li>&lt;%&ndash;<i class="my-icon like"></i>&ndash;%&gt;</li>--%>
-                            <%--<li class="active">}</li>--%>
-                            <%--</ul>--%>
-                            <%--<a href="${ctx}/m/orderPage?newBuy=yes&commodityId=${itme.id }&userId=${sessionScope.mUser.id}"--%>
-                            <%--class="">--%>
-                            <%--<spen class="buy">#购买</spen>--%>
-                            <%--</a>--%>
-                            <%--</div>--%>
                     </div>
                 </li>
             </c:forEach>
@@ -229,12 +251,12 @@
                   </a>
               </li>--%>
             <li class="join-this-shopping-cat">
-                <a href="javascript:void (0);" class="">
+                <a href="javascript:openModel();" class="">
                     <i class="vehicle"></i>
-                    <span class="join-this-shopping-cat">加入购物车</span>
+                    <span>加入购物车</span>
                 </a>
             </li>
-            <li class="buy-new" onclick="buyNow()">
+            <li class="buy-new" onclick="openModel(1)">
                 <span>立即购买</span>
             </li>
         </ul>
@@ -244,6 +266,8 @@
 <div class="am-modal-actions" id="open-bottom-model">
     <form id="addShoppingCat">
         <input name="userId" value="${sessionScope.mUser.id}" hidden><!--当前用记Id-->
+        <input name="commoditySpecifications" value="${slist[0].id}" hidden><!--规格Id-->
+        <input name="commodityFlavor" hidden><!--口味-->
         <div class="bottom-model">
             <ul class="model-title">
                 <li>
@@ -254,30 +278,54 @@
                     <span style="display: inline-block;  width: 100%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
                         ${commodity.commodityName}
                     </span>
-                    <span class="price">￥:${commodity.commodityPice}</span>
+                    <span class="price">￥:<span
+                            class="specificationsCommodityPice">${slist[0].specificationsCommodityPice}</span></span>
                     <span style="display: inline-block;float: right">重量:${commodity.commodityWeightShow}${commodityWeightUnit}</span><br>
                     <span>库存:${commodity.commodityNumber}</span><br>
                     <%--<span>商品编号:5555522</span><br>--%>
                 </li>
-                <span class="close-model">x</span>
             </ul>
-            <div class="buy-number">
-                <p>购买数量</p>
-
-                <span class="buy-span buy-del remove-number"></span>
+            <div class="specifications">
+                <p class="buy-number">购买数量</p>
+                <span class="buy-span buy-add add-number"></span><!--加入购物车商品数量-->
                 <input value="1" class="number-input" onkeyup="setNumber()"
                        type="number" name="commodityNumber">
-                <span class="buy-span buy-add add-number"></span><!--加入购物车商品数量-->
+                <span class="buy-span buy-del remove-number"></span>
                 <input name="commodityId" value="${commodity.id}" hidden><!--商品id-->
             </div>
-            <button type="button" class="am-btn am-btn-danger">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
+            <!--规格-->
+            <div class="specifications padding-right">
+                <p>规格</p>
+                <c:forEach items="${slist}" var="itme" varStatus="s">
+                    <button type="button"
+                            class="am-btn <c:if test="${s.index == 0}">am-btn-danger</c:if> am-radius"
+                            onclick="selectSpecifications(this,'${itme.specificationsCommodityPice}','${itme.id}')">
+                            ${itme.specificationsParameter}
+                    </button>
+                </c:forEach>
+            </div>
+            <div class="specifications padding-right commodity-flavor">
+                <p>口味</p>
+                <c:forEach var="itme" items="${fns:getDictList('commodity_flavor')}">
+                    <c:forEach items="${fn:split(commodity.commodityFlavor,',')}" var="flavor">
+                        <c:if test="${flavor == itme.value}">
+                            <button type="button" class="am-btn am-radius"
+                                    onclick="selectCommodityFlavor(this,'${itme.value}')">
+                                    ${itme.label}
+                            </button>
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
+            </div>
+            <button type="button" class="am-btn am-btn-danger add-car">确定加入</button>
+            <button type="button" class="am-btn am-btn-danger buy-now" onclick="buyNow()">立即购买</button>
         </div>
     </form>
 </div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<%--<script src="//assets.kf5.com/supportbox/main.js" id="kf5-provide-supportBox" kf5-domain="mqyb.kf5.com"></script>--%>
 <script>
     $(document).ready(function () {
+        $(".commodity-flavor button:first").click();//口味默认第一个
         var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
         var commodityName = $(".commodity-name-title").html();//分享的标题
         var imgUrl = "http://www.muqinyun.com" + $(".swiper-slide").find("img").first().attr("src");
@@ -380,17 +428,20 @@
         pagination: '.swiper-pagination'
     })
     //弹出添加到购物车
-    $(".join-this-shopping-cat").on("click", function () {
+    function openModel(index) {
+        if (index != undefined) {
+            $(".add-car").hide();
+            $(".buy-now").show()
+        } else {
+            $(".add-car").show();
+            $(".buy-now").hide()
+        }
         if ('${sessionScope.mUser.id}' != "") {
             $("#open-bottom-model").modal('open');
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/loginPage";
         }
-    })
-    //关闭添加到购物车
-    $(".close-model").on("click", function () {
-        $("#open-bottom-model").modal('close');
-    })
+    }
     var commodityNumber = parseInt('${commodity.commodityNumber}');
     var inputNumber = $(".number-input");
     //减少商品
@@ -432,7 +483,12 @@
         inputNumber.val(inputNumberVal);
     }
     //添加到购物车
-    $(".am-btn-danger").on("click", function () {
+    $(".add-car").on("click", function () {
+        var commodityFlavor = $("input[name='commodityFlavor']").val();
+        if (commodityFlavor == "") {
+            loadingShow("请选择口味");
+            return;
+        }
         $(this).attr("disabled", "disabled");//设置为禁用
         $.post("${ctx}/m/addShoppingCat", $("#addShoppingCat").serialize(), function (data) {
             if (data.code == '0') {
@@ -444,13 +500,33 @@
         })
         $(this).removeAttr("disabled");//设置为可用
     })
+    //选择规格
+    function selectSpecifications(ev, specificationsCommodityPice, specificationsId) {
+        $(ev).addClass("am-btn-danger");
+        $(ev).siblings().removeClass("am-btn-danger")
+        $(".specificationsCommodityPice").html(specificationsCommodityPice);
+        $("input[name='commoditySpecifications']").val(specificationsId);
+    }
+    //选择口味
+    function selectCommodityFlavor(ev, value) {
+        $(ev).addClass("am-btn-danger");
+        $(ev).siblings().removeClass("am-btn-danger")
+        $("input[name='commodityFlavor']").val(value);
+    }
     $(document).ready(function () {
         $("p img").attr("style", "width:100%");//设置商品描图片
     })
     //立即购买
     function buyNow() {
+        var commodityFlavor = $("input[name='commodityFlavor']").val();
+        if (commodityFlavor == "") {
+            loadingShow("请选择口味");
+            return;
+        }
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
-            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId=${sessionScope.mUser.id}';
+            window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId='
+                    + $("input[name='userId']").val() + "&commodityFlavor=" + commodityFlavor + "&commoditySpecifications=" +
+                    $("input[name='commoditySpecifications']").val();
         } else {//没有登录，去登录
             window.location.href = "${ctx}/m/loginPage";
         }
