@@ -303,8 +303,6 @@
     var orderNumber = "";
     //删除订单
     function delOrder(orderNum) {
-        loadingShow("21",60000)
-        return;
         orderNumber = orderNum;
         $('#my-confirm').modal({
             relatedTarget: this,

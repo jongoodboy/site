@@ -115,17 +115,33 @@
         padding: 0;
         width: 100%;
     }
+
+    .edit-shoppingCar {
+        display: inline-block;
+        width: 100%;
+        text-align: right;
+        padding: 5px 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .am-modal-dialog {
+        width: 60%;
+    }
 </style>
 <body>
 <div class="content">
     <ul class="am-list">
         <!--购物车列表-->
         <c:if test="${listMap != '[]'}">
+             <span class="edit-shoppingCar">
+                        <span class="edit">编辑</span>
+                    </span>
             <c:forEach var="map" items="${listMap}">
                 <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top">
                     <div class="am-list-thumb am-u-sm-1 shopping-list">
                             <span class="xuanzhong span-select shopping-list-list" onclick="selectShopping(this)"
                                   name="select"
+                                  shoppingId="${map.shoppingId}"
                                   commodityId="${map.id }"
                                   commodityNumber="${map.commodityNumber}"
                                   money="${map.commodityPice}"
@@ -143,6 +159,9 @@
                                   commodityDiscount="${map.commodityDiscount}"
                                   commodityWeightShow="${map.commodityWeightShow}"
                                   commodityWeightUnit="${map.commodityWeightUnit}"
+                                  commoditySpecifications="${map.commoditySpecifications}"
+                                  commodityFlavor="${map.commodityFlavor}"
+                                  specificationsParameter="${map.specificationsParameter}"
                             >
                             </span>
                         <%----%><!--商品单价用于计算-->
@@ -226,10 +245,10 @@
 
         </li>
         <li class="right-menu">
-            <button type="button" class="am-btn am-btn-danger <c:if test="${listMap == '[]'}">am-disabled</c:if>">去结算<%--(
-                <spna class="buyNumber"></spna>
-                )--%>
+            <button type="button"
+                    class="am-btn am-btn-danger go-buy <c:if test="${listMap == '[]'}">am-disabled</c:if>">去结算
             </button>
+            <button type="button" class="am-btn am-btn-danger del" hidden>删除</button>
         </li>
     </ul>
 </div>
@@ -263,6 +282,19 @@
         </ul>
     </div>
 </footer>
+<!--删除操作-->
+<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            搜集宝贝不易<br/>
+            您确定不要了吗?
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+        </div>
+    </div>
+</div>
 <script>
     var selectInput = $("span[name='select']");//购物车列表
     var selectAll = $("#selectAll");//全选
@@ -303,7 +335,7 @@
         })
 
         //去结算
-        $(".am-btn-danger").on("click", function () {
+        $(".go-buy").on("click", function () {
             var imags = "";//商品图片
             var buyNumber = "";//购买的数量
             var buyCommodityId = "";//购买的商品id
@@ -317,6 +349,9 @@
             var commodityDiscountNum = "";//商品折扣满足数量
             var commodityWeightShow = "";//展示给用户看的重量
             var commodityWeightUnit = "";//展示给用户看的重量单位
+            var commoditySpecifications = "";//规格id
+            var commodityFlavor = "";//口味
+            var specificationsParameter = "";//规格
             for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
                 if (selectTshi.hasClass('xuanzhong')) {
@@ -337,6 +372,9 @@
                     commodityDiscountNum += "," + selectTshi.attr("commodityDiscountNum");//商品折扣满足数量
                     commodityWeightShow += "," + selectTshi.attr("commodityWeightShow");//展示给用户看的重量
                     commodityWeightUnit += "," + selectTshi.attr("commodityWeightUnit");//展示给用户看的重量单位
+                    commoditySpecifications += "," + selectTshi.attr("commoditySpecifications");//规格Id
+                    commodityFlavor += "," + selectTshi.attr("commodityFlavor");//商品口味
+                    specificationsParameter += "," + selectTshi.attr("specificationsParameter");//规格显示的名称
                 }
             }
             var paramUrl = "money=" + $(".buySumMoney").html()
@@ -347,9 +385,46 @@
                     + "&expressProvinceIncreasing=" + expressProvinceIncreasing + "&expressOutsideFirst=" + expressOutsideFirst
                     + "&expressOutsideIncreasing=" + expressOutsideIncreasing + "&weight=" + weight + "&freeShipping="
                     + freeShipping + "&commodityDiscount=" + commodityDiscount + "&commodityDiscountNum=" + commodityDiscountNum
-                    + "&commodityWeightUnit=" + commodityWeightUnit + "&commodityWeightShow=" + commodityWeightShow;
+                    + "&commodityWeightUnit=" + commodityWeightUnit + "&commodityWeightShow=" + commodityWeightShow
+                    + "&commoditySpecifications=" + commoditySpecifications + "&commodityFlavor=" + commodityFlavor + "&specificationsParameter=" + specificationsParameter;
 
             window.location.href = ctx + "/m/orderPage?" + paramUrl;
+        })
+        //编辑
+        $(".edit").on("click", function () {
+            var ev = $(this);
+            if (ev.html() == "编辑") {
+                ev.html("取消")
+                $(".go-buy").hide();
+                $(".del").show();
+            } else {
+                ev.html("编辑")
+                $(".del").hide();
+                $(".go-buy").show();
+            }
+        })
+        //删除购物车里的商品
+        $(".del").on("click", function () {
+            $('#my-confirm').modal({
+                relatedTarget: this,
+                onConfirm: function (options) {
+                    var delShoppingIds = "";
+                    for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
+                        var selectTshi = $(selectInput[i]);
+                        if (selectTshi.hasClass('xuanzhong')) {
+                            delShoppingIds += "," + selectTshi.attr("shoppingId");
+                        }
+                    }
+                    $.post("${ctx}/m/delShoppingCar?delShoppingIds=" + delShoppingIds, function (ret) {
+                        loadingShow(ret.msg)
+                        if (ret.code == "0") {
+                            window.location.href = window.location.href;
+                        }
+                    })
+                },
+                onCancel: function () {
+                }
+            });
         })
     })
     function init() {

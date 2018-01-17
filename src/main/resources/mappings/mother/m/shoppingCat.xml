@@ -58,8 +58,10 @@
         com.id AS id,
         sp.specifications_commodityPice AS commodityPice,
         cat.commodity_flavor as commodityFlavor,
+        cat.commodity_specifications as commoditySpecifications,
         sp.specifications_parameter as specificationsParameter,
         cat.commodity_number AS shoppingNumber,
+        cat.id as shoppingId,
         com.commodity_number AS commodityNumber,
         com.free_shipping AS freeShipping,
         com.freight AS freight,
@@ -100,5 +102,15 @@
         )
         AND user_id = #{userId}
     </update>
-
+    <!--删除购物车-->
+    <update id="delShoppingCar" parameterType="java.util.List">
+        UPDATE mq_shopping_cat
+        SET
+        del_flag = -1
+        WHERE id in (
+        <foreach collection="list" item="itme" separator=",">
+            #{itme}
+        </foreach>
+        )
+    </update>
 </mapper>

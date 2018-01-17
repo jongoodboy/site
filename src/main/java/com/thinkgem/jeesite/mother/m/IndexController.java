@@ -283,6 +283,33 @@ public class IndexController {
     }
 
     /**
+     * 删除购物车商品
+     *
+     * @param delShoppingIds
+     * @return
+     */
+    @RequestMapping("/delShoppingCar")
+    @ResponseBody
+    public Map<String, Object> delShoppingCar(String delShoppingIds) {
+        Map<String, Object> returnMap = new HashedMap();
+        try {
+            String[] delShoppingIdsList = delShoppingIds.split(",");
+            List<String> paramList = new ArrayList<String>();
+            for (int i = 1; i < delShoppingIdsList.length; i++) {
+                paramList.add(delShoppingIdsList[i]);
+            }
+            shoppingCatService.delShoppingCar(paramList);
+            returnMap.put("msg", "删除成功!");
+            returnMap.put("code", "0");
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnMap.put("msg", "删除失败!");
+            returnMap.put("code", "-1");
+        }
+        return returnMap;
+    }
+
+    /**
      * 手机端订单生成页面
      *
      * @param userId 个人id

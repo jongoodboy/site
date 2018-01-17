@@ -12,6 +12,9 @@ import java.util.Map;
  */
 @MyBatisDao
 public interface ShoppingCatDao extends CrudDao<ShoppingCat> {
-     List<Map<String,Object>> findShoppingCatByUserId(String userId);
-     int delShoppingCatByCommodityId(Map<String,Object> map);
+    List<Map<String, Object>> findShoppingCatByUserId(String userId);
+
+    int delShoppingCatByCommodityId(Map<String, Object> map);
+
+    int delShoppingCar(List<String> list);
 }

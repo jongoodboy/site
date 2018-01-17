@@ -84,7 +84,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                             commodityMap.put("orderId", o.getId());//订单ID
                             commodityMap.put("comNumber", o.getCommodityNumber());//订单对应的购买商品的数量
                             commodityMap.put("comCompany", dic.getDictLabel(com.getCommodityCompany().toString(), "commodity_company", ""));//商品单位(1.个2.条3.件4.根 -->)
-                            BigDecimal price = specifications.getSpecificationsCommodityPice();
+                            BigDecimal price = specifications.getSpecificationsCommodityPice() == null ? com.getCommodityPice() : specifications.getSpecificationsCommodityPice();
                             commodityMap.put("comPrice", price);//商品的价格
                             commodityMap.put("comImage", com.getCommodityImager());//商品图片
                             commodityMap.put("conFreeShipping", com.getFreeShipping());//是否包邮1包0不包
@@ -210,7 +210,10 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         Order o = listOrder.get(i);
                         Commodity com = comodityService.get(o.getCommodityId());//查询得到每个商品
                      /*   float v = com.getCommodityPice().floatValue() - com.getCostPrice().floatValue();//售价减去成本价等于利润*/
-                        float v = com.getCommodityPice().floatValue();//售价于利润
+                    /*    float v = com.getCommodityPice().floatValue();//售价于利润*/
+                        Specifications specifications = sprcifictionsService.get(o.getCommoditySpecifications());//商品购买的规格
+                        float v = specifications.getSpecificationsCommodityPice()
+                                == null ? com.getCommodityPice().floatValue() : specifications.getSpecificationsCommodityPice().floatValue();
                         BigDecimal parentThisMoney = new BigDecimal(v * 0.08).setScale(2, BigDecimal.ROUND_HALF_UP);//拿8%的利润给分享人
                         parentMoney = parentMoney.add(parentThisMoney);//分享人总收益
                         Profit profit = new Profit();//收益表

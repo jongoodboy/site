@@ -25,7 +25,12 @@ public class ShoppingCatService extends CrudService<ShoppingCatDao, ShoppingCat>
     }
 
     //生成订单后把原来在购物车的商品标记删除
-    public int delShoppingCatByCommodityId(Map<String,Object> map) {
+    public int delShoppingCatByCommodityId(Map<String, Object> map) {
         return shoppingCatDao.delShoppingCatByCommodityId(map);
+    }
+
+    //删除购物车
+    public int delShoppingCar(List<String> list) {
+        return shoppingCatDao.delShoppingCar(list);
     }
 }
