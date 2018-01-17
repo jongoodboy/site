@@ -80,10 +80,11 @@ public class CommodityController extends BaseController {
      * @return
      */
     @RequestMapping("save")
-    public String save(Commodity commodity, RedirectAttributes redirectAttributes, String specificationsId, String specificationsParameter, String specificationsCommodityPice) {
+    public String save(Commodity commodity, String commodityFlavors,  RedirectAttributes redirectAttributes, String specificationsId, String specificationsParameter, String specificationsCommodityPice) {
         try {
             commodity.setCommodityMaker(StringEscapeUtils.unescapeHtml4(
                     commodity.getCommodityMaker()));//设置转换富文本格式
+            commodity.setCommodityFlavor(commodityFlavors);
             commodityService.save(commodity);//商品基本信息
             sprcifictionsService.insertAll(specificationsId, specificationsParameter, specificationsCommodityPice,commodity.getId());//规格信息
             addMessage(redirectAttributes, "商品添加成功");

@@ -78,7 +78,7 @@ public class IndexController {
     @ModelAttribute
     public void getMuser(HttpServletRequest request, HttpServletResponse response, String personalStores) throws IOException {
         String openId = (String) request.getSession().getAttribute("openid");//微信openId
-       if (openId == null) {
+        if (openId == null) {
             String strBackUrl = "http://" + request.getServerName() //服务器地址
                     + ":"
                     + request.getServerPort()           //端口号
@@ -452,7 +452,11 @@ public class IndexController {
             order.setConsigneePhone(consigneePhone);
             order.setOrderNumber(orderNumber);
             order.setExpress(expressNameList[i]);
-            order.setCommodityFlavor(commodityFlavorList[i]);
+            if (commodityFlavorList.length > 0) {
+                if(commodityFlavorList.length > i){
+                    order.setCommodityFlavor(commodityFlavorList[i]);
+                }
+            }
             order.setCommoditySpecifications(commoditySpecificationsList[i]);
             order.setCreateDate(d);
             order.setShareCode(shareCode);

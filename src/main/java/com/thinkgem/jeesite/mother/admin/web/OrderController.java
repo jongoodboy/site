@@ -3,7 +3,9 @@ package com.thinkgem.jeesite.mother.admin.web;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.mother.admin.entity.Commodity;
+import com.thinkgem.jeesite.mother.admin.entity.Specifications;
 import com.thinkgem.jeesite.mother.admin.service.CommodityService;
+import com.thinkgem.jeesite.mother.admin.service.SprcifictionsService;
 import com.thinkgem.jeesite.mother.m.entity.Order;
 import com.thinkgem.jeesite.mother.m.service.OrderService;
 import org.apache.commons.collections.map.HashedMap;
@@ -31,6 +33,8 @@ public class OrderController {
     private OrderService orderService;
     @Resource
     private CommodityService commodityService;
+    @Resource
+    private SprcifictionsService sprcifictionsService;
 
     //所有调用这个controller都会先调用这个方法
     @ModelAttribute
@@ -72,6 +76,9 @@ public class OrderController {
                     Commodity c = commodityService.get(o.getCommodityId());//每一个商品
                     map.put("commodityName", c.getCommodityName());
                     map.put("company", c.getCommodityCompany());
+                    map.put("commodityFlavor", o.getCommodityFlavor());
+                    Specifications s = sprcifictionsService.get(o.getCommoditySpecifications());//每一个商品的规格
+                    map.put("specifications", s);
                     orderListMap.add(map);
                 }
             }
@@ -86,24 +93,25 @@ public class OrderController {
 
     /**
      * 发货
-     * @param order 快递 快递单号
+     *
+     * @param order   快递 快递单号
      * @param orderId 订单ID
      * @return
      */
     @RequestMapping("/delivery")
     @ResponseBody
-    public Map<String, Object> delivery(Order order,String orderId) {
+    public Map<String, Object> delivery(Order order, String orderId) {
         Map<String, Object> returnMap = new HashedMap();
         try {
             order.setId(orderId);
             order.setDeliveryTime(new Date());
             orderService.delivery(order);
-            returnMap.put("code","0");
-            returnMap.put("msg","发货成功");
+            returnMap.put("code", "0");
+            returnMap.put("msg", "发货成功");
         } catch (Exception e) {
             e.printStackTrace();
-            returnMap.put("code","-1");
-            returnMap.put("msg","发货失败");
+            returnMap.put("code", "-1");
+            returnMap.put("msg", "发货失败");
         }
         return returnMap;
     }

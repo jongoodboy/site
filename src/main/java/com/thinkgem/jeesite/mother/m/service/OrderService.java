@@ -214,7 +214,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         Specifications specifications = sprcifictionsService.get(o.getCommoditySpecifications());//商品购买的规格
                         float v = specifications.getSpecificationsCommodityPice()
                                 == null ? com.getCommodityPice().floatValue() : specifications.getSpecificationsCommodityPice().floatValue();
-                        BigDecimal parentThisMoney = new BigDecimal(v * 0.08).setScale(2, BigDecimal.ROUND_HALF_UP);//拿8%的利润给分享人
+                        BigDecimal parentThisMoney = new BigDecimal(v * o.getCommodityNumber() * 0.08).setScale(2, BigDecimal.ROUND_HALF_UP);//拿8%的利润给分享人
                         parentMoney = parentMoney.add(parentThisMoney);//分享人总收益
                         Profit profit = new Profit();//收益表
                         profit.setId(IdGen.uuid());//设置收益表的ID
@@ -228,7 +228,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
                         profit.setIncomeProportion("8%");
                         profitList.add(profit);
                         if (grandFather != null && grandFather != "") {//如果分享人还有上线
-                            BigDecimal grandFatherThisMoney = new BigDecimal(v * 0.02).setScale(2, BigDecimal.ROUND_HALF_UP);//拿2%的利润给分享人的线
+                            BigDecimal grandFatherThisMoney = new BigDecimal(v * o.getCommodityNumber() * 0.02).setScale(2, BigDecimal.ROUND_HALF_UP);//拿2%的利润给分享人的线
                             grandFatherMoney = grandFatherMoney.add(grandFatherThisMoney);//分享人上线总收益
                             Profit profitGrandFather = new Profit();//收益表
                             profitGrandFather.setId(IdGen.uuid());//设置上线收益表的ID

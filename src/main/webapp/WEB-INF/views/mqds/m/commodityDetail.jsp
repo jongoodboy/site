@@ -304,19 +304,21 @@
                     </button>
                 </c:forEach>
             </div>
-            <div class="specifications padding-right commodity-flavor">
-                <p>口味</p>
-                <c:forEach var="itme" items="${fns:getDictList('commodity_flavor')}">
-                    <c:forEach items="${fn:split(commodity.commodityFlavor,',')}" var="flavor">
-                        <c:if test="${flavor == itme.value}">
-                            <button type="button" class="am-btn am-radius"
-                                    onclick="selectCommodityFlavor(this,'${itme.value}')">
-                                    ${itme.label}
-                            </button>
-                        </c:if>
+            <c:if test="${commodity.commodityFlavor != null}">
+                <div class="specifications padding-right commodity-flavor">
+                    <p>口味</p>
+                    <c:forEach var="itme" items="${fns:getDictList('commodity_flavor')}">
+                        <c:forEach items="${fn:split(commodity.commodityFlavor,',')}" var="flavor">
+                            <c:if test="${flavor == itme.value}">
+                                <button type="button" class="am-btn am-radius"
+                                        onclick="selectCommodityFlavor(this,'${itme.value}')">
+                                        ${itme.label}
+                                </button>
+                            </c:if>
+                        </c:forEach>
                     </c:forEach>
-                </c:forEach>
-            </div>
+                </div>
+            </c:if>
             <button type="button" class="am-btn am-btn-danger add-car">确定加入</button>
             <button type="button" class="am-btn am-btn-danger buy-now" onclick="buyNow()">立即购买</button>
         </div>
@@ -485,10 +487,10 @@
     //添加到购物车
     $(".add-car").on("click", function () {
         var commodityFlavor = $("input[name='commodityFlavor']").val();
-        if (commodityFlavor == "") {
+       /* if (commodityFlavor == "") {
             loadingShow("请选择口味");
             return;
-        }
+        }*/
         $(this).attr("disabled", "disabled");//设置为禁用
         $.post("${ctx}/m/addShoppingCat", $("#addShoppingCat").serialize(), function (data) {
             if (data.code == '0') {
@@ -519,10 +521,10 @@
     //立即购买
     function buyNow() {
         var commodityFlavor = $("input[name='commodityFlavor']").val();
-        if (commodityFlavor == "") {
+      /*  if (commodityFlavor == "") {
             loadingShow("请选择口味");
             return;
-        }
+        }*/
         if ('${sessionScope.mUser.id}' != "") {//立即购买页面
             window.location.href = '${ctx}/m/orderPage?nowBuy=yes&commodityId=${commodity.id}&userId='
                     + $("input[name='userId']").val() + "&commodityFlavor=" + commodityFlavor + "&commoditySpecifications=" +

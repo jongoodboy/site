@@ -162,6 +162,7 @@
                                   commoditySpecifications="${map.commoditySpecifications}"
                                   commodityFlavor="${map.commodityFlavor}"
                                   specificationsParameter="${map.specificationsParameter}"
+                                  commodityFlavorName="${fns:getDictLabel(map.commodityFlavor, "commodity_flavor", "")}"
                             >
                             </span>
                         <%----%><!--商品单价用于计算-->
@@ -350,7 +351,8 @@
             var commodityWeightShow = "";//展示给用户看的重量
             var commodityWeightUnit = "";//展示给用户看的重量单位
             var commoditySpecifications = "";//规格id
-            var commodityFlavor = "";//口味
+            var commodityFlavor = "";//口味标识
+            var commodityFlavorName = "";//口味名称
             var specificationsParameter = "";//规格
             for (var i = 0; i < selectInput.length; i++) {//所有选中的商品去结算
                 var selectTshi = $(selectInput[i]);
@@ -373,7 +375,8 @@
                     commodityWeightShow += "," + selectTshi.attr("commodityWeightShow");//展示给用户看的重量
                     commodityWeightUnit += "," + selectTshi.attr("commodityWeightUnit");//展示给用户看的重量单位
                     commoditySpecifications += "," + selectTshi.attr("commoditySpecifications");//规格Id
-                    commodityFlavor += "," + selectTshi.attr("commodityFlavor");//商品口味
+                    commodityFlavor += "," + selectTshi.attr("commodityFlavor");//商品口味标识
+                    commodityFlavorName += "," + selectTshi.attr("commodityFlavorName");//商品口味名称
                     specificationsParameter += "," + selectTshi.attr("specificationsParameter");//规格显示的名称
                 }
             }
@@ -386,7 +389,8 @@
                     + "&expressOutsideIncreasing=" + expressOutsideIncreasing + "&weight=" + weight + "&freeShipping="
                     + freeShipping + "&commodityDiscount=" + commodityDiscount + "&commodityDiscountNum=" + commodityDiscountNum
                     + "&commodityWeightUnit=" + commodityWeightUnit + "&commodityWeightShow=" + commodityWeightShow
-                    + "&commoditySpecifications=" + commoditySpecifications + "&commodityFlavor=" + commodityFlavor + "&specificationsParameter=" + specificationsParameter;
+                    + "&commoditySpecifications=" + commoditySpecifications + "&commodityFlavor=" + commodityFlavor
+                    + "&specificationsParameter=" + specificationsParameter + "&commodityFlavorName=" + commodityFlavorName;
 
             window.location.href = ctx + "/m/orderPage?" + paramUrl;
         })

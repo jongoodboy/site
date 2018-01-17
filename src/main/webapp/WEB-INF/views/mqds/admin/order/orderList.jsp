@@ -56,6 +56,8 @@
     <tr>
         <th>订单号</th>
         <th>商品名称</th>
+        <th>口味</th>
+        <th>商品规格</th>
         <th>购买数量</th>
         <th>单位</th>
         <th>单价</th>
@@ -75,6 +77,8 @@
         <tr>
             <td>${tpl.orderNumber}</td>
             <td>${tpl.commodityName}</td>
+            <td>${fns:getDictLabel(tpl.commodityFlavor, "commodity_flavor", "")}</td>
+            <td>${tpl.specifications.specificationsParameter}</td>
             <td>${tpl.commodityNumber}</td>
             <td>${fns:getDictLabel(tpl.company, 'commodity_company', '')}</td>
             <td>${tpl.commodityPrice}</td>
@@ -107,7 +111,8 @@
                 <h4 class="modal-title" id="myModalLabel">发货操作</h4>
             </div>
             <div class="modal-body">
-                <select name="expressRealHair" id="expressRealHair" onchange="express()" style="width: 100px;height: 40px">
+                <select name="expressRealHair" id="expressRealHair" onchange="express()"
+                        style="width: 100px;height: 40px">
                     <c:forEach items="${fns:getDictList('express_type')}" var="itme">
                         <option value="${itme.value}">${itme.label}</option>
                     </c:forEach>

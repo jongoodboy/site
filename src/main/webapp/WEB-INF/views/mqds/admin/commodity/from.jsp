@@ -134,12 +134,11 @@
         <div class="controls">
             <c:forEach var="itme" items="${fns:getDictList('commodity_flavor')}">
                 <input type="checkbox" value="${itme.value}"
-                       id="commodityFlavor${itme.value}" name="commodityFlavor"
+                       id="commodityFlavor${itme.value}" name="commodityFlavors"
                 <c:forEach items="${fn:split(commodity.commodityFlavor,',')}" var="flavor">
                        <c:if test="${itme.value == flavor}">checked</c:if>
                 </c:forEach>>
                 <label for="commodityFlavor${itme.value}">${itme.label}</label>
-
             </c:forEach>
         </div>
     </div>

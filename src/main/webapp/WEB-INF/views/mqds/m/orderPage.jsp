@@ -224,7 +224,9 @@
                         str += "<li style='width: 55%'><p class='commodity-name'>" + ret.data.commodityName + "</p>";
                         str += "<span class='commodity-money'>￥" + ret.specifications.specificationsCommodityPice + "</span></ul></li></li>";
                         str += '<li class="pading-10" style="display: none">快递:<span class="freight-money select-express">' + ret.express.expressName + '</span></li>'//快递
-                        str += "<li class='pading-10'>口味:<span class='freight-money'>${fns:getDictLabel(param.commodityFlavor, "commodity_flavor", "商品口味")}</span></li>";
+                        if (${param.commodityFlavor != ""}) {
+                            str += "<li class='pading-10'>口味:<span class='freight-money'>${fns:getDictLabel(param.commodityFlavor, "commodity_flavor", "商品口味")}</span></li>";
+                        }
                         str += '<li class="pading-10">规格:<span class="freight-money">' + ret.specifications.specificationsParameter + '</span></li>';
                         str += '<li class="pading-10">运费:<span class="freight-money this-express">' + expressStr + '</span></li>'//计算后的运费
                         str += '<li class="pading-10">重量:<span class="freight-money">' + ret.data.commodityWeightShow + '' + ret.commodityWeightUnit + '</span></li>'
@@ -332,6 +334,7 @@
             var commoditySpecifications = "${param.commoditySpecifications}";//规格id
             var commodityFlavor = "${param.commodityFlavor}";//口味
             var specificationsParameter = "${param.specificationsParameter}";//规格
+            var commodityFlavorName = "${param.commodityFlavorName}";//口味名称
             if (imags != '' && imags != null) {//显示购物车提交过来的购物列表
                 var imags = imags.split(',');
                 var carPrice = carPrice.split(',');
@@ -353,6 +356,7 @@
                 var commoditySpecifications = commoditySpecifications.split(",");//规格id
                 var commodityFlavor = commodityFlavor.split(",");//口味
                 var specificationsParameter = specificationsParameter.split(",");//规格
+                var commodityFlavorName = commodityFlavorName.split(",");//口味名称
                 var str = "";
                 for (var i = 1; i < imags.length; i++) {//最多显示三个商品的图片
                     var expressFirst, expressIncreasing, thisWeight, express = 0.00, expressStr;
@@ -383,7 +387,9 @@
                     str += "<li style='width: 55%'><p class='commodity-name'>" + commodityNames[i] + "</p>";
                     str += "<span class='commodity-money'>￥" + carPrice[i] + "</span></li></ul></li>";
                     str += '<li class="pading-10" style="display: none">快递:<span class="freight-money select-express">' + expressName[i] + '</span></li>'//快递
-                    str += "<li class='pading-10'>口味:<span class='freight-money'>${fns:getDictLabel(commodityFlavor[i], "commodity_flavor", "商品口味")}</span></li>";
+                    if(commodityFlavorName[i] != ""){
+                        str += "<li class='pading-10'>口味:<span class='freight-money'>"+commodityFlavorName[i]+"</span></li>";
+                    }
                     str += '<li class="pading-10">规格:<span class="freight-money">' + specificationsParameter[i] + '</span></li>';
                     str += '<li class="pading-10">运费:<span class="freight-money">' + expressStr + '</span></li>'
                     str += '<li class="pading-10">重量:<span class="freight-money">' + commodityWeightShow[i] + '' + commodityWeightUnit[i] + '</span></li>'
