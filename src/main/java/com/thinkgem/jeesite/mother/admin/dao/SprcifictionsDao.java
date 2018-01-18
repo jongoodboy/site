@@ -13,7 +13,7 @@ import java.util.List;
 public interface SprcifictionsDao extends CrudDao<Specifications> {
     int insertAll(List<Specifications> list);
 
-    int deleteBycommodityId(String commodityId);
+    int updateByCommodity(String commodityId);
 
     int updateAll(List<Specifications> list);
 

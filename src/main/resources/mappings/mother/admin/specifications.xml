@@ -5,7 +5,8 @@
         id as "id",
         specifications_parameter as "specificationsParameter",
         specifications_commodityPice as "specificationsCommodityPice",
-        commodity_id as "commodityId"
+        commodity_id as "commodityId",
+        del_flag as "delFlag"
     </sql>
     <!--批量添加规格-->
     <insert id="insertAll" parameterType="Specifications">
@@ -14,14 +15,16 @@
         id,
         specifications_parameter,
         specifications_commodityPice,
-        commodity_id
+        commodity_id,
+        del_flag
         )VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.id},
             #{item.specificationsParameter},
             #{item.specificationsCommodityPice},
-            #{item.commodityId}
+            #{item.commodityId},
+            #{item.delFlag}
             )
         </foreach>
     </insert>
@@ -42,6 +45,7 @@
         mq_specifications
         WHERE
         commodity_id = #{commodityId}
+        AND del_flag = 0
         ORDER BY specificationsCommodityPice
     </select>
     <!--批量更新-->
@@ -51,10 +55,20 @@
             <set>
                 specifications_parameter = #{item.specificationsParameter},
                 specifications_commodityPice= #{item.specificationsCommodityPice},
-                commodity_id = #{item.commodityId}
+                commodity_id = #{item.commodityId},
+                del_flag=#{item.delFlag}
             </set>
             WHERE
             id = #{item.id}
         </foreach>
+    </update>
+    <!--该商品规格先全部禁用-->
+    <update id="updateByCommodity" parameterType="String">
+        UPDATE mq_specifications
+        <set>
+            del_flag = 1
+        </set>
+        WHERE
+        commodity_id = #{commodityId}
     </update>
 </mapper>

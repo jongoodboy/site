@@ -31,31 +31,44 @@ public class SprcifictionsService extends CrudService<SprcifictionsDao, Specific
      */
     @Transactional(readOnly = false)
     public int insertAll(String specificationsId, String specificationsParameter, String specificationsCommodityPice, String commodityId) {
+        sprcifictionsDao.updateByCommodity(commodityId);
         List<Specifications> paramList = new ArrayList<Specifications>();
         String[] specificationsParameters = specificationsParameter.split(",");
         String[] specificationsCommodityPices = specificationsCommodityPice.split(",");
+        int spIdsIndex = 0;
         if (specificationsId != null && !specificationsId.equals("")) {
             String[] specificationsIds = specificationsId.split(",");
-            for (int i = 0; i < specificationsParameters.length; i++) {
-                Specifications s = new Specifications();
-                s.setId(specificationsIds[i]);
-                s.setSpecificationsCommodityPice(new BigDecimal(specificationsCommodityPices[i]));
-                s.setSpecificationsParameter(specificationsParameters[i]);
-                s.setCommodityId(commodityId);
-                paramList.add(s);
-            }
-            return sprcifictionsDao.updateAll(paramList);//批量更新
-        } else {
-            for (int i = 0; i < specificationsParameters.length; i++) {
-                Specifications s = new Specifications();
-                s.setId(IdGen.uuid());
-                s.setSpecificationsCommodityPice(new BigDecimal(specificationsCommodityPices[i]));
-                s.setSpecificationsParameter(specificationsParameters[i]);
-                s.setCommodityId(commodityId);
-                paramList.add(s);
-            }
-            return sprcifictionsDao.insertAll(paramList);//批量插入
+            spIdsIndex = specificationsIds.length;
         }
+        for (int i = spIdsIndex; i < specificationsParameters.length; i++) {
+            Specifications s = new Specifications();
+            s.setId(IdGen.uuid());
+            s.setSpecificationsCommodityPice(new BigDecimal(specificationsCommodityPices[i]));
+            s.setSpecificationsParameter(specificationsParameters[i]);
+            s.setCommodityId(commodityId);
+            paramList.add(s);
+        }
+        int index = 0;
+        if (paramList.size() > 0) {
+            index = sprcifictionsDao.insertAll(paramList);//批量插入
+        }
+        if (specificationsId != null && !specificationsId.equals("")) {
+            String[] specificationsIds = specificationsId.split(",");
+            List<Specifications> updateParamList = new ArrayList<Specifications>();
+            for (int j = 0; j < specificationsIds.length; j++) {
+                Specifications s = new Specifications();
+                s.setId(specificationsIds[j]);
+                s.setSpecificationsCommodityPice(new BigDecimal(specificationsCommodityPices[j]));
+                s.setSpecificationsParameter(specificationsParameters[j]);
+                s.setCommodityId(commodityId);
+                updateParamList.add(s);
+            }
+            index = sprcifictionsDao.updateAll(updateParamList);//批量更新
+        }
+
+
+        return index;
+
     }
 
     //商品对应的所有规格
