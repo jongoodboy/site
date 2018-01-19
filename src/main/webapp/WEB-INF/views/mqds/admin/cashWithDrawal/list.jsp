@@ -6,6 +6,11 @@
     <%@include file="/WEB-INF/views/include/treetable.jsp" %>
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#btnExport").click(function(){
+                $("#searchForm").attr("action","${ctx}/withdrawals/export");
+                $("#searchForm").submit();
+                $("#searchForm").attr("action","${ctx}/withdrawals/list");
+            });
         });
         function page(n, s) {
             $("#pageNo").val(n);
@@ -41,6 +46,7 @@
     <form:select path="delFlag" class="input-mini"  onchange="$('#searchForm').submit();">
         <form:options items="${fns:getDictList('withdrawals_state')}" itemLabel="label" itemValue="value" htmlEscape="false" />
     </form:select>
+    <input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
 </form:form>
 <table id="treeTable" class="table table-striped table-bordered table-condensed">
     <tr>

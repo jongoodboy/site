@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.mother.m.entity;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
 import java.math.BigDecimal;
 
@@ -26,6 +27,7 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
         this.operator = operator;
     }
 
+    @ExcelField(title = "所属银行", align = 2, sort = 5)
     public String getBankName() {
         return bankName;
     }
@@ -34,6 +36,7 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
         this.bankName = bankName;
     }
 
+    @ExcelField(title = "银行卡号", align = 2, sort = 10)
     public String getBankNumber() {
         return bankNumber;
     }
@@ -42,6 +45,7 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
         this.bankNumber = bankNumber;
     }
 
+    @ExcelField(title = "银行开户行", align = 2, sort = 20)
     public String getBankAddress() {
         return bankAddress;
     }
@@ -50,6 +54,7 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
         this.bankAddress = bankAddress;
     }
 
+    @ExcelField(title = "持卡人姓名", align = 2, sort = 30)
     public String getBankNumberName() {
         return bankNumberName;
     }
@@ -58,6 +63,7 @@ public class CashWithDrawal extends DataEntity<CashWithDrawal> {
         this.bankNumberName = bankNumberName;
     }
 
+    @ExcelField(title = "提现金额",align = 2, sort = 9000)
     public BigDecimal getGetCash() {
         return getCash;
     }

@@ -221,7 +221,7 @@
                     $(".content").append("<p class='no-data'>您还没有相关订单信息</p>")
                 }
             } else {
-                alert(ret.msg);
+                $(".content").append("<p class='no-data'>您还没有相关订单信息</p>")
             }
         })
     }

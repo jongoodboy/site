@@ -216,7 +216,7 @@
         FROM mq_commodity com LEFT JOIN mq_specifications sp
         ON com.id = sp.commodity_id
         WHERE
-        del_flag = '0'
+        sp.del_flag = '0'
         AND com.commodity_release = '0'
         AND commodity_state NOT IN (3)
         AND belong_specialty = #{belongSpecialty}

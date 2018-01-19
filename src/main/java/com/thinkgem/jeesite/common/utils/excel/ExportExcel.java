@@ -188,13 +188,13 @@ public class ExportExcel {
 	private void initialize(String title, List<String> headerList) {
 		this.wb = new SXSSFWorkbook(500);
 		this.sheet = wb.createSheet("Export");
-		this.styles = createStyles(wb);
+	/*	this.styles = createStyles(wb);*/
 		// Create title
 		if (StringUtils.isNotBlank(title)){
 			Row titleRow = sheet.createRow(rownum++);
 			titleRow.setHeightInPoints(30);
 			Cell titleCell = titleRow.createCell(0);
-			titleCell.setCellStyle(styles.get("title"));
+			/*titleCell.setCellStyle(styles.get("title"));*/
 			titleCell.setCellValue(title);
 			sheet.addMergedRegion(new CellRangeAddress(titleRow.getRowNum(),
 					titleRow.getRowNum(), titleRow.getRowNum(), headerList.size()-1));
@@ -207,7 +207,7 @@ public class ExportExcel {
 		headerRow.setHeightInPoints(16);
 		for (int i = 0; i < headerList.size(); i++) {
 			Cell cell = headerRow.createCell(i);
-			cell.setCellStyle(styles.get("header"));
+		/*	cell.setCellStyle(styles.get("header"));*/
 			String[] ss = StringUtils.split(headerList.get(i), "**", 2);
 			if (ss.length==2){
 				cell.setCellValue(ss[0]);
