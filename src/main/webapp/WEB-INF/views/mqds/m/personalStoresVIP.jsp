@@ -9,7 +9,7 @@
     .vip-but{
         width: 50%;
         position: absolute;
-        bottom: 5%;
+        bottom:18%;
         left: 25%;
         height: 50px;
         line-height: 50px;
