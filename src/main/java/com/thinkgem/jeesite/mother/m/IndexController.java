@@ -153,7 +153,7 @@ public class IndexController {
                 paramMap.put("commodityState", 1);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
                 List<Map<String, Object>> listProducts = commodityService.findAdvertising(paramMap);
                 returnMap.put("products", listProducts);//推荐精品
-                paramMap.put("pageSize", 6);//首页6个菜单
+                paramMap.put("pageSize", 1000000);//首页6个菜单
                 paramMap.put("commodityState", 5);//(1.精选商品2.热门商品4.其他状态商品3.必卖商品5.菜单商品' -->)
                 List<Map<String, Object>> listIndexMenuSix = commodityService.findAdvertising(paramMap);
                 returnMap.put("listIndexMenuSix", listIndexMenuSix);//首首页6个菜单

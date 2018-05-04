@@ -194,10 +194,8 @@
                  data-am-paragraph="{ tableScrollable: true, pureview: true }">
             <spen class="commodity-name-title">${itme.commodityName}</spen>
             <ul class="nav-menu">
-                <li class="active">￥<span
-                        class="specificationsCommodityPice">${slist[0].specificationsCommodityPice}</span>
-                    / ${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
-                <li class="weight-show">${itme.commodityWeightShow}${commodityWeightUnit}</li>
+                <li class="active">￥<span class="specificationsCommodityPice">${slist[0].specificationsCommodityPice}</span>/${fns:getDictLabel(itme.commodityCompany,'commodity_company',0)}</li>
+                <%--<li class="weight-show">${itme.commodityWeightShow}${commodityWeightUnit}</li>--%>
                 <li class="freight">运费: <span id="express"></span>元</li><!--按照快递首重来算-->
             </ul>
             <div class="commodityMaker">
@@ -280,7 +278,7 @@
                     </span>
                     <span class="price">￥:<span
                             class="specificationsCommodityPice">${slist[0].specificationsCommodityPice}</span></span>
-                    <span style="display: inline-block;float: right">重量:${commodity.commodityWeightShow}${commodityWeightUnit}</span><br>
+                    <%--<span style="display: inline-block;float: right">重量:${commodity.commodityWeightShow}${commodityWeightUnit}</span>--%><br>
                     <span>库存:${commodity.commodityNumber}</span><br>
                     <%--<span>商品编号:5555522</span><br>--%>
                 </li>

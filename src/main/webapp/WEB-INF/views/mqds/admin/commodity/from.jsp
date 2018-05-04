@@ -218,7 +218,7 @@
     <div class="control-group">
         <label class="control-label">分享描述:</label>
         <div class="controls">
-            <form:textarea path="sharingDescription" htmlEscape="false" class="required"/>
+            <form:textarea path="sharingDescription" htmlEscape="false" class="required" rows="5"/>
         </div>
     </div>
     <div class="control-group">
