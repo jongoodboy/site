@@ -19,8 +19,8 @@ public class ConfigUtil {
     public final static String MCH_ID = "1446007402";//开通微信支付分配的商户号
     public final static String API_KEY = "motherXx201711101027wangjihua001";//商户API密钥 自行去商户平台设置
     public final static String SIGN_TYPE = "MD5";//签名加密方式
-    public final static String NOTIFY_URL = "http://www.muqinyun.com/site/front/m/payCallBack"; //用于告知微信服务器 支付成功回调
-    public final static String REDIRECT_URI = "http://www.muqinyun.com/site/weixin/getCode"; //微信获取code回调页面
+    public final static String NOTIFY_URL = "http://muqinyun.cn/site/front/m/payCallBack"; //用于告知微信服务器 支付成功回调
+    public final static String REDIRECT_URI = "http://muqinyun.cn/site/weixin/getCode"; //微信获取code回调页面
 
 /**
  * 微信基础接口地址

@@ -89,6 +89,7 @@ public class IndexController {
                 strBackUrl += "?" + QueryString;
             }
             request.getSession().setAttribute("strBackUrl", strBackUrl);//为了从哪个页面来。授权之后返回哪页面去。
+            System.out.println(strBackUrl + "=====================================================");
             if (personalStores != null) {
                 request.getSession().setAttribute("personalStores", personalStores);//我要创业
             }
