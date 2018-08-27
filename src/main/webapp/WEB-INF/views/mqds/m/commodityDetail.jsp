@@ -328,13 +328,13 @@
         $(".commodity-flavor button:first").click();//口味默认第一个
         var url = window.location.href + "&code=${sessionScope.mUser.code}";//分享的路径
         var commodityName = $(".commodity-name-title").html();//分享的标题
-        var imgUrl = "http://www.muqinyun.com" + $(".swiper-slide").find("img").first().attr("src");
+        var imgUrl = "http://www.muqinyun.cn" + $(".swiper-slide").find("img").first().attr("src");
         var desc = '${commodity.sharingDescription}';//分享描述
         //url必须是获取的当前的页面路径
         $.post("${ctx}/m/getWxConfig?url=" + window.location.href, function (ret) {
             //微信分享
             wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: ret.appId, // 必填，公众号的唯一标识
                 timestamp: ret.timestamp, // 必填，生成签名的时间戳
                 nonceStr: ret.nonceStr, // 必填，生成签名的随机串
